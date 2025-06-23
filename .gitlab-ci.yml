@@ -22,7 +22,7 @@ stages:          # List of stages for jobs, and their order of execution
 deploy-stage:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
-    - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/t76
+    - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
   environment: 
     name: main
   only:
