@@ -16,16 +16,30 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+image: php:8.2
+
 stages:          # List of stages for jobs, and their order of execution
+  - setup
+  - build
   - deploy
 
-deploy-stage:
-  image: php:8.2 # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+setup-sage:
+  stage: setup
+  script:
+    - sudo apt-get update -y
+    - sudo apt-get php8.2-mysql
+
+build-stage:
+  stage: build
   before_script:
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php composer-setup.php
     - php -r "unlink('composer-setup.php');" in
+  script:
+    - composer install
+
+deploy-stage:
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - composer install
     - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
