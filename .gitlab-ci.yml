@@ -29,7 +29,12 @@ deploy-stage:
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
-  environment: 
+    - touch /var/www/html/.env
+    - echo 'DB_HOST="$DB_HOST"' > /var/www/html/.env
+    - echo 'DB_NAME="$DB_NAME"' >> /var/www/html/.env
+    - echo 'DB_USER="$DB_USER"' >> /var/www/html/.env
+    - echo 'DB_PASS="$DB_PASS"' >> /var/www/html/.env
+  environment:
     name: main
   only:
     - main

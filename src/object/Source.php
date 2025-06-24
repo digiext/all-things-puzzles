@@ -1,5 +1,5 @@
 <?php
-namespace puzzlethings\object;
+namespace puzzlethings\src\object;
 
 class Source {
     private ?int $id = null;

@@ -1,5 +1,5 @@
 <?php
-namespace puzzlethings\object;
+namespace puzzlethings\src\object;
 use DateTime;
 
 class Puzzle {
