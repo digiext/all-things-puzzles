@@ -32,6 +32,7 @@ stages:          # List of stages for jobs, and their order of execution
 build-stage:
   stage: build
   before_script:
+    - echo $PATH
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php composer-setup.php
     - php -r "unlink('composer-setup.php');" in
