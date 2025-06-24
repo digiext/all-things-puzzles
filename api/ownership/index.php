@@ -1,5 +1,5 @@
 <?php
-use puzzlethings\src\gateway\BrandGateway as Gateway;
+use puzzlethings\src\gateway\OwnershipGateway as Gateway;
 
 $id = $_GET['id'] ?? null;
 global $db;

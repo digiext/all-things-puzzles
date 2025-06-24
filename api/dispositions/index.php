@@ -1,5 +1,5 @@
 <?php
-use puzzlethings\src\gateway\BrandGateway as Gateway;
+use puzzlethings\src\gateway\DispositionGateway as Gateway;
 
 global $db;
 

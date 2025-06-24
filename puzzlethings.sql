@@ -178,10 +178,10 @@ INSERT INTO `ownership` (`ownershipid`, `ownershipdesc`) VALUES
 CREATE TABLE `puzzleinv` (
   `puzzleid` bigint(20) UNSIGNED NOT NULL,
   `puzname` text NOT NULL,
-  `pieces` tinyint(4) NOT NULL,
+  `pieces` smallint(6) UNSIGNED NOT NULL,
   `brandid` bigint(20) UNSIGNED NOT NULL,
   `cost` decimal(10,0) NOT NULL,
-  `dateacquired` date NOT NULL,
+  `dateacquired` datetime NOT NULL,
   `sourceid` bigint(20) UNSIGNED NOT NULL,
   `ownershipid` bigint(20) UNSIGNED NOT NULL,
   `locationid` bigint(20) UNSIGNED NOT NULL,
