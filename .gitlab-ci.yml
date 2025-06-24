@@ -21,7 +21,7 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - deploy
 
-setup-sage:
+setup-stage:
   stage: setup
   script:
     - sudo apt-get update -y
@@ -35,7 +35,6 @@ build-stage:
 deploy-stage:
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
-    - composer install
     - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
   environment: 
     name: main
