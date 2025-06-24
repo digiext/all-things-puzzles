@@ -30,10 +30,10 @@ deploy-stage:
   script:
     - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
     - touch /var/www/html/.env
-    - echo 'DB_HOST="$DB_HOST"' > /var/www/html/puzzle/.env
-    - echo 'DB_NAME="$DB_NAME"' >> /var/www/html/puzzle/.env
-    - echo 'DB_USER="$DB_USER"' >> /var/www/html/puzzle/.env
-    - echo 'DB_PASS="$DB_PASS"' >> /var/www/html/puzzle/.env
+    - echo "DB_HOST=\"$DB_HOST\"" > /var/www/html/puzzle/.env
+    - echo "DB_NAME=\"$DB_NAME\"" >> /var/www/html/puzzle/.env
+    - echo "DB_USER=\"$DB_USER\"" >> /var/www/html/puzzle/.env
+    - echo "DB_PASS=\"$DB_PASS\"" >> /var/www/html/puzzle/.env
   environment:
     name: main
   only:
