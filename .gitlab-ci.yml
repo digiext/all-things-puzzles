@@ -17,15 +17,8 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - setup
   - build
   - deploy
-
-setup-stage:
-  stage: setup
-  script:
-    - sudo apt-get update -y
-    - sudo apt-get php8.2 php8.2-mysql -y
 
 build-stage:
   stage: build
