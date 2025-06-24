@@ -14,6 +14,7 @@ class Puzzle {
     private ?int $location = null;
     private ?int $disposition = null;
     private ?string $picture = null;
+    private ?string $upc = null;
 
     public function __construct($id) {
         $this->id = $id;
