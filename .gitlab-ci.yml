@@ -26,8 +26,8 @@ stages:          # List of stages for jobs, and their order of execution
 setup-sage:
   stage: setup
   script:
-    - sudo apt-get update -y
-    - sudo apt-get php8.2-mysql
+    - apt-get update -y
+    - apt-get php8.2-mysql
 
 build-stage:
   stage: build
