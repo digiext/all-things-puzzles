@@ -3,7 +3,6 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
-use puzzlethings\src\object\Brand;
 use puzzlethings\src\object\Puzzle;
 
 class PuzzleGateway {
@@ -12,6 +11,24 @@ class PuzzleGateway {
     public function __construct($db) {
         $this->db = $db;
     }
+
+    // TODO: Puzzle Gateway #create, #update<>, #delete
+//    public function create(int $id, string $name): Puzzle|false {
+//        $sql = "INSERT INTO puzzleinv (puzzleid, puzname, pieces, brandid, cost, dateacquired, sourceid, ownershipid, locationid, dispositionid, pictureurl, upc) VALUES (:id, :desc)";
+//
+//        try {
+//            $stmt = $this->db->prepare($sql);
+//            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+//            $stmt->bindParam(':desc', $desc);
+//            $success = $stmt->execute();
+//
+//            if ($success) {
+//                return new  Status($id, $desc);
+//            } else return false;
+//        } catch (PDOException) {
+//            return false;
+//        }
+//    }
 
     public function findAll(mixed $options = [
         "page" => 0,

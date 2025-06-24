@@ -12,6 +12,23 @@ class BrandGateway {
         $this->db = $db;
     }
 
+    public function create(int $id, string $name): Brand|false {
+        $sql = "INSERT INTO brand (brandid, brandname) VALUES (:id, :name)";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':name', $name);
+            $success = $stmt->execute();
+
+            if ($success) {
+                return new Brand($id, $name);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
     public function findAll(): array {
         $sql = "SELECT * FROM brand";
 
@@ -25,8 +42,8 @@ class BrandGateway {
             }
 
             return $brands;
-        } catch (PDOException $e) {
-            exit($e->getMessage());
+        } catch (PDOException) {
+            return [];
         }
     }
 
@@ -42,8 +59,35 @@ class BrandGateway {
             if ($stmt->rowCount() == 0) return null;
 
             return Brand::of($result);
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return null;
+        }
+    }
+
+    public function updateName(Brand|int $brand, string $name): bool {
+        $sql = "UPDATE brand SET brandname = :name WHERE brandid = :id";
+        $id = $brand instanceof Brand ? $brand->getId() : $brand;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function delete(Brand|int $brand): bool {
+        $sql = "DELETE FROM brand WHERE brandid = :id";
+        $id = $brand instanceof Brand ? $brand->getId() : $brand;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
         }
     }
 }

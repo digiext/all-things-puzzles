@@ -3,6 +3,7 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\object\Disposition;
 use puzzlethings\src\object\Ownership;
 use puzzlethings\src\object\Status;
 
@@ -11,6 +12,23 @@ class StatusGateway {
 
     public function __construct($db) {
         $this->db = $db;
+    }
+
+    public function create(int $id, string $desc): Status|false {
+        $sql = "INSERT INTO status (statusid, statusdesc) VALUES (:id, :desc)";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+            $success = $stmt->execute();
+
+            if ($success) {
+                return new  Status($id, $desc);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
     }
 
     public function findAll(): array {
@@ -45,6 +63,40 @@ class StatusGateway {
             return Status::of($result);
         } catch (PDOException $e) {
             return null;
+        }
+    }
+
+    public function updateDesc(Status|int $status, string $desc): Status|false {
+        $sql = "UPDATE status SET statusdesc = :desc WHERE statusid = :id";
+        $id = $status instanceof Status ? $status->getId() : $status;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+
+            if ($stmt->execute()) {
+                $userSql =  "SELECT * FROM status WHERE statusid = :id";
+                $userStmt = $this->db->prepare($userSql);
+                $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $userStmt->execute();
+                return Status::of($userStmt->fetch(PDO::FETCH_ASSOC));
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function delete(Status|int $status): bool {
+        $sql = "DELETE FROM disposition WHERE dispositionid = :id";
+        $id = $status instanceof Status ? $status->getId() : $status;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
         }
     }
 }

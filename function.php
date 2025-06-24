@@ -1,17 +1,13 @@
 <?php
-function returnToIndex(): void
-{
+function returnToHome(): void {
     returnTo('index.php');
 }
 
-function returnTo($string)
-{
+function returnTo($string) {
     header('Location: ' . $string);
 }
 
-// Encrypt cookie
-function encryptCookie($value): string
-{
+function encryptCookie(string $value): string {
     $key = md5(openssl_random_pseudo_bytes(4));
 
     $cipher = "aes-256-cbc";
@@ -20,67 +16,53 @@ function encryptCookie($value): string
 
     $ciphertext = openssl_encrypt($value, $cipher, $key, 0, $iv);
 
-    return (base64_encode($ciphertext . '::' . $iv . '::' . $key));
+    return base64_encode($ciphertext . '::' . $iv . '::' . $key);
 }
 
 // Decrypt cookie
-function decryptCookie($ciphertext)
-{
+function decryptCookie(string $ciphertext): string|false {
     $cipher = "aes-256-cbc";
 
     list($encrypted_data, $iv, $key) = explode('::', base64_decode($ciphertext));
     return openssl_decrypt($encrypted_data, $cipher, $key, 0, $iv);
 }
 
-function getUserID(): int|false
-{
+function getUserID(): int|false {
     if (!isLoggedIn()) return false;
     return decryptCookie($_COOKIE['rememberme']);
 }
 
-function isLoggedIn(): bool
-{
+function isLoggedIn(): bool {
     return isset($_COOKIE["loggedin"]) && decryptCookie($_COOKIE["loggedin"]) == "true";
 }
 
-function isAdmin(): bool
-{
+function isAdmin(): bool {
     return (isLoggedIn() && isset($_COOKIE["usg"]) && decryptCookie($_COOKIE["usg"]) == "admin");
 }
 
-function isWebmaster(): bool
-{
-    return isAdmin() || (isLoggedIn() && isset($_COOKIE["usg"]) && decryptCookie($_COOKIE["usg"]) == "webmaster");
-}
-
-function successAlertNoRedir($value): void
-{
+function successAlertNoRedir($value): void {
     session_start();
     $_SESSION['success'] = $value;
 }
 
-function successAlert($value, $redir): void
-{
+function successAlert($value, $redir): void {
     session_start();
     $_SESSION['success'] = $value;
     header("Location:" . $redir);
 }
 
-function failAlertNoRedir($value): void
-{
+function failAlertNoRedir($value): void {
     session_start();
     $_SESSION['fail'] = $value;
 }
 
-function failAlert($value, $redir): void
-{
+function failAlert($value, $redir): void {
     session_start();
     $_SESSION['fail'] = $value;
     header("Location:" . $redir);
 }
 
-function hyphenate($str, array $noStrip = []): string
-{
+function hyphenate($str, array $noStrip = []): string {
     // non-alpha and non-numeric characters become spaces
     $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
     $str = trim($str);
@@ -90,8 +72,7 @@ function hyphenate($str, array $noStrip = []): string
     return $str;
 }
 
-function rrmdir($dir): void
-{
+function rrmdir($dir): void {
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
@@ -106,8 +87,7 @@ function rrmdir($dir): void
     }
 }
 
-function getNiceDateRepresentation($date): string
-{
+function getNiceDateRepresentation($date): string {
     $timestamp = strtotime($date);
     if ((int) date("j", $timestamp) % 10 == 1 && (int) date("j", $timestamp) != 11) {
         // 1st, 21st, 31st

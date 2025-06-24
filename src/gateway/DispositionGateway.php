@@ -12,6 +12,23 @@ class DispositionGateway {
         $this->db = $db;
     }
 
+    public function create(int $id, string $desc): Disposition|false {
+        $sql = "INSERT INTO disposition (dispositionid, dispositiondesc) VALUES (:id, :desc)";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+            $success = $stmt->execute();
+
+            if ($success) {
+                return new  Disposition($id, $desc);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
     public function findAll(): array {
         $sql = "SELECT * FROM disposition";
 
@@ -26,7 +43,7 @@ class DispositionGateway {
 
             return $dispositions;
         } catch (PDOException $e) {
-            exit($e->getMessage());
+            return [];
         }
     }
 
@@ -42,8 +59,42 @@ class DispositionGateway {
             if ($stmt->rowCount() == 0) return null;
 
             return Disposition::of($result);
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return null;
+        }
+    }
+
+    public function updateDispositionDesc(Disposition|int $disposition, string $desc): Disposition|false {
+        $sql = "UPDATE disposition SET dispositiondesc = :desc WHERE dispositionid = :id";
+        $id = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+
+            if ($stmt->execute()) {
+                $userSql =  "SELECT * FROM disposition WHERE dispositionid = :id";
+                $userStmt = $this->db->prepare($userSql);
+                $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $userStmt->execute();
+                return Disposition::of($userStmt->fetch(PDO::FETCH_ASSOC));
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function delete(Disposition|int $disposition): bool {
+        $sql = "DELETE FROM disposition WHERE dispositionid = :id";
+        $id = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
         }
     }
 }

@@ -12,6 +12,23 @@ class OwnershipGateway {
         $this->db = $db;
     }
 
+    public function create(int $id, string $desc): Ownership|false {
+        $sql = "INSERT INTO ownership (ownershipid, ownershipdesc) VALUES (:id, :desc)";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+            $success = $stmt->execute();
+
+            if ($success) {
+                return new  Ownership($id, $desc);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
     public function findAll(): array {
         $sql = "SELECT * FROM ownership";
 
@@ -44,6 +61,40 @@ class OwnershipGateway {
             return Ownership::of($result);
         } catch (PDOException $e) {
             return null;
+        }
+    }
+
+    public function updateDesc(Ownership|int $ownership, string $desc): Ownership|false {
+        $sql = "UPDATE ownership SET ownershipdesc = :desc WHERE ownershipid = :id";
+        $id = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':desc', $desc);
+
+            if ($stmt->execute()) {
+                $userSql =  "SELECT * FROM ownership WHERE ownershipid = :id";
+                $userStmt = $this->db->prepare($userSql);
+                $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $userStmt->execute();
+                return Ownership::of($userStmt->fetch(PDO::FETCH_ASSOC));
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function delete(Ownership|int $ownership): bool {
+        $sql = "DELETE FROM ownership WHERE ownershipid = :id";
+        $id = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
         }
     }
 }

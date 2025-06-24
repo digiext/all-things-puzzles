@@ -250,7 +250,7 @@ CREATE TABLE `user` (
   `user_name` text NOT NULL,
   `full_name` text NOT NULL,
   `email` text NOT NULL,
-  `emailconfirmed` tinyint(4) NOT NULL,
+  `emailconfirmed` tinyint(1) NOT NULL,
   `user_password` varchar(255) NOT NULL,
   `user_hash` varchar(32) NOT NULL,
   `usergroupid` bigint(20) UNSIGNED NOT NULL,

@@ -1,8 +1,9 @@
 {
   "require": {
     "vlucas/phpdotenv": "^5.6",
+    "twbs/bootstrap": "^5.3.7",
     "ext-pdo": "*",
-    "twbs/bootstrap": "^5.3.7"
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {
