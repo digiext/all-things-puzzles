@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Jun 23, 2025 at 11:32 PM
+-- Generation Time: Jun 24, 2025 at 12:24 AM
 -- Server version: 10.9.8-MariaDB-1:10.9.8+maria~ubu2204
 -- PHP Version: 8.2.27
 
@@ -186,7 +186,8 @@ CREATE TABLE `puzzleinv` (
   `ownershipid` bigint(20) UNSIGNED NOT NULL,
   `locationid` bigint(20) UNSIGNED NOT NULL,
   `dispositionid` bigint(20) UNSIGNED NOT NULL,
-  `pictureurl` text NOT NULL
+  `pictureurl` text NOT NULL,
+  `upc` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
