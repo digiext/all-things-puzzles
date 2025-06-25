@@ -15,12 +15,12 @@
                 <!-- Sign In/Register Links Changes based on LoggedIn cookie -->
                 <?php if (isLoggedIn()) {
                     echo "<div class='text-end'>";
-                    echo "<button class='btn btn-outline-light' type='submit' href='profile.php'>Profile</button>";
+                    echo "<button class='btn btn-outline-light m-1' type='submit' href='profile.php'>Profile</button>";
                     echo "<button class='btn btn-warning' type='submit' href='logout.php'>Logout</button>";
                     echo "</div>";
                 } else {
                     echo "<div class='text-end'>";
-                    echo "<button class='btn btn-outline-light' type='submit' data-bs-toggle='modal' data-bs-target='#staticBackdrop'>Login</button>";
+                    echo "<button class='btn btn-outline-light m-1' type='submit' data-bs-toggle='modal' data-bs-target='#staticBackdrop'>Login</button>";
                     echo "<button class='btn btn-warning' type='submit' href='register.php'>Sign Up</button>";
                     echo "</div>";
                 } ?>
@@ -41,18 +41,18 @@
                                 <label for="username" class="col-form-label">User Name</label>
                             </div>
                             <div class="col-auto">
-                                <input type="text" class="form-control" id="username">
+                                <input type="text" class="form-control" id="username" name="username">
                             </div>
                             <div class="col-auto">
                                 <label for="password" class="col-form-label">Password</label>
                             </div>
                             <div class="col-auto">
-                                <input type="password" id="password" class="form-control">
+                                <input type="password" class="form-control" id="password" name="password">
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-success">Login</button>
+                            <button type="submit" class="btn btn-success" name="submit">Login</button>
                         </div>
                     </form>
                 </div>

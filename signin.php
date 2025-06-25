@@ -10,6 +10,8 @@ global $db;
 require_once 'db.php';
 require_once 'function.php';
 
+var_dump($_POST);
+
 // Check if $_SESSION or $_COOKIE already set
 if (isset($_SESSION['userid'])) {
     header("Location: " . (isset($_POST['from']) ? $_SERVER['HTTPS'] ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_POST['from'] : 'index.php'));
@@ -38,7 +40,8 @@ if (isset($_POST['submit'])) {
     if ($username != "" && $password != "") {
         $gateway = new UserGateway($db);
         $user = $gateway->attemptLogin($username, $password);
-        if ($user instanceof User) {                $days = 30;
+        if ($user instanceof User) {
+            $days = 30;
             $options = array(
                 'expires' => time() + ($days * 24 * 60 * 60),
                 'path' => '/'

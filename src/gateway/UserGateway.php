@@ -270,8 +270,7 @@ class UserGateway
         }
     }
 
-    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false
-    {
+    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
@@ -284,7 +283,7 @@ class UserGateway
             }
 
             $record = $stmt->fetch(PDO::FETCH_ASSOC);
-            $hashedPassword = $record['user_pass'];
+            $hashedPassword = $record['user_password'];
 
             if (password_verify($password, $hashedPassword)) {
                 if ($setlastlogin) {
@@ -299,7 +298,8 @@ class UserGateway
 
                 return User::of($record);
             } else return false;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Database error on signing in: " . $e->getMessage());
             return false;
         }
     }
