@@ -1,4 +1,5 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use DateTime;
@@ -13,15 +14,18 @@ const EMAIL_IN_USE = 4;
 const USERNAME_DB_ERROR = 5;
 const EMAIL_DB_ERROR = 6;
 
-class UserGateway {
+class UserGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(int $id, string $username, string $email, string $password): User|int {
-        $sql = "INSERT INTO user (userid, user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:id, :name, '', :email, 0, :password, :hash, 0, 0, NOW())";
+    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true): User|bool|int
+    {
+        $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (, :name, :fullname, :email, 0, :password, :hash, 0, 0, NOW())";
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         if (!preg_match('/^[0-9a-zA-Z_]{5,32}$/', $username)) {
@@ -58,22 +62,23 @@ class UserGateway {
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':fullname', $fullname);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':hash', $hash);
             $success = $stmt->execute();
 
-            if ($success) {
-                return new User($id, $username, "", $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
-            } else return false;
+            if ($success && $returnuser) {
+                return true; //new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
+            } else return $success;
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $sql = "SELECT * FROM user";
 
         try {
@@ -91,7 +96,8 @@ class UserGateway {
         }
     }
 
-    public function findById(int $id): ?User {
+    public function findById(int $id): ?User
+    {
         $sql = "SELECT * FROM user WHERE userid = :id";
 
         try {
@@ -108,7 +114,8 @@ class UserGateway {
         }
     }
 
-    public function updateUsername(User|int $user, string $name): User|false {
+    public function updateUsername(User|int $user, string $name): User|false
+    {
         $sql = "UPDATE user SET user_name = :name WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
@@ -129,7 +136,8 @@ class UserGateway {
         }
     }
 
-    public function updateFullName(User|int $user, string $fullname): User|false {
+    public function updateFullName(User|int $user, string $fullname): User|false
+    {
         $sql = "UPDATE user SET full_name = :fullname WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
@@ -150,7 +158,8 @@ class UserGateway {
         }
     }
 
-    public function updateEmail(User|int $user, string $email): User|false {
+    public function updateEmail(User|int $user, string $email): User|false
+    {
         $sql = "UPDATE user SET email = :email WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
@@ -171,7 +180,8 @@ class UserGateway {
         }
     }
 
-    public function updatePassword(User|int $user, string $password): User|false {
+    public function updatePassword(User|int $user, string $password): User|false
+    {
         $sql = "UPDATE user SET user_password = :password WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -193,7 +203,8 @@ class UserGateway {
         }
     }
 
-    public function updateGroup(User|int $user, int $groupid): User|false {
+    public function updateGroup(User|int $user, int $groupid): User|false
+    {
         $sql = "UPDATE user SET usergroupid = :groupid WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
@@ -214,7 +225,8 @@ class UserGateway {
         }
     }
 
-    public function setEmailConfirmed(User|int $user): User|false {
+    public function setEmailConfirmed(User|int $user): User|false
+    {
         $sql = "UPDATE user SET emailconfirmed = TRUE WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
@@ -234,7 +246,8 @@ class UserGateway {
         }
     }
 
-    public function validLogin(string $username, string $password, bool $setlastlogin = true): User|false {
+    public function validLogin(string $username, string $password, bool $setlastlogin = true): User|false
+    {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
@@ -267,7 +280,8 @@ class UserGateway {
         }
     }
 
-    public function delete(User|int $user): bool {
+    public function delete(User|int $user): bool
+    {
         $sql = "DELETE FROM user WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
 
