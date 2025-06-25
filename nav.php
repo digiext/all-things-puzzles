@@ -34,8 +34,9 @@
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Login</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form class="column" action="signin.php" method="post" name="login">
+                    <form class="column" action="signin.php" method="post" name="login">
+                        <div class="modal-body">
+
                             <div class="col-auto">
                                 <label for="username" class="col-form-label">User Name</label>
                             </div>
@@ -48,12 +49,12 @@
                             <div class="col-auto">
                                 <input type="password" id="password" class="form-control">
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success" href="signin.php">Login</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success">Login</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
