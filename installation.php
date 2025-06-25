@@ -32,7 +32,7 @@ include 'header.php';
         </div>
 
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+            <button type="submit" class="btn btn-primary mb-3" name="submit">Submit</button>
         </div>
     </form>
 </div>
