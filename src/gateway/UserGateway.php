@@ -23,9 +23,9 @@ class UserGateway
         $this->db = $db;
     }
 
-    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true): User|bool|int
+    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true): User|PDOException|true|int
     {
-        $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (, :name, :fullname, :email, 0, :password, :hash, 0, 0, NOW())";
+        $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, 1, 1, NOW())";
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         if (!preg_match('/^[0-9a-zA-Z_]{5,32}$/', $username)) {
@@ -72,8 +72,8 @@ class UserGateway
             if ($success && $returnuser) {
                 return true; //new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
             } else return $success;
-        } catch (PDOException) {
-            return false;
+        } catch (PDOException $e) {
+            return $e;
         }
     }
 

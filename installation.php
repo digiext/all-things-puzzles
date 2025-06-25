@@ -15,7 +15,7 @@ include 'header.php';
 
         <div class="mb-3">
             <label for="fullname" class="form-label">Full Name</label>
-            <input type="text" class="form-control" name="fullname">
+            <input type="text" class="form-control" name="fullname" id="fullname">
         </div>
 
         <div class="mb-3">
