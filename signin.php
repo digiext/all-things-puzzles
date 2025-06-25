@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
             $group = $user->getGroupId();
             if ($group === ADMIN_GROUP_ID) setcookie("usg", encryptCookie("admin"), $options);
 
-            header("Location: $from");
+            header("Location: home.php");
 
             exit;
         } else {
