@@ -2,6 +2,7 @@
 
 use puzzlethings\src\gateway\UserGateway;
 
+use puzzlethings\src\object\User;
 use const puzzlethings\src\gateway\INVALID_USERNAME;
 use const puzzlethings\src\gateway\USERNAME_IN_USE;
 
@@ -20,9 +21,9 @@ if (isset($_SESSION['userid'])) {
 
     // Fetch records
     $gateway = new UserGateway($db);
-    $code = $gateway->findById($userid);
+    $user = $gateway->findById($userid);
 
-    if (!empty($code)) {
+    if (!empty($user)) {
         $_SESSION['userid'] = $userid;
         header("Location: " . (isset($_POST['from']) ? $_SERVER['HTTPS'] ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_POST['from'] : 'index.php'));
         exit;
@@ -31,48 +32,30 @@ if (isset($_SESSION['userid'])) {
 
 // On submit
 if (isset($_POST['submit'])) {
-
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = $_POST['username'] ?? "";
+    $password = $_POST['password'] ?? "";
     $from = $_POST['from'] ?? 'index.php';
 
     if ($username != "" && $password != "") {
-
         $gateway = new UserGateway($db);
-        $code = $gateway->validLogin($username, $password, true);
-        if ($code == true) {
+        $user = $gateway->attemptLogin($username, $password);
+        if ($user instanceof User) {                $days = 30;
+            $options = array(
+                'expires' => time() + ($days * 24 * 60 * 60),
+                'path' => '/'
+            );
+
             if (isset($_POST['rememberme'])) {
                 // Set cookie variables
-                $value = encryptCookie($userid);
-
-                $days = 30;
-                $options = array(
-                    'expires' => time() + ($days * 24 * 60 * 60),
-                    'path' => '/'
-                );
+                $value = encryptCookie($user->getId());
                 setcookie("rememberme", $value, $options);
-                setcookie("loggedin", encryptCookie("true"), $options);
-            } else {
-                // Set cookie variables
-                $days = 30;
-                $options = array(
-                    'expires' => time() + ($days * 24 * 60 * 60),
-                    'path' => '/'
-                );
-                setcookie("loggedin", encryptCookie("true"), $options);
             }
 
-            $code = $gateway->findByName($username);
-            $admin = $code['usergroupid'];
+            setcookie("loggedin", encryptCookie("true"), $options);
 
-            if ($admin == 1) {
-                $days = 30;
-                $options = array(
-                    'expires' => time() + ($days * 24 * 60 * 60),
-                    'path' => '/'
-                );
-                setcookie("usg", encryptCookie("admin"), $options);
-            }
+            $admin = $user->getGroupId();
+
+            if ($admin == 1) setcookie("usg", encryptCookie("admin"), $options);
 
             header("Location: $from");
 

@@ -114,9 +114,8 @@ class UserGateway
         }
     }
 
-    public function findByName(string $name): array
-    {
-        $sql = "SELECT * FROM user WHERE username = :username";
+    public function findByName(string $name): array {
+        $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
             $stmt = $this->db->query($sql);
@@ -265,7 +264,7 @@ class UserGateway
         }
     }
 
-    public function validLogin(string $username, string $password, bool $setlastlogin = true): User|false
+    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false
     {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
