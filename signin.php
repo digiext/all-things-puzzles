@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
 
             if ($admin == 1) setcookie("usg", encryptCookie("admin"), $options);
 
-            header("Location: $from");
+            header("Location: home.php");
 
             exit;
         } else {
