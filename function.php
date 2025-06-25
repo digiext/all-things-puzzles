@@ -1,4 +1,7 @@
 <?php
+const ADMIN_GROUP_ID = 1;
+const USER_GROUP_ID = 2;
+
 function returnToHome(): void {
     returnTo('index.php');
 }

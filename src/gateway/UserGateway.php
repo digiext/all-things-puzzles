@@ -25,7 +25,7 @@ class UserGateway
 
     public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true): User|PDOException|true|int
     {
-        $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, 1, 1, NOW())";
+        $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, :usergroup, 1, NOW())";
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         if (!preg_match('/^[0-9a-zA-Z_]{5,32}$/', $username)) {
@@ -67,10 +67,13 @@ class UserGateway
         $hash = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 32);
 
         try {
+            $usergroup = USER_GROUP_ID;
+
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':fullname', $fullname);
             $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':usergroup', $usergroup);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':hash', $hash);
             $success = $stmt->execute();
@@ -287,11 +290,15 @@ class UserGateway
 
             if (password_verify($password, $hashedPassword)) {
                 if ($setlastlogin) {
-                    $llsql = "UPDATE user SET lastlogin = NOW() WHERE userid = :id";
+                    try {
+                        $llsql = "UPDATE user SET lastlogin = NOW() WHERE userid = :id";
 
-                    $llstmt = $this->db->prepare($llsql);
-                    $llstmt->bindParam(':id', $id, PDO::PARAM_INT);
-                    $llstmt->execute();
+                        $llstmt = $this->db->prepare($llsql);
+                        $llstmt->bindParam(':id', $id, PDO::PARAM_INT);
+                        $llstmt->execute();
+                    } catch (PDOException $e) {
+                        error_log("Database error on updating last login: " . $e->getMessage());
+                    }
                 }
 
                 return User::of($record);

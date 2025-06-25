@@ -53,9 +53,8 @@ if (isset($_POST['submit'])) {
 
             setcookie("loggedin", encryptCookie("true"), $options);
 
-            $admin = $user->getGroupId();
-
-            if ($admin == 1) setcookie("usg", encryptCookie("admin"), $options);
+            $group = $user->getGroupId();
+            if ($group === ADMIN_GROUP_ID) setcookie("usg", encryptCookie("admin"), $options);
 
             header("Location: $from");
 
