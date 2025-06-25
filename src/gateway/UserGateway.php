@@ -29,10 +29,12 @@ class UserGateway
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         if (!preg_match('/^[0-9a-zA-Z_]{5,32}$/', $username)) {
+            error_log("Invalid username $username");
             return INVALID_USERNAME;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            error_log("Invalid email $email");
             return INVALID_EMAIL;
         }
 
@@ -41,9 +43,11 @@ class UserGateway
             $stmt = $this->db->prepare($usernameSql);
             $stmt->execute([':username' => $username]);
             if ($stmt->fetchColumn() > 0) {
+                error_log("Username $username in use!");
                 return USERNAME_IN_USE;
             }
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Database error while checking usernames! " .  $e->getMessage());
             return USERNAME_DB_ERROR;
         }
 
@@ -52,9 +56,11 @@ class UserGateway
             $stmt = $this->db->prepare($emailSql);
             $stmt->execute([':email' => $email]);
             if ($stmt->fetchColumn() > 0) {
+                error_log("Email $email in use!");
                 return EMAIL_IN_USE;
             }
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Database error while checking emails! " .  $e->getMessage());
             return EMAIL_DB_ERROR;
         }
 

@@ -15,7 +15,6 @@ if (isset($_SESSION['userid'])) {
     header("Location: " . (isset($_POST['from']) ? $_SERVER['HTTPS'] ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_POST['from'] : 'index.php'));
     exit;
 } else if (isLoggedIn()) {
-
     // Decrypt cookie variable value
     $userid = decryptCookie($_COOKIE['rememberme']);
 
@@ -65,5 +64,5 @@ if (isset($_POST['submit'])) {
             $_SESSION['fail'] = "Incorrect username and password.  Please try again";
             header("Location: index.php");
         }
-    }
+    } else header("Location: " . (isset($_POST['from']) ? $_SERVER['HTTPS'] ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_POST['from'] : 'index.php'));
 }

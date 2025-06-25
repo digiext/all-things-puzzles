@@ -2,8 +2,14 @@
 
 use puzzlethings\src\gateway\UserGateway;
 
-use const puzzlethings\src\gateway\INVALID_USERNAME;
-use const puzzlethings\src\gateway\USERNAME_IN_USE;
+use const puzzlethings\src\gateway\{
+    INVALID_USERNAME,
+    INVALID_EMAIL,
+    USERNAME_IN_USE,
+    EMAIL_IN_USE,
+    USERNAME_DB_ERROR,
+    EMAIL_DB_ERROR
+};
 
 global $db;
 require_once 'db.php';
@@ -18,18 +24,22 @@ if (isset($_POST['submit'])) {
     $gateway = new UserGateway($db);
     $code = $gateway->create($username, $fullname, $email, $password, false);
 
-    // Since there is no HTML on this page you need to find a way to "pass this up" to the installation/index page
+    session_start();
     if ($code instanceof PDOException) {
-        session_start();
         $_SESSION['fail'] = $code->getMessage();
-        header("Location: index.php");
-    } elseif ($code == USERNAME_IN_USE) {
-        session_start();
+    } elseif ($code === INVALID_USERNAME) {
+        $_SESSION['fail'] = "Invalid username!";
+    } elseif ($code === INVALID_EMAIL) {
+        $_SESSION['fail'] = "Invalid email!";
+    } elseif ($code === USERNAME_IN_USE) {
         $_SESSION['fail'] = "Username in use!";
-        header("Location: index.php");
+    } elseif ($code === EMAIL_IN_USE) {
+        $_SESSION['fail'] = "Username in use!";
+    } elseif ($code === USERNAME_DB_ERROR || $code === EMAIL_DB_ERROR) {
+        $_SESSION['fail'] = "Database error! Check your PHP Console for details!";
     } else {
-        session_start();
         $_SESSION['success'] = "User has been created";
-        header("Location: index.php");
     }
+
+    header("Location: index.php");
 }
