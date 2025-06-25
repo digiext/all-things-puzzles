@@ -287,12 +287,10 @@ class UserGateway
 
             if (password_verify($password, $hashedPassword)) {
                 if ($setlastlogin) {
-                    $now = (new DateTime("now"))->format("Y-m-d H:i:s");
-                    $llsql = "UPDATE user SET lastlogin = :lastlogin WHERE userid = :id";
+                    $llsql = "UPDATE user SET lastlogin = NOW() WHERE userid = :id";
 
                     $llstmt = $this->db->prepare($llsql);
                     $llstmt->bindParam(':id', $id, PDO::PARAM_INT);
-                    $llstmt->bindParam(':lastlogin', $now);
                     $llstmt->execute();
                 }
 
