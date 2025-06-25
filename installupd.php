@@ -3,6 +3,7 @@
 use puzzlethings\src\gateway\UserGateway;
 
 use const puzzlethings\src\gateway\INVALID_USERNAME;
+use const puzzlethings\src\gateway\USERNAME_IN_USE;
 
 global $db;
 require_once 'db.php';
@@ -19,10 +20,16 @@ if (isset($_POST['submit'])) {
 
     // Since there is no HTML on this page you need to find a way to "pass this up" to the installation/index page
     if ($code instanceof PDOException) {
-        echo '<div class="alert alert-danger" role="alert>Database Error: ' . $code->getMessage() . '</div>';
-    }
-
-    if ($code == INVALID_USERNAME) {
-        echo '<div class="alert alert-danger" role="alert>Invalid username!</div>';
+        session_start();
+        $_SESSION['fail'] = $code->getMessage();
+        header("Location: index.php");
+    } elseif ($code == USERNAME_IN_USE) {
+        session_start();
+        $_SESSION['fail'] = "Username in use!";
+        header("Location: index.php");
+    } else {
+        session_start();
+        $_SESSION['success'] = "User has been created";
+        header("Location: index.php");
     }
 }

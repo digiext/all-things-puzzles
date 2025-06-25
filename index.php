@@ -6,6 +6,26 @@ include 'header.php';
 include 'nav.php';
 
 ?>
+<?php
+if (isset($_SESSION['success'])) { ?>
+    <div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <h4><?php
+            echo $_SESSION['success'];
+            unset($_SESSION['success']); ?>
+        </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div><?php
+        } elseif (isset($_SESSION['fail'])) { ?>
+    <div class='alert alert-danger alert-dismissible fade show' role="alert">
+        <h4><?php
+            echo $_SESSION['fail'];
+            unset($_SESSION['fail']); ?>
+        </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div><?php
+        }
+            ?>
+
 <div class="container-fluid">
     <br>
     <h1>Welcome to All Things Puzzles!</h1>
