@@ -114,6 +114,25 @@ class UserGateway
         }
     }
 
+    public function findByName(string $name): array
+    {
+        $sql = "SELECT * FROM user WHERE username = :username";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $users = array();
+
+            foreach ($result as $res) {
+                $users[] = User::of($res);
+            }
+
+            return $users;
+        } catch (PDOException) {
+            return [];
+        }
+    }
+
     public function updateUsername(User|int $user, string $name): User|false
     {
         $sql = "UPDATE user SET user_name = :name WHERE userid = :id";

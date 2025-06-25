@@ -10,22 +10,22 @@ include 'header.php';
     <form class="row" action="installupd.php" method="post" name="installupd">
         <div class="mb-3">
             <label for="userid" class="form-label">User ID</label>
-            <input type="text" class="form-control" name="userid">
+            <input type="text" class="form-control" name="userid" id="userid">
         </div>
 
         <div class="mb-3">
             <label for="fullname" class="form-label">Full Name</label>
-            <input type="text" class="form-control" name="fullname" id="fullname">
+            <input type="text" class="form-control" name="fullname" id="fullname" placeholder="First Name Last Name">
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" name="email" placeholder="name@example.com">
+            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
         </div>
 
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" aria-describedby="passwordHelpBlock">
+            <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelpBlock">
             <div id="passwordHelpBlock" class="form-text">
                 Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
             </div>
