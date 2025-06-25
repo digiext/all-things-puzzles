@@ -10,8 +10,6 @@ global $db;
 require_once 'db.php';
 require_once 'function.php';
 
-var_dump($_POST);
-
 // Check if $_SESSION or $_COOKIE already set
 if (isset($_SESSION['userid'])) {
     header("Location: " . (isset($_POST['from']) ? $_SERVER['HTTPS'] ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_POST['from'] : 'index.php'));

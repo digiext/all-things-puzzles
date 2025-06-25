@@ -25,7 +25,7 @@ class User implements \JsonSerializable {
     }
 
     public static function of(mixed $res): User {
-        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['password'], $res['user_hash'], $res['groupid'], $res['themeid'], new DateTime($res['lastlogin']));
+        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], new DateTime($res['lastlogin']));
     }
 
     public function getId(): ?int {
