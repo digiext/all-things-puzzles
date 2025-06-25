@@ -12,7 +12,8 @@ try {
     // set the resulting array to associative
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "<style>.hidden { visibility: visible; } .shown { visibility: hidden; font-size: 0px }</style>";
+    echo "" . $e->getMessage() . "";
+    //echo "<style>.hidden { visibility: visible; } .shown { visibility: hidden; font-size: 0px }</style>";
 }
 if (isset($_POST['submit'])) {
     try {
@@ -52,6 +53,7 @@ if (isset($_POST['submit'])) {
             }
         }
     } catch (PDOException $e) {
-        echo "<style>.hidden { visibility: visible; } .shown { visibility: hidden; font-size: 0px }</style>";
+        echo "" . $e->getMessage();
+        //echo "<style>.hidden { visibility: visible; } .shown { visibility: hidden; font-size: 0px }</style>";
     }
 }
