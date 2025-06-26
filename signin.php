@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
             setcookie(LOGGED_IN, encryptCookie("true"), $options);
 
             $group = $user->getGroupId();
-            if ($group === ADMIN_GROUP_ID) setcookie("usg", encryptCookie("admin"), $options);
+            if ($group === ADMIN_GROUP_ID) setcookie("usg", encryptCookie(ADMIN_GROUP_ID), $options);
 
             session_start();
             successAlert("Welcome " . $username, "home.php");
