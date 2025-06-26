@@ -1,4 +1,9 @@
 <?php
+//If Not Logged In Reroute to index.php
+if (isset($_COOKIE['loggedin'])) {
+    header("Location: home.php");
+}
+
 include 'function.php';
 
 $title = 'All Things Puzzles';
