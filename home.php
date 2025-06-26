@@ -11,9 +11,9 @@ include 'header.php';
 include 'nav.php';
 ?>
 
-<h3>Puzzle Stats</h3>
+<h3 class="text-center">Puzzle Stats</h3>
 <div class="container text-center">
-    <div class=" row">
+    <div class="row g-2">
         <div class="col">
             <div class="card">
                 <div class="card-header">
@@ -59,8 +59,8 @@ include 'nav.php';
     </div>
 </div>
 <br>
-<h3>Puzzle Management</h3>
-<div class="container text-center">
+<h3 class="text-center">Puzzle Management</h3>
+<div class="container text-center my-2">
     <div class="row">
         <div class="col">
             <div class="card">
@@ -88,7 +88,7 @@ include 'nav.php';
         </div>
     </div>
 </div>
-<div class="container text-center">
+<div class="container text-center my-2">
     <div class="row">
         <div class="col">
             <div class="card">
