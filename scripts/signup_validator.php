@@ -11,7 +11,7 @@ use const puzzlethings\src\gateway\{
 };
 
 global $db;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/util/db.php';
+require_once '../util/db.php';
 
 $gateway = new UserGateway($db);
 if (isset($_POST['username'])) {

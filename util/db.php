@@ -8,7 +8,7 @@ use PDOException;
 
 $DEV_ENV = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+require '../vendor/autoload.php';
 try {
     $dotenv = Dotenv::createImmutable(dirname(__DIR__));
     $dotenv->load();
