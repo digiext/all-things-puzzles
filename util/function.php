@@ -1,6 +1,5 @@
 <?php
 include 'constants.php';
-session_start();
 
 function returnToHome(): void {
     returnTo('index.php');

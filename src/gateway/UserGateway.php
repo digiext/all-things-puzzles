@@ -28,7 +28,7 @@ class UserGateway
         $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, :usergroup, 1, NOW())";
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        if (!preg_match('/^[0-9a-zA-Z_]{5,32}$/', $username)) {
+        if (!preg_match('/^[0-9a-zA-Z_]{5,16}$/', $username)) {
             error_log("Invalid username $username");
             return INVALID_USERNAME;
         }
@@ -272,6 +272,37 @@ class UserGateway
             return false;
         }
     }
+
+    public function usernameInUse(string $username): bool {
+        $sql = "SELECT COUNT(*) FROM user where user_name = :username";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+            return $stmt->fetchColumn() > 0;
+        } catch (PDOException $e) {
+            error_log("Database error validating username: " . $e->getMessage());
+            // Just to be on the safe side
+            return true;
+        }
+    }
+
+    public function emailInUse(string $email): bool {
+        $sql = "SELECT COUNT(*) FROM user where email = :email";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            return $stmt->fetchColumn() > 0;
+        } catch (PDOException $e) {
+            error_log("Database error validating email: " . $e->getMessage());
+            // Just to be on the safe side
+            return true;
+        }
+    }
+
 
     public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false {
         $sql = "SELECT * FROM user WHERE user_name = :username";

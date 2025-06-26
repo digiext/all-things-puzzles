@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
     } elseif ($code === USERNAME_DB_ERROR || $code === EMAIL_DB_ERROR) {
         failAlert("Database error! Check your PHP Console for details!");
     } else {
-        successAlert("User has been created");
+        successAlert("You have been registered!");
     }
 
     header("Location: index.php");

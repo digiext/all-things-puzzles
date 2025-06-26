@@ -9,17 +9,17 @@ include 'header.php';
     <h3>Fill in form below for initial user creation</h3>
     <form class="row" action="installupd.php" method="post" name="installupd">
         <div class="mb-3">
-            <label for="userid" class="form-label">User ID</label>
-            <input type="text" class="form-control" name="userid" id="userid">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" id="username">
         </div>
 
         <div class="mb-3">
-            <label for="fullname" class="form-label">Full Name</label>
+            <label for="fullname" class="form-label">Display Name</label>
             <input type="text" class="form-control" name="fullname" id="fullname" placeholder="First Name Last Name">
         </div>
 
         <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
+            <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
         </div>
 
