@@ -17,9 +17,11 @@ include 'nav.php';
 
 $gateway = new BrandGateway($db);
 $gateway->findAll();
+?>
 
-foreach ($gateway as $brand) {
-    if (!($brand instanceof Brand)) continue;
+<
+    <?php foreach ($gateway as $brand) {
+        if (!($brand instanceof Brand)) continue;
 
-    echo "Brand ID: " . $brand->getId() . " | Brand Name: " . $brand->getName();
-}
+        echo "Brand ID: " . $brand->getId() . " | Brand Name: " . $brand->getName();
+    } ?>
