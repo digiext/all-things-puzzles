@@ -1,20 +1,8 @@
 <?php
 namespace puzzlethings;
 
-use Dotenv\Dotenv;
-use Exception;
 use PDO;
 use PDOException;
-
-$DEV_ENV = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
-
-require __DIR__ . '/../vendor/autoload.php';
-try {
-    $dotenv = Dotenv::createImmutable(dirname(__DIR__));
-    $dotenv->load();
-} catch (Exception $e) {
-    die("Unable to load the dotenv file: " . $e->getMessage());
-}
 
 $DB_HOST = $_ENV['DB_HOST'];
 $DB_NAME = $_ENV['DB_NAME'];

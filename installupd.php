@@ -12,8 +12,8 @@ use const puzzlethings\src\gateway\{
 };
 
 global $db;
-require_once 'util/db.php';
 require_once 'util/function.php';
+require_once 'util/db.php';
 
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
