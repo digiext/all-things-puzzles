@@ -1,5 +1,24 @@
 <?php
+
+use Dotenv\Dotenv;
+use Exception;
+
 include 'constants.php';
+
+require __DIR__ . '/../vendor/autoload.php';
+try {
+    $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+    $dotenv->load();
+    $GLOBALS['DEV'] = $_ENV['DEVELOPER_MODE'] === 'true';
+} catch (Exception $e) {
+    die("Unable to load the dotenv file: " . $e->getMessage());
+}
+
+define("BASE_URL", $_SERVER['HTTP_HOST'] === "https://www.digitalunderworlds.com" ? "https://www.digitalunderworlds.com/puzzle" : $_SERVER['DOCUMENT_ROOT']);
+
+function isDev() {
+    return $GLOBALS['DEV'] ?? false;
+}
 
 function returnToHome(): void {
     returnTo('index.php');

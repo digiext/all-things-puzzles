@@ -7,8 +7,8 @@ use const puzzlethings\src\gateway\INVALID_USERNAME;
 use const puzzlethings\src\gateway\USERNAME_IN_USE;
 
 global $db;
-require_once 'util/db.php';
 require_once 'util/function.php';
+require_once 'util/db.php';
 
 // Check if $_SESSION or $_COOKIE already set
 if (isset($_SESSION['userid'])) {
