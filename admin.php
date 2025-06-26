@@ -2,7 +2,7 @@
 include 'util/function.php';
 
 //If Not Logged In Reroute to index.php
-if (!isLoggedIn()) {
+if (!isAdmin()) {
     header("Location: index.php");
 }
 

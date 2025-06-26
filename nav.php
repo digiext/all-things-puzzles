@@ -1,4 +1,4 @@
-<script src="scripts/signup_validator.js"></script>
+<script src="<?php echo __DIR__ ?>/scripts/signup_validator.js"></script>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?php
@@ -6,7 +6,7 @@
             if (str_starts_with($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
             else echo $goto;
         ?>">
-            <img src="images/atp.png" alt="Logo" width="32" height="32">
+            <img src="<?php echo __DIR__ ?>/images/atp.png" alt="Logo" width="32" height="32">
             All Things Puzzles</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -131,4 +131,4 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-<script src="scripts/util.js"></script>
+<script src="<?php echo __DIR__ ?>/scripts/util.js"></script>
