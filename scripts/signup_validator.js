@@ -13,7 +13,6 @@ $(function () {
             }
         });
 
-        console.log(`checkValidity: ${form[0].checkValidity()} | invalidInputs.length: ${invalidInputs.length === 0} | allFieldsFilled: ${allFieldsFilled}`)
         return form[0].checkValidity() && invalidInputs.length === 0 && allFieldsFilled;
     }
 
