@@ -67,7 +67,7 @@ include 'nav.php';
                 <div class="card-header">
                     Add Puzzle
                 </div>
-                <button class="btn btn-secondary" href="#" type="button">Add</button>
+                <a class="btn btn-secondary" href="#" type="button">Add</a>
             </div>
         </div>
         <div class="col">
@@ -75,7 +75,7 @@ include 'nav.php';
                 <div class="card-header">
                     Puzzle Inventory
                 </div>
-                <button class="btn btn-secondary" href="#" type="button">Inventory</button>
+                <a class="btn btn-secondary" href="#" type="button">Inventory</a>
             </div>
         </div>
         <div class="col">
@@ -83,7 +83,7 @@ include 'nav.php';
                 <div class="card-header">
                     Remove Puzzle
                 </div>
-                <button class="btn btn-secondary" href="#" type="button">Remove</button>
+                <a class="btn btn-secondary" href="#" type="button">Remove</a>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@ include 'nav.php';
                 <div class="card-header">
                     Admin Area
                 </div>
-                <button class="btn btn-secondary" href="admin.php" type="button">Admin</button>
+                <a class="btn btn-secondary" href="admin.php" type="button">Admin</a>
             </div>
         </div>
         <div class="col">
@@ -103,7 +103,7 @@ include 'nav.php';
                 <div class="card-header">
                     Future Item
                 </div>
-                <button class="btn btn-secondary disabled" href="#" type="button">Future</button>
+                <a class="btn btn-secondary disabled" href="#" type="button">Future</a>
             </div>
         </div>
         <div class="col">
@@ -111,7 +111,7 @@ include 'nav.php';
                 <div class="card-header">
                     Future Item
                 </div>
-                <button class="btn btn-secondary disabled" href="#" type="button">Future</button>
+                <a class="btn btn-secondary disabled" href="#" type="button">Future</a>
             </div>
         </div>
     </div>
