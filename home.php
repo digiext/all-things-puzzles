@@ -87,7 +87,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Add Puzzle
                 </div>
-                <button class="btn btn-secondary" href="#" role="button">Add</button>
+                <button class="btn btn-secondary" href="#" type="button">Add</button>
             </div>
         </div>
         <div class="col">
@@ -95,7 +95,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Puzzle Inventory
                 </div>
-                <button class="btn btn-secondary" href="#" role="button">Inventory</button>
+                <button class="btn btn-secondary" href="#" type="button">Inventory</button>
             </div>
         </div>
         <div class="col">
@@ -103,7 +103,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Remove Puzzle
                 </div>
-                <button class="btn btn-secondary" href="#" role="button">Remove</button>
+                <button class="btn btn-secondary" href="#" type="button">Remove</button>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Admin Area
                 </div>
-                <button class="btn btn-secondary" href="admin.php" role="button">Add</button>
+                <button class="btn btn-secondary" href="admin.php" type="button">Admin</button>
             </div>
         </div>
         <div class="col">
@@ -123,7 +123,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Future Item
                 </div>
-                <button class="btn btn-secondary disabled" href="#" role="button">Inventory</button>
+                <button class="btn btn-secondary disabled" href="#" type="button">Future</button>
             </div>
         </div>
         <div class="col">
@@ -131,7 +131,7 @@ if (isset($_SESSION['success'])) { ?>
                 <div class="card-header">
                     Future Item
                 </div>
-                <button class="btn btn-secondary disabled" href="#" role="button">Remove</button>
+                <button class="btn btn-secondary disabled" href="#" type="button">Future</button>
             </div>
         </div>
     </div>
