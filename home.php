@@ -108,3 +108,31 @@ if (isset($_SESSION['success'])) { ?>
         </div>
     </div>
 </div>
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Admin Area
+                </div>
+                <button class="btn btn-secondary" href="admin.php" role="button">Add</button>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Future Item
+                </div>
+                <button class="btn btn-secondary disabled" href="#" role="button">Inventory</button>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Future Item
+                </div>
+                <button class="btn btn-secondary disabled" href="#" role="button">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
