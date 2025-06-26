@@ -1,6 +1,6 @@
 <?php
-const ADMIN_GROUP_ID = 1;
-const USER_GROUP_ID = 2;
+include 'constants.php';
+session_start();
 
 function returnToHome(): void {
     returnTo('index.php');
@@ -30,37 +30,43 @@ function decryptCookie(string $ciphertext): string|false {
     return openssl_decrypt($encrypted_data, $cipher, $key, 0, $iv);
 }
 
+function cookieSet(string $cookie): bool {
+    return isset($_COOKIE[$cookie]);
+}
+
+function deleteCookie(string $cookie): void {
+    if (cookieSet($cookie)) {
+        setcookie($cookie, null, -1, '/');
+    }
+}
+
 function getUserID(): int|false {
     if (!isLoggedIn()) return false;
-    return decryptCookie($_COOKIE['rememberme']);
+    return decryptCookie($_COOKIE[REMEMBER_ME]);
 }
 
 function isLoggedIn(): bool {
-    return isset($_COOKIE["loggedin"]) && decryptCookie($_COOKIE["loggedin"]) == "true";
+    return isset($_COOKIE[LOGGED_IN]) && decryptCookie($_COOKIE[LOGGED_IN]) == "true";
 }
 
 function isAdmin(): bool {
-    return (isLoggedIn() && isset($_COOKIE["usg"]) && decryptCookie($_COOKIE["usg"]) == "admin");
+    return (isLoggedIn() && cookieSet(USER_GROUP) && decryptCookie($_COOKIE[USER_GROUP]) == ADMIN_GROUP_ID);
 }
 
 function successAlertNoRedir($value): void {
-    session_start();
     $_SESSION['success'] = $value;
 }
 
-function successAlert($value, $redir): void {
-    session_start();
+function successAlert($value, $redir = "index.php"): void {
     $_SESSION['success'] = $value;
     header("Location:" . $redir);
 }
 
 function failAlertNoRedir($value): void {
-    session_start();
     $_SESSION['fail'] = $value;
 }
 
-function failAlert($value, $redir): void {
-    session_start();
+function failAlert($value, $redir = "index.php"): void {
     $_SESSION['fail'] = $value;
     header("Location:" . $redir);
 }

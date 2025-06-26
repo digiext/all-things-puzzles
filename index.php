@@ -1,10 +1,10 @@
 <?php
+include 'util/function.php';
+
 //If Not Logged In Reroute to index.php
-if (isset($_COOKIE['loggedin'])) {
+if (isLoggedIn()) {
     header("Location: home.php");
 }
-
-include 'function.php';
 
 $title = 'All Things Puzzles';
 include 'header.php';

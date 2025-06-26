@@ -1,5 +1,5 @@
 <?php
-include 'function.php';
+include 'util/function.php';
 
 $title = 'All Things Puzzles';
 include 'header.php';

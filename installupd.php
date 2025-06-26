@@ -12,8 +12,8 @@ use const puzzlethings\src\gateway\{
 };
 
 global $db;
-require_once 'db.php';
-require_once 'function.php';
+require_once 'util/db.php';
+require_once 'util/function.php';
 
 if (isset($_POST['submit'])) {
     $username = $_POST['userid'];
@@ -26,19 +26,19 @@ if (isset($_POST['submit'])) {
 
     session_start();
     if ($code instanceof PDOException) {
-        $_SESSION['fail'] = $code->getMessage();
+        failAlert($code->getMessage());
     } elseif ($code === INVALID_USERNAME) {
-        $_SESSION['fail'] = "Invalid username!";
+        failAlert("Invalid username!");
     } elseif ($code === INVALID_EMAIL) {
-        $_SESSION['fail'] = "Invalid email!";
+        failAlert("Invalid email!");
     } elseif ($code === USERNAME_IN_USE) {
-        $_SESSION['fail'] = "Username in use!";
+        failAlert("Username in use!");
     } elseif ($code === EMAIL_IN_USE) {
-        $_SESSION['fail'] = "Username in use!";
+        failAlert("Email in use!");
     } elseif ($code === USERNAME_DB_ERROR || $code === EMAIL_DB_ERROR) {
-        $_SESSION['fail'] = "Database error! Check your PHP Console for details!";
+        failAlert("Database error! Check your PHP Console for details!");
     } else {
-        $_SESSION['success'] = "User has been created";
+        successAlert("User has been created");
     }
 
     header("Location: index.php");

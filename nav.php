@@ -1,7 +1,11 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="images/atp.png" alt="Logo" width="30" height="24">
+        <a class="navbar-brand" href="<?php
+            $goto = isLoggedIn() ? "home.php" : "index.php";
+            if (str_starts_with($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
+            else echo $goto;
+        ?>">
+            <img src="images/atp.png" alt="Logo" width="32" height="32">
             All Things Puzzles</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -15,13 +19,13 @@
                 <!-- Sign In/Register Links Changes based on LoggedIn cookie -->
                 <?php if (isLoggedIn()) {
                     echo "<div class='text-end'>";
-                    echo "<button class='btn btn-outline-light m-1' type='submit' href='profile.php'>Profile</button>";
-                    echo "<button class='btn btn-warning' type='submit' href='logout.php'>Logout</button>";
+                    echo "<a class='btn btn-outline-light m-1' type='submit' href='profile.php'>Profile</a>";
+                    echo "<a class='btn btn-warning' type='submit' href='signout.php'>Logout</a>";
                     echo "</div>";
                 } else {
                     echo "<div class='text-end'>";
                     echo "<button class='btn btn-outline-light m-1' type='submit' data-bs-toggle='modal' data-bs-target='#staticBackdrop'>Login</button>";
-                    echo "<button class='btn btn-warning' type='submit' href='register.php'>Sign Up</button>";
+                    echo "<a class='btn btn-warning' type='submit' href='register.php'>Sign Up</a>";
                     echo "</div>";
                 } ?>
             </div>
