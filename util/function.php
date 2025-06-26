@@ -58,7 +58,7 @@ function successAlertNoRedir($value): void {
 
 function successAlert($value, $redir = "index.php"): void {
     $_SESSION['success'] = $value;
-    header("Location:" . $redir);
+    header("Location: " . $redir);
 }
 
 function failAlertNoRedir($value): void {

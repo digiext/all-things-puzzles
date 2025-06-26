@@ -56,7 +56,8 @@ if (isset($_POST['submit'])) {
             $group = $user->getGroupId();
             if ($group === ADMIN_GROUP_ID) setcookie("usg", encryptCookie("admin"), $options);
 
-            header("Location: home.php");
+            session_start();
+            successAlert("Welcome " . $username, "home.php");
         } else {
             failAlert("Incorrect username and password. Please try again.");
         }

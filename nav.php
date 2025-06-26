@@ -110,3 +110,25 @@
         </div>
     </div>
 </nav>
+
+<?php
+if (isset($_SESSION['success'])) {
+    echo
+    "<div class='alert alert-success alert-dismissible fade show' role='alert' id='successAlert'>
+        <strong>" . $_SESSION['success'] . "</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+
+    unset($_SESSION['success']);
+} else if (isset($_SESSION['fail'])) {
+    echo
+        "<div class='alert alert-danger alert-dismissible fade show' role='alert' id='failAlert'>
+        <strong>" . $_SESSION['fail'] . "</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+
+    unset($_SESSION['fail']);
+}
+?>
+
+<script src="scripts/util.js"></script>
