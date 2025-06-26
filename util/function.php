@@ -49,7 +49,7 @@ function isLoggedIn(): bool {
 }
 
 function isAdmin(): bool {
-    return (isLoggedIn() && cookieSet(USER_GROUP) && decryptCookie($_COOKIE[USER_GROUP]) == ADMIN_GROUP_ID);
+    return (isLoggedIn() && cookieSet(USER_GROUP) && decryptCookie($_COOKIE[USER_GROUP]) == "" . ADMIN_GROUP_ID);
 }
 
 function successAlertNoRedir($value): void {
