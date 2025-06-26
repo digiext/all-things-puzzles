@@ -10,7 +10,7 @@ $DEV_ENV = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
 
 require 'vendor/autoload.php';
 try {
-    $dotenv = Dotenv::createImmutable("");
+    $dotenv = Dotenv::createImmutable(dirname(__DIR__));
     $dotenv->load();
 } catch (Exception $e) {
     die("Unable to load the dotenv file: " . $e->getMessage());
