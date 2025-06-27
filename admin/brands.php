@@ -28,7 +28,7 @@ $brands = $gateway->findAll();
 </div>
 
 <div class="container my-2">
-    <table class="table table-bordered table-success table-striped">
+    <table class="table table-bordered table-dark table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
