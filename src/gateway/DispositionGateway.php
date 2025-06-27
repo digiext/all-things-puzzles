@@ -12,7 +12,7 @@ class DispositionGateway {
         $this->db = $db;
     }
 
-    public function create(string $desc): Disposition|false {
+    public function create(string $desc): bool {
         $sql = "INSERT INTO disposition (dispositiondesc) VALUES (:desc)";
 
         try {
