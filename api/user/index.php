@@ -4,7 +4,7 @@ use puzzlethings\src\gateway\UserGateway as Gateway;
 $id = $_GET['id'] ?? null;
 global $db;
 
-require "../../db.php";
+require "../../util/db.php";
 $gateway = new Gateway($db);
 
 $res = $gateway->findById($id);

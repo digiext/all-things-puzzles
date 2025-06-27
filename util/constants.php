@@ -7,3 +7,4 @@ const USER_GROUP_ID = 2;
 const LOGGED_IN = "loggedin";
 const REMEMBER_ME = "rememberme";
 const USER_GROUP = "usg";
+const USER_ID = 'uid';

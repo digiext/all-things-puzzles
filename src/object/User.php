@@ -25,14 +25,14 @@ class User implements \JsonSerializable {
     }
 
     public static function of(mixed $res): User {
-        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], new DateTime($res['lastlogin']));
+        return new User($res["userid"], $res["user_name"], $res['full_name'] === '' ? null : $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], new DateTime($res['lastlogin']));
     }
 
     public function getId(): ?int {
         return $this->id;
     }
 
-    public function getUsername(): ?string {
+    public function getUsername(): string {
         return $this->username;
     }
 

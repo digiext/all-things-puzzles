@@ -23,11 +23,13 @@ class UserGateway
         $this->db = $db;
     }
 
-    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true): User|PDOException|true|int
+    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true, int $group = USER_GROUP_ID): User|PDOException|true|int
     {
         $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, :usergroup, 1, NOW())";
 
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $hash = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 32);
+        $hashedPassword = password_hash($password . $hash, PASSWORD_BCRYPT);
+
         if (!preg_match('/^[0-9a-zA-Z_]{5,16}$/', $username)) {
             error_log("Invalid username $username");
             return INVALID_USERNAME;
@@ -64,16 +66,12 @@ class UserGateway
             return EMAIL_DB_ERROR;
         }
 
-        $hash = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 32);
-
         try {
-            $usergroup = USER_GROUP_ID;
-
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':fullname', $fullname);
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':usergroup', $usergroup);
+            $stmt->bindParam(':usergroup', $group);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':hash', $hash);
             $success = $stmt->execute();
@@ -209,14 +207,17 @@ class UserGateway
 
     public function updatePassword(User|int $user, string $password): User|false
     {
-        $sql = "UPDATE user SET user_password = :password WHERE userid = :id";
+        $sql = "UPDATE user SET user_password = :password, user_hash = :hash WHERE userid = :id";
         $id = $user instanceof User ? $user->getId() : $user;
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $hash = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 32);
+        $hashedPassword = password_hash($password . $hash, PASSWORD_BCRYPT);
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':hash', $hash);
 
             if ($stmt->execute()) {
                 $userSql =  "SELECT * FROM user WHERE userid = :id";
@@ -319,10 +320,13 @@ class UserGateway
             $record = $stmt->fetch(PDO::FETCH_ASSOC);
             $hashedPassword = $record['user_password'];
 
-            if (password_verify($password, $hashedPassword)) {
+            // UNCOMMENT THIS TO CHECK YOUR HASH
+            //error_log(password_hash($password . $record['user_hash'], PASSWORD_BCRYPT));
+
+            if (password_verify($password . $record['user_hash'], $hashedPassword)) {
                 if ($setlastlogin) {
                     try {
-                        $llsql = "UPDATE user SET lastlogin = NOW() WHERE userid = :id";
+                        $llsql = "UPDATE user SET lastlogin = CURRENT_TIMESTAMP WHERE userid = :id";
 
                         $llstmt = $this->db->prepare($llsql);
                         $llstmt->bindParam(':id', $id, PDO::PARAM_INT);

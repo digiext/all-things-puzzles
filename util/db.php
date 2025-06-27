@@ -4,6 +4,8 @@ namespace puzzlethings;
 use PDO;
 use PDOException;
 
+require_once __DIR__ . "/function.php";
+
 $DB_HOST = $_ENV['DB_HOST'];
 $DB_NAME = $_ENV['DB_NAME'];
 $DB_USER = $_ENV['DB_USER'];

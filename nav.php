@@ -2,8 +2,8 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?php
-            $goto = isLoggedIn() ? "home.php" : "index.php";
-            if (str_starts_with($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
+            $goto = isLoggedIn() ? "/home.php" : "/index.php";
+            if (str_contains($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
             else echo BASE_URL . $goto;
         ?>">
             <img src="<?php echo BASE_URL ?>/images/atp.png" alt="Logo" width="32" height="32">
@@ -20,8 +20,8 @@
                 <!-- Sign In/Register Links Changes based on LoggedIn cookie -->
                 <?php if (isLoggedIn()) {
                     echo "<div class='text-end'>";
-                    echo "<a class='btn btn-outline-light m-1' type='submit' href='profile.php'>Profile</a>";
-                    echo "<a class='btn btn-warning' type='submit' href='signout.php'>Logout</a>";
+                    echo "<a class='btn btn-outline-light m-1' type='submit' href='" . BASE_URL . "/profile.php'>Profile</a>";
+                    echo "<a class='btn btn-warning' type='submit' href='" . BASE_URL . "/signout.php'>Logout</a>";
                     echo "</div>";
                 } else {
                     echo "<div class='text-end'>";
@@ -39,7 +39,7 @@
                         <h1 class="modal-title fs-5" id="loginLabel">Login</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="column" action="signin.php" method="post" name="login">
+                    <form class="column" action="<?php echo BASE_URL ?>/signin.php" method="post" name="login">
                         <div class="modal-body">
 
                             <div class="col-auto">
@@ -70,13 +70,14 @@
                         <h1 class="modal-title fs-5" id="signupLabel">Sign Up</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="column needs-validation" action="signup.php" method="post" id="signupForm" name="signup">
+                    <form class="column needs-validation" action="<?php echo BASE_URL ?>/signup.php" method="post" id="signupForm" name="signup">
                         <div class="modal-body">
                             <div class="col-auto">
                                 <label for="usernameSignup" class="col-form-label">Username</label>
                             </div>
-                            <div class="col-auto">
-                                <input type="text" class="form-control" id="usernameSignup" name="username" required>
+                            <div class="col-auto input-group">
+                                <span class="input-group-text" id="usernameAddon">@</span>
+                                <input type="text" class="form-control rounded-end" id="usernameSignup" name="username" required>
                                 <div id="usernameSignupFeedback"></div>
                             </div>
                             <div class="col-auto">

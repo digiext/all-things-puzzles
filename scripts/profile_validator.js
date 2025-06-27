@@ -1,45 +1,27 @@
 $(function () {
-    const form = $('#signupForm');
-    const formSubmit = $('#submitSignup');
+    $('#updateUsername').on('blur', function () {
+        let feedback = $('#usernameFeedback');
+        let username = $('#updateUsername');
+        let submit = $('#updateUsernameSubmit');
 
-    function submittable() {
-        let requiredInputs = $('#signupForm :input[required]')
-        let invalidInputs = $('#signupForm .is-invalid')
-        let allFieldsFilled = true;
+        username.removeClass('is-valid')
+        feedback.removeClass('valid-feedback')
+        submit.prop('disabled', true);
 
-        requiredInputs.each(function() {
-            if ($(this).val().length === 0) {
-                allFieldsFilled = false;
-            }
-        });
-
-        return form[0].checkValidity() && invalidInputs.length === 0 && allFieldsFilled;
-    }
-
-    formSubmit.prop('disabled', true);
-
-    $('#usernameSignup').on('blur', function (e) {
-        let feedback = $('#usernameSignupFeedback');
-        let username = $('#usernameSignup');
-
-        if (username.val() === "") {
-            username.addClass('is-invalid')
+        if (username.val() === '') {
+            username.addClass('is-invalid');
             feedback.addClass('invalid-feedback')
-            feedback.text("Username required!");
-            formSubmit.prop('disabled', true);
-            return;
+            feedback.text('Username required!');
         }
 
         if (username.val().length < 5) {
-            username.addClass('is-invalid')
-            feedback.addClass('invalid-feedback')
-            feedback.text("Username too short!");
-            formSubmit.prop('disabled', true);
+            username.addClass('is-invalid');
+            feedback.addClass('invalid-feedback');
+            feedback.text('Username too short!');
         } else if (username.val().length > 16) {
-            username.addClass('is-invalid')
+            username.addClass('is-invalid');
             feedback.addClass('invalid-feedback')
-            feedback.text("Username too long!");
-            formSubmit.prop('disabled', true);
+            feedback.text('Username too long!');
         }
 
         $.ajax("scripts/validator.php", {
@@ -48,6 +30,7 @@ $(function () {
             },
             type: "POST",
             success: function (data) {
+                feedback.text("");
                 username.removeClass('is-valid is-invalid')
                 feedback.removeClass('valid-feedback invalid-feedback')
 
@@ -55,12 +38,12 @@ $(function () {
                     username.addClass('is-valid')
                     feedback.addClass('valid-feedback')
                     feedback.text(`Username ${username.val()} is available`)
-                    formSubmit.prop('disabled', !submittable())
-                } else {
+                    submit.prop('disabled', false)
+                } else if (data !== "same") {
                     username.addClass('is-invalid')
                     feedback.addClass('invalid-feedback')
                     feedback.text(`Username ${username.val()} already in use!`)
-                    formSubmit.prop('disabled', true);
+                    submit.prop('disabled', true);
                 }
             },
             error: function() {
@@ -70,21 +53,50 @@ $(function () {
                 username.addClass('is-invalid')
                 feedback.addClass('invalid-feedback')
                 feedback.text(`AJAX Error`)
-                formSubmit.prop('disabled', true);
+                submit.prop('disabled', true);
             }
         })
-    });
+    })
 
-    $('#emailSignup').on('blur', function (e) {
-        let feedback = $('#emailSignupFeedback');
-        let email = $('#emailSignup');
+    $('#updateFullname').on('blur', function () {
+        let feedback = $('#fullnameFeedback');
+        let fullname = $('#updateFullname');
+        let submit = $('#updateFullnameSubmit');
 
-        if (email.val() === "") {
-            email.addClass('is-invalid')
+        fullname.removeClass('is-valid')
+        feedback.removeClass('valid-feedback')
+        submit.prop('disabled', true);
+
+        if (fullname.val().length > 32) {
+            fullname.addClass('is-invalid');
             feedback.addClass('invalid-feedback')
-            feedback.text("Email required!");
-            formSubmit.prop('disabled', true);
-            return;
+            feedback.text('Display name too long!');
+            submit.prop('disabled', true);
+        } else {
+            fullname.removeClass('is-valid is-invalid')
+            feedback.removeClass('valid-feedback invalid-feedback')
+            feedback.text('')
+
+            fullname.addClass('is-valid')
+            feedback.addClass('valid-feedback')
+            submit.prop('disabled', false);
+        }
+    })
+
+
+    $('#updateEmail').on('blur', function () {
+        let feedback = $('#emailFeedback');
+        let email = $('#updateEmail');
+        let submit = $('#updateEmailSubmit');
+
+        email.removeClass('is-valid')
+        feedback.removeClass('valid-feedback')
+        submit.prop('disabled', true);
+
+        if (email.val() === '') {
+            email.addClass('is-invalid');
+            feedback.addClass('invalid-feedback')
+            feedback.text('Email required!');
         }
 
         $.ajax("scripts/validator.php", {
@@ -93,6 +105,7 @@ $(function () {
             },
             type: "POST",
             success: function (data) {
+                feedback.text('')
                 email.removeClass('is-valid is-invalid')
                 feedback.removeClass('valid-feedback invalid-feedback')
 
@@ -100,17 +113,12 @@ $(function () {
                     email.addClass('is-valid')
                     feedback.addClass('valid-feedback')
                     feedback.text(`Email ${email.val()} is available`)
-                    formSubmit.prop('disabled', !submittable())
-                } else if (data === "InvalidEmail") {
-                    email.addClass('is-invalid')
-                    feedback.addClass('invalid-feedback')
-                    feedback.text(`Email ${email.val()} is invalid!`)
-                    formSubmit.prop('disabled', true);
-                } else {
+                    submit.prop('disabled', false)
+                } else if (data !== "same") {
                     email.addClass('is-invalid')
                     feedback.addClass('invalid-feedback')
                     feedback.text(`Email ${email.val()} already in use!`)
-                    formSubmit.prop('disabled', true);
+                    submit.prop('disabled', true);
                 }
             },
             error: function() {
@@ -120,23 +128,25 @@ $(function () {
                 email.addClass('is-invalid')
                 feedback.addClass('invalid-feedback')
                 feedback.text(`AJAX Error`)
-                formSubmit.prop('disabled', true);
+                submit.prop('disabled', true);
             }
         })
-    });
+    })
 
-    $('#passwordSignup').on('keyup click', function(e) {
-        let strongPasswordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,32}$/;
+    $('#updatePassword').on('blur', function () {
+        let strongPasswordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,32}$/
 
-        let feedback = $('#passwordSignupFeedback');
-        let password = $('#passwordSignup');
+        let feedback = $('#passwordFeedback');
+        let password = $('#updatePassword');
+        let submit = $('#updatePasswordSubmit');
+
         let pword = password.val().toString();
 
         if (pword === "") {
             password.addClass('is-invalid')
             feedback.addClass('invalid-feedback')
             feedback.text("Password required!");
-            formSubmit.prop('disabled', true);
+            submit.prop('disabled', true);
             return;
         }
 
@@ -147,34 +157,26 @@ $(function () {
             password.addClass('is-invalid')
             feedback.addClass('invalid-feedback')
             feedback.text(`Password too short!`)
-            formSubmit.prop('disabled', true);
+            submit.prop('disabled', true);
             return;
         } else if (pword.length > 32) {
             password.addClass('is-invalid')
             feedback.addClass('invalid-feedback')
             feedback.text(`Password too long!`)
-            formSubmit.prop('disabled', true);
+            submit.prop('disabled', true);
             return;
         }
 
         if (strongPasswordRegex.test(pword)) {
             password.addClass('is-valid')
             feedback.addClass('valid-feedback')
-            feedback.text(`Looks good!`)
-            formSubmit.prop('disabled', !submittable())
+            feedback.text(``)
+            submit.prop('disabled', false)
         } else {
             password.addClass('is-invalid')
             feedback.addClass('invalid-feedback')
             feedback.text(`Weak password!`)
-            formSubmit.prop('disabled', true);
+            submit.prop('disabled', true);
         }
-    });
-
-    form.on('submit', function(e) {
-        if (!submittable()) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        form[0].addClass('was-validated')
     })
-});
+})

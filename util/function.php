@@ -1,15 +1,16 @@
 <?php
 
 use Dotenv\Dotenv;
-use Exception;
 
 include 'constants.php';
 
 require __DIR__ . '/../vendor/autoload.php';
+
+session_start();
 try {
     $dotenv = Dotenv::createImmutable(dirname(__DIR__));
     $dotenv->load();
-    $GLOBALS['DEV'] = $_ENV['DEVELOPER_MODE'] === 'true';
+    $GLOBALS['DEV'] = ($_ENV['DEVELOPER_MODE'] ?? 'false') === 'true';
 } catch (Exception $e) {
     die("Unable to load the dotenv file: " . $e->getMessage());
 }
@@ -33,7 +34,7 @@ function returnTo($string) {
     header('Location: ' . $string);
 }
 
-function encryptCookie(string $value): string {
+function encrypt(string $value): string {
     $key = md5(openssl_random_pseudo_bytes(4));
 
     $cipher = "aes-256-cbc";
@@ -46,7 +47,7 @@ function encryptCookie(string $value): string {
 }
 
 // Decrypt cookie
-function decryptCookie(string $ciphertext): string|false {
+function decrypt(string $ciphertext): string|false {
     $cipher = "aes-256-cbc";
 
     list($encrypted_data, $iv, $key) = explode('::', base64_decode($ciphertext));
@@ -65,15 +66,15 @@ function deleteCookie(string $cookie): void {
 
 function getUserID(): int|false {
     if (!isLoggedIn()) return false;
-    return decryptCookie($_COOKIE[REMEMBER_ME]);
+    return decrypt($_SESSION[USER_ID]);
 }
 
 function isLoggedIn(): bool {
-    return isset($_COOKIE[LOGGED_IN]) && decryptCookie($_COOKIE[LOGGED_IN]) == "true";
+    return isset($_SESSION[USER_ID]);
 }
 
 function isAdmin(): bool {
-    return (isLoggedIn() && cookieSet(USER_GROUP) && decryptCookie($_COOKIE[USER_GROUP]) == "" . ADMIN_GROUP_ID);
+    return (isLoggedIn() && cookieSet(USER_GROUP) && decrypt($_COOKIE[USER_GROUP]) == "" . ADMIN_GROUP_ID);
 }
 
 function successAlertNoRedir($value): void {

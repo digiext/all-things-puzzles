@@ -1,8 +1,7 @@
 <?php
 require_once "util/function.php";
 
-deleteCookie(LOGGED_IN);
-deleteCookie(REMEMBER_ME);
-deleteCookie(USER_GROUP);
+unset($_SESSION[USER_ID]);
+unset($_SESSION[USER_GROUP_ID]);
 
 header("Location: index.php");

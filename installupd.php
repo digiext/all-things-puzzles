@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     $gateway = new UserGateway($db);
-    $code = $gateway->create($username, $fullname, $email, $password, false);
+    $code = $gateway->create($username, $fullname, $email, $password, false, ADMIN_GROUP_ID);
 
     session_start();
     if ($code instanceof PDOException) {

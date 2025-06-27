@@ -2,8 +2,7 @@
 use puzzlethings\src\gateway\UserGateway as Gateway;
 
 global $db;
-
-require "../../db.php";
+require "../../util/db.php";
 $gateway = new Gateway($db);
 
 $res = $gateway->findAll();
