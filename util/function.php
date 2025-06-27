@@ -14,13 +14,18 @@ try {
     die("Unable to load the dotenv file: " . $e->getMessage());
 }
 
-define("BASE_URL", "http" . ($_SERVER['HTTPS'] ? "s://" : "://") . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF'], 2), '/\\'));
+if (!isset($_ENV['BASE_URL'])) die("Base URL not set in .env!");
+define("BASE_URL", rtrim($_ENV['BASE_URL'], '/') . "/");
 
-function isDev() {
+function isDev(): bool {
     return $GLOBALS['DEV'] ?? false;
 }
 
 function returnToHome(): void {
+    returnTo('home.php');
+}
+
+function returnToIndex(): void{
     returnTo('index.php');
 }
 
