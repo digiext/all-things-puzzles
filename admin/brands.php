@@ -26,12 +26,14 @@ if ($sort == "nosort") {
 <div class="container my-2 text-center">
     <h3 class="text-center">Brand Table</h3>
     <div class="container">
-        <div class="d-grid gap-2 d-md-flex">
-            <a class="btn btn-primary">ID Desc</a>
-            <a class="btn btn-primary">ID Asc</a>
-            <a class="btn btn-primary">Name Desc</a>
-            <a class="btn btn-primary">Name Asc</a>
-            <div class="justify-content-md-end">
+        <div class="row">
+            <div class="col-12 float-start">
+                <a class="btn btn-primary">ID Desc</a>
+                <a class="btn btn-primary">ID Asc</a>
+                <a class="btn btn-primary">Name Desc</a>
+                <a class="btn btn-primary">Name Asc</a>
+            </div>
+            <div class="col-12 float-end">
                 <a class="btn btn-primary me-md-2" href="../admin.php">Admin Home</a>
                 <a class="btn btn-primary" href="brandadd.php">Add New</a>
             </div>
