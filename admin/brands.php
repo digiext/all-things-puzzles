@@ -28,7 +28,7 @@ $brands = $gateway->findAll();
 </div>
 
 <div class="container my-2">
-    <table class="table table-success table-striped">
+    <table class="table table-bordered table-success table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -37,7 +37,7 @@ $brands = $gateway->findAll();
                 <th scope="col">Delete</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
             <?php foreach ($brands as $brand) {
                 if (!($brand instanceof Brand)) continue;
                 echo "<tr><th scope='row'>" . $brand->getId() . "</th> <td> " . $brand->getName() . "</td><td><a class='btn btn-secondary' href='brandedit.php?" . $brand->getId() . "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil' viewBox='0 0 16 16'>
