@@ -24,7 +24,7 @@ class BrandGateway {
         }
     }
 
-    public function findAll($sortBy = null): array {
+    public function findAll(): array {
         $sql = "SELECT * FROM brand";
 
         try {

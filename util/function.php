@@ -15,7 +15,7 @@ try {
 }
 
 if (!isset($_ENV['BASE_URL'])) die("Base URL not set in .env!");
-define("BASE_URL", rtrim($_ENV['BASE_URL'], '/') . "/");
+define("BASE_URL", rtrim($_ENV['BASE_URL'], '/'));
 
 function isDev(): bool {
     return $GLOBALS['DEV'] ?? false;

@@ -28,7 +28,7 @@ class SourceGateway
         }
     }
 
-    public function findAll($sortBy = null): array
+    public function findAll(): array
     {
         $sql = "SELECT * FROM source";
 
@@ -65,7 +65,7 @@ class SourceGateway
         }
     }
 
-    public function updateName(Source|int $source, string $name): bool
+    public function updateDesc(Source|int $source, string $name): bool
     {
         $sql = "UPDATE source SET sourcedesc = :name WHERE sourceid = :id";
         $id = $source instanceof Source ? $source->getId() : $source;

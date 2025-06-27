@@ -10,7 +10,7 @@ $id = $_POST['id'];
 $source = $_POST['source'];
 
 $gateway = new SourceGateway($db);
-$code = $gateway->updateName($id, $source);
+$code = $gateway->updateDesc($id, $source);
 
 session_start();
 if (!$code) {

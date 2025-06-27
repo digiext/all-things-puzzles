@@ -19,7 +19,7 @@ $gateway = new BrandGateway($db);
 $brands = $gateway->findAll();
 ?>
 
-<script src="scripts/brands.js"></script>
+<script src="scripts/sources.js"></script>
 
 <!--<div class="container mb-2 mt-5 hstack">-->
 <!--    <h3 class="text-center">Brand Table</h3>-->
@@ -28,28 +28,29 @@ $brands = $gateway->findAll();
 <!--        <a class="btn btn-warning" href="brandadd.php">Add New</a>-->
 <!--    </div>-->
 <!--</div>-->
-<div class="container mb-2 mt-4">
-    <h3 class="text-center">Brand Table</h3>
-    <div class="row">
-        <div class="col-6">
-            <a class="btn btn-primary">ID Desc</a>
-            <a class="btn btn-primary">ID Asc</a>
-            <a class="btn btn-primary">Name Desc</a>
-            <a class="btn btn-primary">Name Asc</a>
-        </div>
-        <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a class="btn btn-primary me-md-2" href="../admin.php">Admin Home</a>
-            <a class="btn btn-warning" href="brandadd.php">Add New</a>
-        </div>
+<div class="container mb-2 mt-4 hstack justify-content-between">
+    <h3 class="text-center align-text-bottom">Brand Table</h3>
+    <div class="d-grid gap-2 d-md-flex">
+        <a class="btn btn-primary" href="../admin.php">Admin Home</a>
+        <a class="btn btn-warning" href="brandadd.php">Add New</a>
+        <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
     </div>
 </div>
 
 <div class="container my-2">
-    <table class="table table-bordered table-dark table-striped">
+    <table data-classes="table table-dark table-bordered table-striped table-hover"
+           data-toggle="table"
+           data-pagination="true"
+           data-search="true"
+           data-buttons-toolbar=".buttons-toolbar"
+           data-page-list="10,25,50,100,all"
+           data-search-on-enter-key="false"
+           data-id-field="id"
+    >
         <thead>
             <tr>
-                <th scope="col" class="text-center align-middle">#</th>
-                <th scope="col" class="col-11 align-middle">Brand</th>
+                <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">ID</th>
+                <th scope="col" class="col-11 align-middle" data-sortable="true">Brand</th>
                 <th scope="col" class="text-center">Edit</th>
                 <th scope="col" class="text-center">Delete</th>
             </tr>
@@ -59,10 +60,10 @@ $brands = $gateway->findAll();
                 if (!($brand instanceof Brand)) continue;
                 echo
                 "<tr class='brand-row'>
-                    <th scope='row' class='text-center align-middle border-end id''>" . $brand->getId() . "</th>
+                    <th scope='row' class='text-center align-middle id''>" . $brand->getId() . "</th>
                     <td class='align-middle name'>" . $brand->getName() . "</td>
                     <td class='text-center'><button class='btn btn-secondary edit' type='submit' data-bs-toggle='modal' data-bs-target='#edit'><i class='bi bi-pencil'></td>
-                    <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
+                    <td class='text-center'><button class='btn btn-secondarydelete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                 </tr>";
             } ?>
         </tbody>
@@ -84,13 +85,13 @@ $brands = $gateway->findAll();
                         <label for="deleteId" class="col-form-label">ID</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deleteId" name="id" value="<?php echo $brand->getId(); ?>" readonly>
+                        <input type="text" class="form-control" id="deleteId" name="id" value="<?php echo $brands[0]->getId(); ?>" readonly>
                     </div>
                     <div class="col-auto">
                         <label for="deleteBrand" class="col-form-label">Brand</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deleteBrand" name="brand" value="<?php echo $brand->getName(); ?>" readonly>
+                        <input type="text" class="form-control" id="deleteBrand" name="brand" value="<?php echo $brands[0]->getName(); ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
