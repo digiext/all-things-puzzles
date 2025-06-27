@@ -3,8 +3,6 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
-use puzzlethings\src\object\Disposition;
-use puzzlethings\src\object\Ownership;
 use puzzlethings\src\object\Status;
 
 class StatusGateway {
@@ -14,7 +12,7 @@ class StatusGateway {
         $this->db = $db;
     }
 
-    public function create(string $desc): Status|false {
+    public function create(string $desc): bool {
         $sql = "INSERT INTO status (statusdesc) VALUES (:desc)";
 
         try {

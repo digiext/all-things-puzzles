@@ -12,7 +12,7 @@ class BrandGateway {
         $this->db = $db;
     }
 
-    public function create(string $name): Brand|false {
+    public function create(string $name): bool {
         $sql = "INSERT INTO brand (brandname) VALUES (:name)";
 
         try {
