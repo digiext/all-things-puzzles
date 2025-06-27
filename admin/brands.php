@@ -15,15 +15,27 @@ $title = 'Brands';
 include '../header.php';
 include '../nav.php';
 
-$gateway = new BrandGateway($db);
-$brands = $gateway->findAll();
+$sort = "nosort";
+
+if ($sort == "nosort") {
+    $gateway = new BrandGateway($db);
+    $brands = $gateway->findAll();
+}
 ?>
 
 <div class="container my-2 text-center">
     <h3 class="text-center">Brand Table</h3>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a class="btn btn-primary me-md-2" href="../admin.php">Admin Home</a>
-        <a class="btn btn-primary" href="brandadd.php">Add New</a>
+    <div class="container">
+        <div class="d-grid gap-2 d-md-flex">
+            <a class="btn btn-primary">ID Desc</a>
+            <a class="btn btn-primary">ID Asc</a>
+            <a class="btn btn-primary">Name Desc</a>
+            <a class="btn btn-primary">Name Asc</a>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-primary me-md-2" href="../admin.php">Admin Home</a>
+            <a class="btn btn-primary" href="brandadd.php">Add New</a>
+        </div>
     </div>
 </div>
 
