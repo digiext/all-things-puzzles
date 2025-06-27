@@ -16,7 +16,7 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new BrandGateway($db);
-$gateway->findAll();
+$brands = $gateway->findAll();
 ?>
 
 <div class="container my-2 text-center">
@@ -32,7 +32,7 @@ $gateway->findAll();
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($gateway as $brand) {
+            <?php foreach ($brands as $brand) {
                 if (!($brand instanceof Brand)) continue;
                 echo "<tr><th scope='row'>" . $brand->getId() . "</th> <td> " . $brand->getName() . "</td></tr>";
             } ?>
