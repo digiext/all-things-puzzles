@@ -12,18 +12,13 @@ class DispositionGateway {
         $this->db = $db;
     }
 
-    public function create(int $id, string $desc): Disposition|false {
-        $sql = "INSERT INTO disposition (dispositionid, dispositiondesc) VALUES (:id, :desc)";
+    public function create(string $desc): Disposition|false {
+        $sql = "INSERT INTO disposition (dispositiondesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':desc', $desc);
-            $success = $stmt->execute();
-
-            if ($success) {
-                return new  Disposition($id, $desc);
-            } else return false;
+            return $stmt->execute();
         } catch (PDOException) {
             return false;
         }
