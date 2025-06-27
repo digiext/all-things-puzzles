@@ -12,18 +12,13 @@ class OwnershipGateway {
         $this->db = $db;
     }
 
-    public function create(int $id, string $desc): Ownership|false {
-        $sql = "INSERT INTO ownership (ownershipid, ownershipdesc) VALUES (:id, :desc)";
+    public function create(string $desc): bool {
+        $sql = "INSERT INTO ownership (ownershipdesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':desc', $desc);
-            $success = $stmt->execute();
-
-            if ($success) {
-                return new  Ownership($id, $desc);
-            } else return false;
+            return $stmt->execute();
         } catch (PDOException) {
             return false;
         }

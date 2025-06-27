@@ -14,18 +14,13 @@ class StatusGateway {
         $this->db = $db;
     }
 
-    public function create(int $id, string $desc): Status|false {
-        $sql = "INSERT INTO status (statusid, statusdesc) VALUES (:id, :desc)";
+    public function create(string $desc): Status|false {
+        $sql = "INSERT INTO status (statusdesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':desc', $desc);
-            $success = $stmt->execute();
-
-            if ($success) {
-                return new  Status($id, $desc);
-            } else return false;
+            return $stmt->execute();
         } catch (PDOException) {
             return false;
         }

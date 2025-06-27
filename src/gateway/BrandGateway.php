@@ -12,24 +12,19 @@ class BrandGateway {
         $this->db = $db;
     }
 
-    public function create(int $id, string $name): Brand|false {
-        $sql = "INSERT INTO brand (brandid, brandname) VALUES (:id, :name)";
+    public function create(string $name): Brand|false {
+        $sql = "INSERT INTO brand (brandname) VALUES (:name)";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id);
             $stmt->bindParam(':name', $name);
-            $success = $stmt->execute();
-
-            if ($success) {
-                return new Brand($id, $name);
-            } else return false;
+            return $stmt->execute();
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll($sortBy = null): array {
         $sql = "SELECT * FROM brand";
 
         try {
