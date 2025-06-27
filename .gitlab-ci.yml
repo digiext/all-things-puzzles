@@ -35,7 +35,7 @@ deploy-stage:
     - echo "DB_NAME=\"$DB_NAME\"" >> /var/www/html/puzzle/.env
     - echo "DB_USER=\"$DB_USER\"" >> /var/www/html/puzzle/.env
     - echo "DB_PASS=\"$DB_PASS\"" >> /var/www/html/puzzle/.env
-    - echo "BASE_URL=\"$BASE_URL" >> /var/www/html/puzzle/.env
+    - echo "BASE_URL=\"$BASE_URL\"" >> /var/www/html/puzzle/.env
   environment:
     name: main
   only:
