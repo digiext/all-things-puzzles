@@ -63,7 +63,7 @@ $brands = $gateway->findAll();
                     <th scope='row' class='text-center align-middle id''>" . $brand->getId() . "</th>
                     <td class='align-middle name'>" . $brand->getName() . "</td>
                     <td class='text-center'><button class='btn btn-secondary edit' type='submit' data-bs-toggle='modal' data-bs-target='#edit'><i class='bi bi-pencil'></td>
-                    <td class='text-center'><button class='btn btn-secondarydelete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
+                    <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                 </tr>";
             } ?>
         </tbody>
