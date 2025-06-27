@@ -29,6 +29,7 @@ $brands = $gateway->findAll();
 
         <div class="mb-3">
             <button type="submit" class="btn btn-primary mb-3" name="submit">Submit</button>
+            <a class="btn btn-warning mb-3" name="cancel" href="brands.php">Cancel</a>
         </div>
     </form>
 </div>
