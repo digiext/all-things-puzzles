@@ -3,11 +3,11 @@ namespace puzzlethings\src\object;
 
 class Status implements \JsonSerializable {
     private int $id;
-    private ?string $name;
+    private ?string $desc;
 
-    public function __construct(int $id, ?string $name) {
+    public function __construct(int $id, ?string $desc) {
         $this->id = $id;
-        $this->name = $name;
+        $this->desc = $desc;
     }
 
     public static function of($res): Status {
@@ -18,14 +18,14 @@ class Status implements \JsonSerializable {
         return $this->id;
     }
 
-    public function getName(): ?string {
-        return $this->name;
+    public function getDescription(): ?string {
+        return $this->desc;
     }
 
     public function jsonSerialize(): mixed {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'desc' => $this->desc
         ];
     }
 }

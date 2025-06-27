@@ -61,7 +61,7 @@ $sources = $gateway->findAll();
                 echo
                 "<tr class='brand-row'>
                     <th scope='row' class='text-center align-middle id''>" . $source->getId() . "</th>
-                    <td class='align-middle name'>" . $source->getSource() . "</td>
+                    <td class='align-middle name'>" . $source->getDescription() . "</td>
                     <td class='text-center'><button class='btn btn-secondary edit' type='submit' data-bs-toggle='modal' data-bs-target='#edit'><i class='bi bi-pencil'></td>
                     <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                 </tr>";
@@ -91,7 +91,7 @@ $sources = $gateway->findAll();
                         <label for="deleteBrand" class="col-form-label">Source</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deleteBrand" name="source" value="<?php echo $source->getSource(); ?>" readonly>
+                        <input type="text" class="form-control" id="deleteBrand" name="source" value="<?php echo $source->getDescription(); ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -123,7 +123,7 @@ $sources = $gateway->findAll();
                         <label for="editBrand" class="col-form-label">Source</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="editBrand" name="source" value="<?php echo $source->getSource(); ?>">
+                        <input type="text" class="form-control" id="editBrand" name="source" value="<?php echo $source->getDescription(); ?>">
                     </div>
                 </div>
                 <div class="modal-footer">

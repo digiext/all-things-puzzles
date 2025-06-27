@@ -2,20 +2,20 @@
 
 namespace puzzlethings\src\object;
 
-class Source implements \JsonSerializable
+class Location implements \JsonSerializable
 {
     private int $id;
     private ?string $desc;
 
-    public function __construct(int $id, ?string $description)
+    public function __construct(int $id, ?string $desc)
     {
         $this->id = $id;
-        $this->desc = $description;
+        $this->desc = $desc;
     }
 
-    public static function of(mixed $res): Source
+    public static function of(mixed $res): Location
     {
-        return new Source($res["sourceid"], $res["sourcedesc"]);
+        return new Location($res["locationid"], $res["locationdesc"]);
     }
 
     public function getId(): ?int
