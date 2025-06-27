@@ -131,4 +131,4 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-<script src="<?php echo __DIR__ ?>/scripts/util.js"></script>
+<script src="<?php echo BASE_URL ?>/scripts/util.js"></script>
