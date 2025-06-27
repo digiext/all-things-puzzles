@@ -56,7 +56,7 @@ include 'nav.php';
                 <div class="card-header">
                     Source
                 </div>
-                <a class="btn btn-primary" href="admin/source.php" role="button">Source</a>
+                <a class="btn btn-primary" href="admin/sources.php" role="button">Source</a>
             </div>
         </div>
         <div class="col">
