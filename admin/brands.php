@@ -31,7 +31,7 @@ if ($sort == "nosort") {
             <a class="btn btn-primary">ID Asc</a>
             <a class="btn btn-primary">Name Desc</a>
             <a class="btn btn-primary">Name Asc</a>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="justify-content-md-end">
                 <a class="btn btn-primary me-md-2" href="../admin.php">Admin Home</a>
                 <a class="btn btn-primary" href="brandadd.php">Add New</a>
             </div>
