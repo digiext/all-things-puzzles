@@ -1,0 +1,4 @@
+.form-control:read-only {
+    background-color: var(--bs-secondary-bg);
+    opacity: 1;
+}
