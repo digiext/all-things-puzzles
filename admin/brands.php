@@ -1,7 +1,7 @@
 <?php
 global $db;
 include '../util/function.php';
-include BASE_URL . '../util/db.php';
+require '../util/db.php';
 
 use puzzlethings\src\gateway\BrandGateway;
 use puzzlethings\src\object\Brand;
@@ -12,8 +12,8 @@ if (!isAdmin()) {
 }
 
 $title = 'Brands';
-include BASE_URL . '/header.php';
-include BASE_URL . '/nav.php';
+include '../header.php';
+include '../nav.php';
 
 $gateway = new BrandGateway($db);
 $gateway->findAll();

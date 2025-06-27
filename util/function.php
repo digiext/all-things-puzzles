@@ -14,7 +14,7 @@ try {
     die("Unable to load the dotenv file: " . $e->getMessage());
 }
 
-define("BASE_URL", "http" . ($_SERVER['HTTPS'] ? "s://" : "://") . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\'));
+define("BASE_URL", "http" . ($_SERVER['HTTPS'] ? "s://" : "://") . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF'], 2), '/\\'));
 
 function isDev() {
     return $GLOBALS['DEV'] ?? false;
