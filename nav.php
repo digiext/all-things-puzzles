@@ -4,7 +4,7 @@
         <a class="navbar-brand" href="<?php
             $goto = isLoggedIn() ? "home.php" : "index.php";
             if (str_starts_with($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
-            else echo $goto;
+            else echo BASE_URL . $goto;
         ?>">
             <img src="<?php echo BASE_URL ?>/images/atp.png" alt="Logo" width="32" height="32">
             All Things Puzzles</a>
