@@ -19,7 +19,7 @@ $gateway = new BrandGateway($db);
 $brands = $gateway->findAll();
 ?>
 
-<script src="scripts/sources.js"></script>
+<script src="scripts/brands.js"></script>
 
 <!--<div class="container mb-2 mt-5 hstack">-->
 <!--    <h3 class="text-center">Brand Table</h3>-->
@@ -38,19 +38,21 @@ $brands = $gateway->findAll();
 </div>
 
 <div class="container my-2">
-    <table data-classes="table table-dark table-bordered table-striped table-hover"
-           data-toggle="table"
-           data-pagination="true"
-           data-search="true"
-           data-buttons-toolbar=".buttons-toolbar"
-           data-page-list="10,25,50,100,all"
-           data-search-on-enter-key="false"
-           data-id-field="id"
+    <table
+        id="table"
+        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-toggle="table"
+        data-pagination="true"
+        data-search="true"
+        data-buttons-toolbar=".buttons-toolbar"
+        data-page-list="10,25,50,100,all"
+        data-search-on-enter-key="false"
+        data-id-field="id"
     >
         <thead>
             <tr>
                 <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">ID</th>
-                <th scope="col" class="col-11 align-middle" data-sortable="true">Brand</th>
+                <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="brand">Brand</th>
                 <th scope="col" class="text-center">Edit</th>
                 <th scope="col" class="text-center">Delete</th>
             </tr>

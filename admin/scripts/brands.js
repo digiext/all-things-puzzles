@@ -1,6 +1,6 @@
 $(function () {
     $('.edit').on('click', function () {
-        let row = $(this).parent().parent();
+        let row = $(this).closest('tr');
         let rowId = row.children('.id');
         let rowBrand = row.children('.name');
 
@@ -12,7 +12,7 @@ $(function () {
     })
 
     $('.delete').on('click', function () {
-        let row = $(this).parent().parent();
+        let row = $(this).closest('tr');
         let rowId = row.children('.id');
         let rowBrand = row.children('.name');
 

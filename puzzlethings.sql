@@ -24,6 +24,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `auth`
+--
+
+CREATE TABLE auth
+(
+    authid BIGINT(20) UNSIGNED NOT NULL,
+    selector VARCHAR(255) NOT NULL,
+    hashed_validator VARCHAR(255) NOT NULL,
+    userid BIGINT(20) UNSIGNED NOT NULL,
+    expiry DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Table structure for table `brand`
 --
 
@@ -452,6 +465,12 @@ ALTER TABLE `usergroup`
 --
 
 --
+-- Constraints for table `auth`
+--
+ALTER TABLE `auth`
+    ADD CONSTRAINT `fkauthuserid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`);
+
+--
 -- Constraints for table `puzzleinv`
 --
 ALTER TABLE `puzzleinv`
@@ -480,3 +499,9 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ALTER TABLE `auth`
+    ADD UNIQUE KEY `authid` (`authid`),
+    ADD KEY `fkauthuserid` (`userid`);
+ALTER TABLE `auth`
+    MODIFY `authid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;

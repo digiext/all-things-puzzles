@@ -88,10 +88,10 @@ $sources = $gateway->findAll();
                         <input type="text" class="form-control" id="deleteId" name="id" value="<?php echo $source->getId(); ?>" readonly>
                     </div>
                     <div class="col-auto">
-                        <label for="deleteBrand" class="col-form-label">Source</label>
+                        <label for="deleteSource" class="col-form-label">Source</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deleteBrand" name="source" value="<?php echo $source->getDescription(); ?>" readonly>
+                        <input type="text" class="form-control" id="deleteSource" name="source" value="<?php echo $source->getDescription(); ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -120,10 +120,10 @@ $sources = $gateway->findAll();
                         <input type="text" class="form-control" id="editId" name="id" value="<?php echo $source->getId(); ?>" readonly>
                     </div>
                     <div class="col-auto">
-                        <label for="editBrand" class="col-form-label">Source</label>
+                        <label for="editSource" class="col-form-label">Source</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="editBrand" name="source" value="<?php echo $source->getDescription(); ?>">
+                        <input type="text" class="form-control" id="editSource" name="source" value="<?php echo $source->getDescription(); ?>">
                     </div>
                 </div>
                 <div class="modal-footer">

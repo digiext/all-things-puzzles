@@ -74,7 +74,7 @@ function isLoggedIn(): bool {
 }
 
 function isAdmin(): bool {
-    return (isLoggedIn() && cookieSet(USER_GROUP) && decrypt($_COOKIE[USER_GROUP]) == "" . ADMIN_GROUP_ID);
+    return (isLoggedIn() && isset($_SESSION[USER_GROUP]) && decrypt($_SESSION[USER_GROUP]) == "" . ADMIN_GROUP_ID);
 }
 
 function successAlertNoRedir($value): void {

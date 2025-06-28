@@ -41,7 +41,6 @@
                     </div>
                     <form class="column" action="<?php echo BASE_URL ?>/signin.php" method="post" name="login">
                         <div class="modal-body">
-
                             <div class="col-auto">
                                 <label for="usernameLogin" class="col-form-label">Username</label>
                             </div>
@@ -55,9 +54,15 @@
                                 <input type="password" class="form-control" id="passwordLogin" name="password">
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-success" name="submit">Login</button>
+                        <div class="modal-footer hstack justify-content-between">
+                            <div>
+                                <input type="checkbox" class="form-check-input" id="rememberme" name="rememberme">
+                                <label for="rememberme" class="form-check-label">Remember Me</label>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success" name="submit">Login</button>
+                            </div>
                         </div>
                     </form>
                 </div>

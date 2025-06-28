@@ -46,12 +46,6 @@ if (isset($_POST['submit'])) {
                 'path' => '/'
             );
 
-//            if (isset($_POST['rememberme'])) {
-//                // Set cookie variables
-//                $value = encrypt($user->getId());
-//                setcookie(REMEMBER_ME, $value, $options);
-//            }
-
             $_SESSION[USER_ID] = encrypt($user->getId());
             $_SESSION[USER_GROUP] = encrypt($user->getGroupId());
 
@@ -59,5 +53,5 @@ if (isset($_POST['submit'])) {
         } else {
             failAlert("Incorrect username and password. Please try again.");
         }
-    } else header("Location: " . (isset($_POST['from']) ? BASE_URL . $_POST['from'] : 'index.php'));
+    } else failAlert("Enter both Username and Password!", (isset($_POST['from']) ? BASE_URL . $_POST['from'] : 'index.php'));
 }
