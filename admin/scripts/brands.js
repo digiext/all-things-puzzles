@@ -1,5 +1,7 @@
 $(function () {
-    $('.edit').on('click', function () {
+    const table = $('#table');
+
+    table.on('click', '.edit', function () {
         let row = $(this).closest('tr');
         let rowId = row.children('.id');
         let rowBrand = row.children('.name');
@@ -11,7 +13,7 @@ $(function () {
         modalBrand.val(rowBrand.html())
     })
 
-    $('.delete').on('click', function () {
+    table.on('click', '.delete', function () {
         let row = $(this).closest('tr');
         let rowId = row.children('.id');
         let rowBrand = row.children('.name');
@@ -21,11 +23,5 @@ $(function () {
 
         modalId.val(rowId.html())
         modalBrand.val(rowBrand.html())
-    })
-
-    $('.editSubmit').on('click', function () {
-        $(':disabled').each(function () {
-            $(this).removeAttr('disabled')
-        })
     })
 })
