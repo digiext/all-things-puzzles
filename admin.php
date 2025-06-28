@@ -2,7 +2,7 @@
 include 'util/function.php';
 
 //If Not Logged In Reroute to index.php
-if (!isAdmin()) {
+if (!isLoggedIn()) {
     header("Location: index.php");
 }
 
@@ -12,7 +12,9 @@ include 'nav.php';
 
 ?>
 
-<h3 class="container">Admin Area</h3>
+<h3 class="container my-2">Admin Area</h3>
+<br>
+<p class="container my-2">User Changeable Options</p>
 <div class="container text-center my-2">
     <div class="row">
         <div class="col">
@@ -26,29 +28,9 @@ include 'nav.php';
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Disposition
-                </div>
-                <a class="btn btn-primary" href="admin/disposition.php" role="button">Disposition</a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
                     Location
                 </div>
                 <a class="btn btn-primary" href="admin/location.php" role="button">Location</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container text-center my-2">
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Ownership
-                </div>
-                <a class="btn btn-primary" href="admin/ownership.php" role="button">Ownership</a>
             </div>
         </div>
         <div class="col">
@@ -59,12 +41,34 @@ include 'nav.php';
                 <a class="btn btn-primary" href="admin/sources.php" role="button">Source</a>
             </div>
         </div>
+    </div>
+</div>
+<br>
+<p class="container my-2">Admin Only Options</p>
+<div class="container text-center my-2">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Disposition
+                </div>
+                <a class="btn btn-secondary" href="admin/disposition.php" role="button">Disposition</a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Ownership
+                </div>
+                <a class="btn btn-secondary" href="admin/ownership.php" role="button">Ownership</a>
+            </div>
+        </div>
         <div class="col">
             <div class="card">
                 <div class="card-header">
                     Status
                 </div>
-                <a class="btn btn-primary" href="admin/status.php" role="button">Status</a>
+                <a class="btn btn-secondary" href="admin/status.php" role="button">Status</a>
             </div>
         </div>
     </div>

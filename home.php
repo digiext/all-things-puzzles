@@ -67,7 +67,7 @@ include 'nav.php';
                 <div class="card-header">
                     Add Puzzle
                 </div>
-                <a class="btn btn-secondary" href="#" type="button">Add</a>
+                <a class="btn btn-secondary" href="puzzleadd.php" type="button">Add</a>
             </div>
         </div>
         <div class="col">
@@ -75,7 +75,7 @@ include 'nav.php';
                 <div class="card-header">
                     Puzzle Inventory
                 </div>
-                <a class="btn btn-secondary" href="#" type="button">Inventory</a>
+                <a class="btn btn-secondary" href="puzzleinv.php" type="button">Inventory</a>
             </div>
         </div>
         <div class="col">
@@ -83,7 +83,7 @@ include 'nav.php';
                 <div class="card-header">
                     Remove Puzzle
                 </div>
-                <a class="btn btn-secondary" href="#" type="button">Remove</a>
+                <a class="btn btn-secondary" href="puzzleremove.php" type="button">Remove</a>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@ include 'nav.php';
                 <a class="btn btn-secondary" href="admin.php" type="button">Admin</a>
             </div>
         </div>
-        <div class="col">
+        <div class="col invisible">
             <div class="card">
                 <div class="card-header">
                     Future Item
@@ -106,7 +106,7 @@ include 'nav.php';
                 <a class="btn btn-secondary disabled" href="#" type="button">Future</a>
             </div>
         </div>
-        <div class="col">
+        <div class="col invisible">
             <div class="card">
                 <div class="card-header">
                     Future Item
