@@ -3,7 +3,13 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
-use puzzlethings\src\object\Puzzle;
+use puzzlethings\src\object\{
+    Brand,
+    Source,
+    Location,
+    Disposition,
+    Puzzle
+};
 
 class PuzzleGateway {
     private PDO $db;
@@ -12,23 +18,30 @@ class PuzzleGateway {
         $this->db = $db;
     }
 
-    // TODO: Puzzle Gateway #create, #update<>, #delete
-//    public function create(int $id, string $name): Puzzle|false {
-//        $sql = "INSERT INTO puzzleinv (puzzleid, puzname, pieces, brandid, cost, dateacquired, sourceid, ownershipid, locationid, dispositionid, pictureurl, upc) VALUES (:id, :desc)";
-//
-//        try {
-//            $stmt = $this->db->prepare($sql);
-//            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-//            $stmt->bindParam(':desc', $desc);
-//            $success = $stmt->execute();
-//
-//            if ($success) {
-//                return new  Status($id, $desc);
-//            } else return false;
-//        } catch (PDOException) {
-//            return false;
-//        }
-//    }
+    public function create(string $name, int $pieces, Brand|int $brand, float $cost, \DateTime $dateAcquired, Source|int $source, Location|int $locationId, Disposition|int $disposition, string $upc): bool {
+        $sql = "INSERT INTO puzzleinv (puzname, pieces, brandid, cost, dateacquired, sourceid, locationid, dispositionid, upc) VALUES (:name, :pieces, :brandid, :cost, :dateacquired, :sourceid, :locationid, :dispositionid, :upc)";
+
+        $brandId = $brand instanceof Brand ? $brand->getId() : $brand;
+        $sourceId = $source instanceof Source ? $source->getId() : $source;
+        $locationId = $locationId instanceof Location ? $locationId->getId() : $locationId;
+        $dispositionId = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':pieces', $pieces);
+            $stmt->bindParam(':brandid', $brandId);
+            $stmt->bindParam(':cost', $cost);
+            $stmt->bindParam(':dateacquired', $dateAcquired);
+            $stmt->bindParam(':sourceid', $sourceId);
+            $stmt->bindParam(':locationid', $locationId);
+            $stmt->bindParam(':dispositionid', $dispositionId);
+            $stmt->bindParam(':upc', $upc);
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
+        }
+    }
 
     public function findAll(mixed $options = [
         "page" => 0,

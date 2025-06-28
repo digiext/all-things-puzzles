@@ -38,14 +38,16 @@ $sources = $gateway->findAll();
 </div>
 
 <div class="container my-2">
-    <table data-classes="table table-dark table-bordered table-striped table-hover"
-           data-toggle="table"
-           data-pagination="true"
-           data-search="true"
-           data-buttons-toolbar=".buttons-toolbar"
-           data-page-list="10,25,50,100,all"
-           data-search-on-enter-key="false"
-           data-id-field="id"
+    <table
+        id="table"
+        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-toggle="table"
+        data-pagination="true"
+        data-search="true"
+        data-buttons-toolbar=".buttons-toolbar"
+        data-page-list="10,25,50,100,all"
+        data-search-on-enter-key="false"
+        data-id-field="id"
     >
         <thead>
             <tr>
