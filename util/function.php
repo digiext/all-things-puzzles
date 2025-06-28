@@ -1,6 +1,7 @@
 <?php
 
 use Dotenv\Dotenv;
+use puzzlethings\src\gateway\AuthGateway;
 
 include 'constants.php';
 
@@ -70,7 +71,29 @@ function getUserID(): int|false {
 }
 
 function isLoggedIn(): bool {
-    return isset($_SESSION[USER_ID]);
+    if (isset($_SESSION[USER_ID])) return true;
+
+    // else check for rememberme
+    $token = filter_input(INPUT_COOKIE, REMEMBER_ME, FILTER_SANITIZE_SPECIAL_CHARS);
+
+    global $db;
+    require_once __DIR__ . '/remember.php';
+    require_once __DIR__ . '/db.php';
+
+    $gateway = new AuthGateway($db);
+
+    if ($token && tokenIsValid($gateway, $token)) {
+        $user = $gateway->findUserByToken($token);
+
+        if ($user) {
+            $_SESSION[USER_ID] = $user->getId();
+            $_SESSION[USER_GROUP] = $user->getGroupId();
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function isAdmin(): bool {

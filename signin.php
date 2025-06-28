@@ -1,5 +1,6 @@
 <?php
 
+use puzzlethings\src\gateway\AuthGateway;
 use puzzlethings\src\gateway\UserGateway;
 
 use puzzlethings\src\object\User;
@@ -12,7 +13,7 @@ require_once 'util/db.php';
 
 // Check if $_SESSION or $_COOKIE already set
 if (isset($_SESSION[USER_ID])) {
-    header("Location: " . (isset($_POST['from']) ? BASE_URL . $_POST['from'] : 'index.php'));
+    header("Location: " . (isset($_POST['from']) ? BASE_URL . "/" . $_POST['from'] : 'index.php'));
     exit;
 } else if (isLoggedIn()) {
     // Decrypt cookie variable value
@@ -24,7 +25,7 @@ if (isset($_SESSION[USER_ID])) {
 
     if (!empty($user)) {
         $_SESSION[USER_ID] = $userid;
-        header("Location: " . (isset($_POST['from']) ? BASE_URL . $_POST['from'] : 'index.php'));
+        header("Location: " . (isset($_POST['from']) ? BASE_URL . "/" .  $_POST['from'] : 'index.php'));
         exit;
     }
 }
@@ -33,25 +34,29 @@ if (isset($_SESSION[USER_ID])) {
 if (isset($_POST['submit'])) {
     $username = $_POST['username'] ?? "";
     $password = $_POST['password'] ?? "";
-    $from = $_POST['from'] ?? 'index.php';
+    $rememberme = boolval($_POST['rememberme']) ?? false;
+    $from = $_POST['from'] ?? 'home.php';
 
     if ($username != "" && $password != "") {
+        session_regenerate_id();
+
         $gateway = new UserGateway($db);
         $user = $gateway->attemptLogin($username, $password);
 
         if ($user instanceof User) {
-            $days = 30;
-            $options = array(
-                'expires' => time() + ($days * 24 * 60 * 60),
-                'path' => '/'
-            );
-
             $_SESSION[USER_ID] = encrypt($user->getId());
             $_SESSION[USER_GROUP] = encrypt($user->getGroupId());
 
-            successAlert("Welcome " . $username, "home.php");
+            if ($rememberme) {
+                require_once __DIR__ . "/util/remember.php";
+
+                $authGateway = new AuthGateway($db);
+                remember($authGateway, $user);
+            }
+
+            successAlert("Welcome " . $username, $from);
         } else {
             failAlert("Incorrect username and password. Please try again.");
         }
-    } else failAlert("Enter both Username and Password!", (isset($_POST['from']) ? BASE_URL . $_POST['from'] : 'index.php'));
+    } else failAlert("Enter both Username and Password!", (isset($_POST['from']) ? BASE_URL . "/" . $_POST['from'] : 'index.php'));
 }
