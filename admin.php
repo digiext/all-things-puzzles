@@ -12,7 +12,12 @@ include 'nav.php';
 
 ?>
 
-<h3 class="container my-2">Admin Area</h3>
+<div class="container mb-2 mt-4 hstack justify-content-between">
+    <h3 class="text-center align-text-bottom">Admin Area</h3>
+    <div class="d-grid gap-2 d-md-flex">
+        <a class="btn btn-primary" href="home.php">Home</a>
+    </div>
+</div>
 <br>
 <p class="container my-2">User Changeable Options</p>
 <div class="container text-center my-2">
