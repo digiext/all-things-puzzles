@@ -172,6 +172,11 @@ $dispositions = $gateway->findAll();
                 </div>
             </div>
 
+            <div class="p-2 mb-2 mx-1">
+                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
+            </div>
+
             <div id="newLocationMenu" class="hstack gap-3 p-2 mb-2 mx-2" style="display: none;">
                 <div class="vr col-auto"></div>
                 <div class="col-12">
@@ -181,10 +186,6 @@ $dispositions = $gateway->findAll();
                         <input type="text" class="form-control" name="locationDesc" id="locationDesc">
                     </div>
                 </div>
-            </div>
-            <div class="p-2 mb-2 mx-1">
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-                <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
             </div>
         </form>
     </div>
