@@ -1,30 +1,37 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
 use puzzlethings\src\object\Brand;
 
-class BrandGateway {
+class BrandGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(string $name): bool {
+    public function create(string $name): int
+    {
         $sql = "INSERT INTO brand (brandname) VALUES (:name)";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
-            return $stmt->execute();
+            $stmt->execute();
+            $id = $this->db->lastInsertId();
+            return $id;
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $sql = "SELECT * FROM brand";
 
         try {
@@ -42,7 +49,8 @@ class BrandGateway {
         }
     }
 
-    public function findById(int $id): ?Brand {
+    public function findById(int $id): ?Brand
+    {
         $sql = "SELECT * FROM brand WHERE brandid = :id";
 
         try {
@@ -59,7 +67,8 @@ class BrandGateway {
         }
     }
 
-    public function updateName(Brand|int $brand, string $name): bool {
+    public function updateName(Brand|int $brand, string $name): bool
+    {
         $sql = "UPDATE brand SET brandname = :name WHERE brandid = :id";
         $id = $brand instanceof Brand ? $brand->getId() : $brand;
 
@@ -73,7 +82,8 @@ class BrandGateway {
         }
     }
 
-    public function delete(Brand|int $brand): bool {
+    public function delete(Brand|int $brand): bool
+    {
         $sql = "DELETE FROM brand WHERE brandid = :id";
         $id = $brand instanceof Brand ? $brand->getId() : $brand;
 

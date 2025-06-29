@@ -1,30 +1,37 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
 use puzzlethings\src\object\Status;
 
-class StatusGateway {
+class StatusGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(string $desc): bool {
+    public function create(string $desc): int
+    {
         $sql = "INSERT INTO status (statusdesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
-            return $stmt->execute();
+            $stmt->execute();
+            $id = $this->db->lastInsertId();
+            return $id;
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $sql = "SELECT * FROM status";
 
         try {
@@ -42,7 +49,8 @@ class StatusGateway {
         }
     }
 
-    public function findById(int $id): ?Status {
+    public function findById(int $id): ?Status
+    {
         $sql = "SELECT * FROM status WHERE statusid = :id";
 
         try {
@@ -59,7 +67,8 @@ class StatusGateway {
         }
     }
 
-    public function updateDesc(Status|int $status, string $desc): Status|false {
+    public function updateDesc(Status|int $status, string $desc): Status|false
+    {
         $sql = "UPDATE status SET statusdesc = :desc WHERE statusid = :id";
         $id = $status instanceof Status ? $status->getId() : $status;
 
@@ -80,7 +89,8 @@ class StatusGateway {
         }
     }
 
-    public function delete(Status|int $status): bool {
+    public function delete(Status|int $status): bool
+    {
         $sql = "DELETE FROM disposition WHERE dispositionid = :id";
         $id = $status instanceof Status ? $status->getId() : $status;
 

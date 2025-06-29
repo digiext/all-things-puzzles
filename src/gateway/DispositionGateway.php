@@ -1,30 +1,37 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
 use puzzlethings\src\object\Disposition;
 
-class DispositionGateway {
+class DispositionGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(string $desc): bool {
+    public function create(string $desc): int
+    {
         $sql = "INSERT INTO disposition (dispositiondesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
-            return $stmt->execute();
+            $stmt->execute();
+            $id = $this->db->lastInsertId();
+            return $id;
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $sql = "SELECT * FROM disposition";
 
         try {
@@ -42,7 +49,8 @@ class DispositionGateway {
         }
     }
 
-    public function findById(int $id): ?Disposition {
+    public function findById(int $id): ?Disposition
+    {
         $sql = "SELECT * FROM disposition WHERE dispositionid = :id";
 
         try {
@@ -59,7 +67,8 @@ class DispositionGateway {
         }
     }
 
-    public function updateDispositionDesc(Disposition|int $disposition, string $desc): Disposition|false {
+    public function updateDispositionDesc(Disposition|int $disposition, string $desc): Disposition|false
+    {
         $sql = "UPDATE disposition SET dispositiondesc = :desc WHERE dispositionid = :id";
         $id = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
 
@@ -80,7 +89,8 @@ class DispositionGateway {
         }
     }
 
-    public function delete(Disposition|int $disposition): bool {
+    public function delete(Disposition|int $disposition): bool
+    {
         $sql = "DELETE FROM disposition WHERE dispositionid = :id";
         $id = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
 

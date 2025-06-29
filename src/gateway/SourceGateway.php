@@ -15,14 +15,16 @@ class SourceGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): bool
+    public function create(string $desc): int
     {
         $sql = "INSERT INTO source (sourcedesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
-            return $stmt->execute();
+            $stmt->execute();
+            $id = $this->db->lastInsertId();
+            return $id;
         } catch (PDOException) {
             return false;
         }

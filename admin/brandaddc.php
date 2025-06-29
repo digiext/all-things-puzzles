@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
     $code = $gateway->create($brand);
 
     session_start();
-    if ($code == false) {
+    if (empty($code)) {
         failAlert("Brand Not Created!");
     } else {
         successAlert("Brand has been created");

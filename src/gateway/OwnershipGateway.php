@@ -1,30 +1,37 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
 use puzzlethings\src\object\Ownership;
 
-class OwnershipGateway {
+class OwnershipGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(string $desc): bool {
+    public function create(string $desc): int
+    {
         $sql = "INSERT INTO ownership (ownershipdesc) VALUES (:desc)";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
-            return $stmt->execute();
+            $stmt->execute();
+            $id = $this->db->lastInsertId();
+            return $id;
         } catch (PDOException) {
             return false;
         }
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $sql = "SELECT * FROM ownership";
 
         try {
@@ -42,7 +49,8 @@ class OwnershipGateway {
         }
     }
 
-    public function findById(int $id): ?Ownership {
+    public function findById(int $id): ?Ownership
+    {
         $sql = "SELECT * FROM ownership WHERE ownershipid = :id";
 
         try {
@@ -59,7 +67,8 @@ class OwnershipGateway {
         }
     }
 
-    public function updateDesc(Ownership|int $ownership, string $desc): Ownership|false {
+    public function updateDesc(Ownership|int $ownership, string $desc): Ownership|false
+    {
         $sql = "UPDATE ownership SET ownershipdesc = :desc WHERE ownershipid = :id";
         $id = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
 
@@ -80,7 +89,8 @@ class OwnershipGateway {
         }
     }
 
-    public function delete(Ownership|int $ownership): bool {
+    public function delete(Ownership|int $ownership): bool
+    {
         $sql = "DELETE FROM ownership WHERE ownershipid = :id";
         $id = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
 
