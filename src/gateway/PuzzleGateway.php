@@ -1,4 +1,5 @@
 <?php
+
 namespace puzzlethings\src\gateway;
 
 use PDO;
@@ -11,16 +12,20 @@ use puzzlethings\src\object\{
     Puzzle
 };
 
-class PuzzleGateway {
+class PuzzleGateway
+{
     private PDO $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function create(string $name, int $pieces, Brand|int $brand, float $cost, \DateTime $dateAcquired, Source|int $source, Location|int $locationId, Disposition|int $disposition, string $upc): bool {
+    public function create(string $name, int $pieces, Brand|int $brand, float $cost, string $dateAcquired, Source|int $source, Location|int $locationId, Disposition|int $disposition, string $upc): bool
+    {
         $sql = "INSERT INTO puzzleinv (puzname, pieces, brandid, cost, dateacquired, sourceid, locationid, dispositionid, upc) VALUES (:name, :pieces, :brandid, :cost, :dateacquired, :sourceid, :locationid, :dispositionid, :upc)";
 
+        $date = date("Y-m-d H:i:s", strtotime($dateAcquired));
         $brandId = $brand instanceof Brand ? $brand->getId() : $brand;
         $sourceId = $source instanceof Source ? $source->getId() : $source;
         $locationId = $locationId instanceof Location ? $locationId->getId() : $locationId;
@@ -32,13 +37,14 @@ class PuzzleGateway {
             $stmt->bindParam(':pieces', $pieces);
             $stmt->bindParam(':brandid', $brandId);
             $stmt->bindParam(':cost', $cost);
-            $stmt->bindParam(':dateacquired', $dateAcquired);
+            $stmt->bindParam(':dateacquired', $date);
             $stmt->bindParam(':sourceid', $sourceId);
             $stmt->bindParam(':locationid', $locationId);
             $stmt->bindParam(':dispositionid', $dispositionId);
             $stmt->bindParam(':upc', $upc);
             return $stmt->execute();
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Database error while adding puzzle: " . $e->getMessage());
             return false;
         }
     }
@@ -46,7 +52,8 @@ class PuzzleGateway {
     public function findAll(mixed $options = [
         "page" => 0,
         "maxperpage" => 10
-    ]): array {
+    ]): array
+    {
         $sql = "SELECT * FROM puzzleinv LIMIT " . ($options['page'] * $options['maxperpage']) . ", " . $options['maxperpage'];
 
         try {
@@ -64,7 +71,8 @@ class PuzzleGateway {
         }
     }
 
-    public function findById(int $id, mixed $options = []): ?Puzzle {
+    public function findById(int $id, mixed $options = []): ?Puzzle
+    {
         $sql = "SELECT * FROM puzzleinv WHERE puzzleid = :id";
 
         try {
@@ -81,7 +89,8 @@ class PuzzleGateway {
         }
     }
 
-    public function findByName(string $name, mixed $options = []): ?Puzzle {
+    public function findByName(string $name, mixed $options = []): ?Puzzle
+    {
         $sql = "SELECT * FROM puzzleinv WHERE puzname LIKE :name";
 
         $before = null;
@@ -113,7 +122,7 @@ class PuzzleGateway {
 
             return Puzzle::of($result, $this->db);
         } catch (PDOException $e) {
-            print ($e->getMessage());
+            print($e->getMessage());
             return null;
         }
     }
