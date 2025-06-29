@@ -182,9 +182,9 @@ $dispositions = $gateway->findAll();
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary mb-3" name="submit">Submit</button>
-                <a class="btn btn-danger mb-3" name="cancel" href="home.php">Cancel</a>
+            <div class="p-2 mb-2 mx-1">
+                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
             </div>
     </div>
     </form>
