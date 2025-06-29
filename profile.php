@@ -25,8 +25,8 @@ $user = $gateway->findById(getUserId());
 <div class="container mt-4 mb-2">
     <h4>Hello, <?php echo $user->getFullname() ?? $user->getUsername() ?></h4>
     <hr>
-    <div class="row">
-        <div class="col-sm-4">
+    <div class="hstack gap-2">
+        <div class="col-4">
             <form class="p-2 mb-2 mx-1 align-items-center" action="useredit.php?ctx=uname" method="post">
                 <div class="col-6">
                     <label for="updateUsername"><strong>Username</strong></label>
@@ -69,7 +69,8 @@ $user = $gateway->findById(getUserId());
                 </div>
             </form>
         </div>
-        <div class="col-sm-8">
+        <div class="vr"></div>
+        <div class="">
             <!-- PLACEHOLDER -->
         </div>
     </div>
