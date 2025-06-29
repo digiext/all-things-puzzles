@@ -186,8 +186,8 @@ $dispositions = $gateway->findAll();
                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
             </div>
+        </form>
     </div>
-    </form>
 </div>
 
 <div class="vr"></div>
