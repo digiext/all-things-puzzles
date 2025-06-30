@@ -11,6 +11,7 @@ include 'header.php';
 include 'nav.php';
 ?>
 
+<br>
 <h3 class="text-center">Puzzle Stats</h3>
 <div class="container text-center">
     <div class="row g-2">
@@ -62,7 +63,7 @@ include 'nav.php';
 <h3 class="text-center">Puzzle Management</h3>
 <div class="container text-center my-2">
     <div class="row">
-        <div class="col">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">
                     Add Puzzle
@@ -70,7 +71,7 @@ include 'nav.php';
                 <a class="btn btn-secondary" href="puzzleadd.php" type="button">Add</a>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">
                     Puzzle Inventory
@@ -78,40 +79,18 @@ include 'nav.php';
                 <a class="btn btn-secondary" href="puzzleinv.php" type="button">Inventory</a>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Remove Puzzle
-                </div>
-                <a class="btn btn-secondary" href="puzzleremove.php" type="button">Remove</a>
-            </div>
-        </div>
     </div>
 </div>
+<br>
+<h3 class="text-center">Administration</h3>
 <div class="container text-center my-2">
     <div class="row">
-        <div class="col">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     Admin Area
                 </div>
                 <a class="btn btn-secondary" href="admin.php" type="button">Admin</a>
-            </div>
-        </div>
-        <div class="col invisible">
-            <div class="card">
-                <div class="card-header">
-                    Future Item
-                </div>
-                <a class="btn btn-secondary disabled" href="#" type="button">Future</a>
-            </div>
-        </div>
-        <div class="col invisible">
-            <div class="card">
-                <div class="card-header">
-                    Future Item
-                </div>
-                <a class="btn btn-secondary disabled" href="#" type="button">Future</a>
             </div>
         </div>
     </div>
