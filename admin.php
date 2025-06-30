@@ -35,7 +35,7 @@ include 'nav.php';
                 <div class="card-header">
                     Location
                 </div>
-                <a class="btn btn-primary" href="admin/location.php" role="button">Location</a>
+                <a class="btn btn-primary" href="admin/locations.php" role="button">Location</a>
             </div>
         </div>
         <div class="col">
