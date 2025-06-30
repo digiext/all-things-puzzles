@@ -82,6 +82,20 @@ include 'nav.php';
     </div>
 </div>
 <br>
+<h3 class="text-center">User Puzzle Management</h3>
+<div class="container text-center my-2">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    User Puzzle Inventory
+                </div>
+                <a class="btn btn-secondary" href="userinv.php" type="button">Inventory</a>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
 <h3 class="text-center">Administration</h3>
 <div class="container text-center my-2">
     <div class="row">
