@@ -42,6 +42,7 @@ class PuzzleGateway
             $stmt->bindParam(':locationid', $locationId);
             $stmt->bindParam(':dispositionid', $dispositionId);
             $stmt->bindParam(':upc', $upc);
+            $stmt->execute();
 
             $id = $this->db->lastInsertId();
             return Puzzle::of([
@@ -54,6 +55,7 @@ class PuzzleGateway
                 "sourceid" => $sourceId,
                 "locationid" => $locationId,
                 "dispositionid" => $dispositionId,
+                "pictureurl" => '',
                 "upc" => $upc
             ], $this->db);
         } catch (PDOException $e) {
