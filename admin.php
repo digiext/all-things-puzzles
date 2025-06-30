@@ -49,32 +49,39 @@ include 'nav.php';
     </div>
 </div>
 <br>
-<p class="container my-2">Admin Only Options</p>
-<div class="container text-center my-2">
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Disposition
+
+<?php
+if (isAdmin()) {
+    echo
+    "<p class='container my-2'>Admin Only Options</p>
+        <div class='container text-center my-2'>
+            <div class='row'>
+                <div class='col'>
+                    <div class='card'>
+                        <div class='card-header'>
+                            Disposition
+                        </div>
+                        <a class='btn btn-secondary' href='admin/disposition.php' role='button'>Disposition</a>
+                    </div>
                 </div>
-                <a class="btn btn-secondary" href="admin/disposition.php" role="button">Disposition</a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Ownership
+                <div class='col'>
+                    <div class='card'>
+                        <div class='card-header'>
+                            Ownership
+                        </div>
+                        <a class='btn btn-secondary' href='admin/ownership.php' role='button'>Ownership</a>
+                    </div>
                 </div>
-                <a class="btn btn-secondary" href="admin/ownership.php" role="button">Ownership</a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Status
+                <div class='col'>
+                    <div class='card'>
+                        <div class='card-header'>
+                            Status
+                        </div>
+                        <a class='btn btn-secondary' href='admin/status.php' role='button'>Status</a>
+                    </div>
                 </div>
-                <a class="btn btn-secondary" href="admin/status.php" role="button">Status</a>
             </div>
-        </div>
-    </div>
-</div>
+        </div>";
+}
+
+?>

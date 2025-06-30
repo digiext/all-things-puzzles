@@ -91,7 +91,7 @@ class StatusGateway
 
     public function delete(Status|int $status): bool
     {
-        $sql = "DELETE FROM disposition WHERE dispositionid = :id";
+        $sql = "DELETE FROM status WHERE statusid = :id";
         $id = $status instanceof Status ? $status->getId() : $status;
 
         try {
