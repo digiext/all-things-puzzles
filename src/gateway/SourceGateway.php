@@ -15,7 +15,7 @@ class SourceGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): int
+    public function create(string $desc): Source|false
     {
         $sql = "INSERT INTO source (sourcedesc) VALUES (:desc)";
 
@@ -23,10 +23,24 @@ class SourceGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Source($id, $desc);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM source";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting sources: " . $e->getMessage());
+            return -1;
         }
     }
 

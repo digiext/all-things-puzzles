@@ -13,12 +13,13 @@ $options = [
 
 global $db;
 
-require "../../db.php";
+require __DIR__ . "/../../util/db.php";
 $gateway = new Gateway($db);
 
+$count = $gateway->count();
 $res = $gateway->findAll($options);
 
-if (count($res) < $maxperpage) {
+if ($maxperpage * $page + count($res) >= $count) {
     $next = null;
 } else {
     $query = [];

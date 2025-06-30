@@ -25,7 +25,7 @@ $options = [
 
 global $db;
 
-require "../../db.php";
+require __DIR__ . "/../../util/db.php";
 $gateway = new Gateway($db);
 
 $res = null;

@@ -16,7 +16,7 @@ class LocationGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): int
+    public function create(string $desc): Location|false
     {
         $sql = "INSERT INTO location (locationdesc) VALUES (:desc)";
 
@@ -24,10 +24,24 @@ class LocationGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Location($id, $desc);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM location";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting locations: " . $e->getMessage());
+            return -1;
         }
     }
 

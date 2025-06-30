@@ -15,7 +15,7 @@ $title = 'Puzzle Inventory';
 include 'header.php';
 include 'nav.php';
 
-$options = ["page" => 50, "maxperpage" => 8];
+$options = ["page" => 0, "maxperpage" => 8];
 
 $gateway = new PuzzleGateway($db);
 $puzzles = $gateway->findAll($options);
@@ -31,36 +31,65 @@ $puzzles = $gateway->findAll($options);
     </div>
 </div>
 
-<div class="container my-2">
+<div class="container my-2 table-responsive">
     <table
         id="table"
-        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-classes="table table-dark table-striped table-hover"
         data-toggle="table"
         data-pagination="true"
         data-search="true"
         data-buttons-toolbar=".buttons-toolbar"
         data-page-list="10,25,50,100,all"
         data-search-on-enter-key="false"
-        data-id-field=""></table>
+        data-id-field="">
 
-    <tbody class="table-group-divider">
-        <?php foreach ($puzzles as $puzzle) {
-            if (!($puzzle instanceof Puzzle)) continue;
-            echo
-            "<tr>
-                    <div class='card' style='width: 100%'>
-                        <div class='card-header'><strong>Puzzle Listing Preview</strong></div>
-                        <div class='card-body placeholder-glow'>
-                            <h5 class='card-title col-12' id='cardname'></h5>
-                            <p class='card-subtitle placeholder col-12 text-body-secondary' id='cardbrand'></p>
+        <thead>
+            <tr>
+                <th scope="col" class="col-6"></th>
+                <th scope="col" class="col-6"></th>
+            </tr>
+        </thead>
+
+        <tbody class="table-group-divider">
+            <?php
+            foreach ($puzzles as $puzzle) {
+                if (!($puzzle instanceof Puzzle)) continue;
+                echo
+                "<tr class='m-2'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <h5 class='card-title col-12' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
+                            <p class='card-subtitle col-12 text-body-secondary' id='cardbrand-" . $puzzle->getId() . "'>" . $puzzle->getBrand()->getName() . "</p>
                         </div>
-                        <ul class='list-group list-group-flush placeholder-glow'>
-                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces' class='placeholder col-2'></span></li>
-                            <li class='list-group-item hstack gap-2'><span class='input-group-text py-1'>$</span><span id='cardcost' class='placeholder col-1'></span> <span id='cardcurrency'>USD</span></li>
-                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource' class='placeholder col-3'></span></li>
-                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc' class='placeholder col-3'></span></li>
+                        <ul class='list-group list-group-flush'>
+                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces-" . $puzzle->getId() . "'>" . $puzzle->getPieces() . "</span></li>
+                            <li class='list-group-item hstack gap-2'><span class='input-group-text py-1'>$</span><span id='cardcost-" . $puzzle->getId() . "'>" . $puzzle->getCost() . "</span><span id='cardcurrency-" . $puzzle->getId() . "'>USD</span></li>
+                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource-" . $puzzle->getId() . "'>" . $puzzle->getSource()->getDescription() . "</span></li>
+                            <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . $puzzle->getUpc() . "</span></li>
                         </ul>
                     </div>
                 </tr>";
-        } ?>
-    </tbody>
+            }
+            ?>
+
+<!--            --><?php //foreach ($puzzles as $puzzle) {
+//                if (!($puzzle instanceof Puzzle)) continue;
+//                echo
+//                "<tr>
+//                        <div class='card' style='width: 100%'>
+//                            <div class='card-header'><strong>Puzzle Listing Preview</strong></div>
+//                            <div class='card-body placeholder-glow'>
+//                                <h5 class='card-title col-12' id='cardname'></h5>
+//                                <p class='card-subtitle placeholder col-12 text-body-secondary' id='cardbrand'></p>
+//                            </div>
+//                            <ul class='list-group list-group-flush placeholder-glow'>
+//                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces' class='placeholder col-2'></span></li>
+//                                <li class='list-group-item hstack gap-2'><span class='input-group-text py-1'>$</span><span id='cardcost' class='placeholder col-1'></span> <span id='cardcurrency'>USD</span></li>
+//                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource' class='placeholder col-3'></span></li>
+//                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc' class='placeholder col-3'></span></li>
+//                            </ul>
+//                        </div>
+//                    </tr>";
+//            } ?>
+        </tbody>
+    </table>

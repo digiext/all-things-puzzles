@@ -15,7 +15,7 @@ class BrandGateway
         $this->db = $db;
     }
 
-    public function create(string $name): int
+    public function create(string $name): Brand|false
     {
         $sql = "INSERT INTO brand (brandname) VALUES (:name)";
 
@@ -23,10 +23,24 @@ class BrandGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Brand($id, $name);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM brand";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting brands: " . $e->getMessage());
+            return -1;
         }
     }
 

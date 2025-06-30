@@ -15,7 +15,7 @@ class OwnershipGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): int
+    public function create(string $desc): Ownership|false
     {
         $sql = "INSERT INTO ownership (ownershipdesc) VALUES (:desc)";
 
@@ -23,10 +23,24 @@ class OwnershipGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Ownership($id, $desc);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM ownership";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting ownerships: " . $e->getMessage());
+            return -1;
         }
     }
 

@@ -23,7 +23,7 @@ class UserGateway
         $this->db = $db;
     }
 
-    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true, int $group = USER_GROUP_ID): User|PDOException|true|int
+    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true, int $group = USER_GROUP_ID): User|PDOException|bool|int
     {
         $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, :usergroup, 1, NOW())";
 
@@ -77,10 +77,24 @@ class UserGateway
             $success = $stmt->execute();
 
             if ($success && $returnuser) {
-                return true; //new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
+                $id = $this->db->lastInsertId();
+                return new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
             } else return $success;
         } catch (PDOException $e) {
             return $e;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM user";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting users: " . $e->getMessage());
+            return -1;
         }
     }
 

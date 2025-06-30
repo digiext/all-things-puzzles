@@ -21,14 +21,14 @@ class PuzzleGateway
         $this->db = $db;
     }
 
-    public function create(string $name, int $pieces, Brand|int $brand, float $cost, string $dateAcquired, Source|int $source, Location|int $locationId, Disposition|int $disposition, string $upc): bool
+    public function create(string $name, int $pieces, Brand|int $brand, float $cost, string $dateAcquired, Source|int $source, Location|int $location, Disposition|int $disposition, string $upc): Puzzle|false
     {
         $sql = "INSERT INTO puzzleinv (puzname, pieces, brandid, cost, dateacquired, sourceid, locationid, dispositionid, upc) VALUES (:name, :pieces, :brandid, :cost, :dateacquired, :sourceid, :locationid, :dispositionid, :upc)";
 
         $date = date("Y-m-d H:i:s", strtotime($dateAcquired));
         $brandId = $brand instanceof Brand ? $brand->getId() : $brand;
         $sourceId = $source instanceof Source ? $source->getId() : $source;
-        $locationId = $locationId instanceof Location ? $locationId->getId() : $locationId;
+        $locationId = $location instanceof Location ? $location->getId() : $location;
         $dispositionId = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
 
         try {
@@ -42,10 +42,36 @@ class PuzzleGateway
             $stmt->bindParam(':locationid', $locationId);
             $stmt->bindParam(':dispositionid', $dispositionId);
             $stmt->bindParam(':upc', $upc);
-            return $stmt->execute();
+
+            $id = $this->db->lastInsertId();
+            return Puzzle::of([
+                "puzzleid" => $id,
+                "puzname" => $name,
+                "pieces" => $pieces,
+                "brandid" => $brandId,
+                "cost" => $cost,
+                "dateacquired" => $date,
+                "sourceid" => $sourceId,
+                "locationid" => $locationId,
+                "dispositionid" => $dispositionId,
+                "upc" => $upc
+            ], $this->db);
         } catch (PDOException $e) {
             error_log("Database error while adding puzzle: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM puzzleinv";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting puzzles: " . $e->getMessage());
+            return -1;
         }
     }
 
@@ -54,7 +80,7 @@ class PuzzleGateway
         "maxperpage" => 10
     ]): array
     {
-        $sql = "SELECT * FROM puzzleinv LIMIT " . ($options['page'] * $options['maxperpage']) . ", " . $options['maxperpage'];
+        $sql = "SELECT * FROM puzzleinv LIMIT " . intval($options['page'] * $options['maxperpage']) . ", " . intval($options['maxperpage']);
 
         try {
             $stmt = $this->db->query($sql);
@@ -80,6 +106,7 @@ class PuzzleGateway
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
             if ($stmt->rowCount() == 0) return null;
 

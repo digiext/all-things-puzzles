@@ -15,7 +15,7 @@ class DispositionGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): int
+    public function create(string $desc): Disposition|false
     {
         $sql = "INSERT INTO disposition (dispositiondesc) VALUES (:desc)";
 
@@ -23,10 +23,24 @@ class DispositionGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Disposition($id, $desc);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM disposition";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting dispositions: " . $e->getMessage());
+            return -1;
         }
     }
 

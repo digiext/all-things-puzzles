@@ -15,7 +15,7 @@ class StatusGateway
         $this->db = $db;
     }
 
-    public function create(string $desc): int
+    public function create(string $desc): Status|false
     {
         $sql = "INSERT INTO status (statusdesc) VALUES (:desc)";
 
@@ -23,10 +23,24 @@ class StatusGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':desc', $desc);
             $stmt->execute();
+
             $id = $this->db->lastInsertId();
-            return $id;
+            return new Status($id, $desc);
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    public function count(): int {
+        $sql = "SELECT COUNT(*) FROM brand";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting statuses: " . $e->getMessage());
+            return -1;
         }
     }
 
