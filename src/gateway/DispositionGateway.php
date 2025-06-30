@@ -67,7 +67,7 @@ class DispositionGateway
         }
     }
 
-    public function updateDispositionDesc(Disposition|int $disposition, string $desc): Disposition|false
+    public function updateDesc(Disposition|int $disposition, string $desc): Disposition|false
     {
         $sql = "UPDATE disposition SET dispositiondesc = :desc WHERE dispositionid = :id";
         $id = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
