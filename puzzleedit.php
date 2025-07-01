@@ -41,6 +41,7 @@ $puzzle = $gateway->findById($id)
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
+            <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
                 <input type="text" class="form-control" name="puzname" id="puzname" value="<?php echo $puzzle->getName(); ?>">
@@ -376,13 +377,13 @@ $puzzle = $gateway->findById($id)
 
                 reader.readAsDataURL(file);
             } else {
-                cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
+                cardPicture.attr('src', '/images/no-image-dark.svg');
             }
         })
 
         pictureClear.on('click', function() {
             picture.val(null);
-            cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
+            cardPicture.attr('src', '/images/no-image-dark.svg');
         })
     })
 </script>

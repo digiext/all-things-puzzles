@@ -31,7 +31,7 @@ $totalPuzzles = $gateway->count($options);
 $seen = $maxperpage * ($page - 1) + count($puzzles);
 
 $query = [];
-parse_str($_SERVER['QUERY_STRING'], $query);
+parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
 
 function queryForPage(int $page): string {
     global $query;
@@ -63,7 +63,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             if (empty($puzzle->getPicture())) {
                 echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
             } else {
-                echo "<img src='" . $puzzle->getPicture() . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
+                echo "<img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
             } ?>
 
         <?php echo "<div class='card-body bg-secondary-subtle'>

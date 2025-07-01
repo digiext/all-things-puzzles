@@ -251,28 +251,31 @@ class PuzzleGateway
 
         $sets = "";
         foreach ($values as $key => $value) {
-            $sets .= "$key = :$key,";
+            $sets .= "$key = :$key, ";
         }
 
         if ($sets == '') return false;
 
         $sql = "UPDATE puzzleinv SET $sets WHERE puzzleid = :puzzleid";
 
-        $pos = strrpos($sql, ",");
+        $pos = strrpos($sql, ", ");
         if ($pos !== false) {
-            $sql = substr_replace($sql, "", $pos, 1);
+            $sql = substr_replace($sql, "", $pos, 2);
         }
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
+           // $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
 
+            $exec = [
+                ":puzzleid" => $id,
+            ];
             foreach ($values as $key => $value) {
-                $stmt->bindParam(":$key", $value);
+                $exec[":$key"] = $value;
+                // $stmt->bindParam(":$key", $value, is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
 
-            error_log($sql);
-            return $stmt->execute();
+            return $stmt->execute($exec);
         } catch (PDOException $e) {
             error_log("Database error while updating puzzle: " . $e->getMessage());
             return false;
