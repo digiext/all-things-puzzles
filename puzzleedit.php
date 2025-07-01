@@ -94,7 +94,7 @@ $puzzle = $gateway->findById($id)
 
             <div class="p-2 mb-2 mx-1">
                 <label for="acquired" class="form-label"><strong>Date Acquired</strong></label>
-                <input type="date" class="form-control" name="acquired" id="acquired" value="<?php echo $puzzle->getAcquired(); ?>">
+                <input type="date" class="form-control" name="acquired" id="acquired" value="<?php echo date('Y-m-d', strtotime($puzzle->getAcquired())); ?>">
             </div>
 
             <div class="p-2 mb-2 mx-1">
