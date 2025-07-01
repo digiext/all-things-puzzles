@@ -83,7 +83,7 @@ if (isset($_POST['submit'])) {
             warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleedit.php?id=" . $id);
         }
 
-        $uploadedFile = hash("SHA256", file_get_contents($tmp)) . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+        $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
         $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
         $success = move_uploaded_file($tmp, $filepath);
@@ -94,12 +94,12 @@ if (isset($_POST['submit'])) {
         $picurl = $gateway->findById($id)->getPicture();
 
         if (($picurl ?? '') != '') {
-        $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
-        if (!$success) {
-            error_log("Failed deleting file $picture");
-            warningAlertNoRedir("Failed removing picture from server");
-        }
-        }
+            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
+            if (!$success) {
+                error_log("Failed deleting file $picture");
+                warningAlertNoRedir("Failed removing picture from server");
+            }
+            }
     }
 
     $values = [
