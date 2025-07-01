@@ -6,12 +6,11 @@ use DateTime;
 class User implements \JsonSerializable {
     private int $id;
     private string $username;
-    private ?string $fullname, $email, $password, $hash;
+    private ?string $fullname, $email, $password, $hash, $lastlogin;
     private ?int $groupid, $themeid;
     private bool $emailconfirmed;
-    private ?DateTime $lastlogin;
 
-    public function __construct(int $id, ?string $username, ?string $fullname, ?string $email, ?bool $emailconfirmed, ?string $password, ?string $hash, ?int $groupid, ?int $themeid, ?DateTime $lastlogin) {
+    public function __construct(int $id, ?string $username, ?string $fullname, ?string $email, ?bool $emailconfirmed, ?string $password, ?string $hash, ?int $groupid, ?int $themeid, ?string $lastlogin) {
         $this->id = $id;
         $this->username = $username;
         $this->fullname = $fullname;
@@ -25,7 +24,7 @@ class User implements \JsonSerializable {
     }
 
     public static function of(mixed $res): User {
-        return new User($res["userid"], $res["user_name"], $res['full_name'] === '' ? null : $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], new DateTime($res['lastlogin']));
+        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], $res['lastlogin']);
     }
 
     public function getId(): ?int {
@@ -56,7 +55,7 @@ class User implements \JsonSerializable {
         return $this->themeid;
     }
 
-    public function getLastLogin(): ?DateTime {
+    public function getLastLogin(): ?string {
         return $this->lastlogin;
     }
 

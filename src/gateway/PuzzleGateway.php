@@ -64,8 +64,11 @@ class PuzzleGateway
         }
     }
 
-    public function count(): int {
-        $sql = "SELECT COUNT(*) FROM puzzleinv";
+    public function count($options = [
+        FILTERS => []
+    ]): int {
+        $filters = $this->determineFilters($options[FILTERS] ?? []);
+        $sql = "SELECT COUNT(*) FROM puzzleinv $filters";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -78,11 +81,24 @@ class PuzzleGateway
     }
 
     public function findAll(mixed $options = [
-        "page" => 0,
-        "maxperpage" => 10
-    ]): array
-    {
-        $sql = "SELECT * FROM puzzleinv LIMIT " . intval($options['page'] * $options['maxperpage']) . ", " . intval($options['maxperpage']);
+        PAGE => 0,
+        MAX_PER_PAGE => 10,
+        SORT => null,
+        SORT_DIRECTION => SQL_SORT_ASC,
+        FILTERS => []
+    ]): array {
+        require_once __DIR__ . '/../../util/constants.php';
+
+        $sort = $options[SORT] ?? PUZ_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+        $filters = $options[FILTERS] ?? [];
+
+        $offset = $page * $maxPerPage;
+        $filters = $this->determineFilters($filters);
+
+        $sql = "SELECT * FROM puzzleinv $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -95,8 +111,81 @@ class PuzzleGateway
 
             return $puzzles;
         } catch (PDOException $e) {
-            exit($e->getMessage());
+            error_log('Error while fetching puzzles: ' . $e->getMessage());
+            die();
         }
+    }
+
+    private function determineFilters(mixed $filters = []): string {
+        $res = "";
+
+        foreach ($filters as $filter => $val) {
+            switch ($filter) {
+                case PUZ_FILTER_NAME: {
+                    $res .= "AND puzname LIKE %" . $val . "% ";
+                    break;
+                }
+                case PUZ_FILTER_PIECES: {
+                    if (is_array($val)) {
+                        $res .= "AND pieces BETWEEN $val[0] AND $val[1]";
+                    } else {
+                        $res .= "AND pieces = $val";
+                    }
+                    break;
+                }
+                case PUZ_FILTER_BRAND: {
+                    if ($val instanceof Brand) {
+                        $id = $val->getId();
+                        $res .= "AND brandid = $id";
+                    } else {
+                        $res .= "AND brandid = $val";
+                    }
+                    break;
+                }
+                case PUZ_FILTER_COST: {
+                    if (is_array($val)) {
+                        $res .= "AND cost BETWEEN $val[0] AND $val[1]";
+                    } else {
+                        $res .= "AND cost = $val";
+                    }
+                    break;
+                }
+                case PUZ_FILTER_SOURCE: {
+                    if ($val instanceof Source) {
+                        $id = $val->getId();
+                        $res .= "AND sourceid = $id";
+                    } else {
+                        $res .= "AND sourceid = $val";
+                    }
+                    break;
+                }
+                case PUZ_FILTER_LOCATION: {
+                    if ($val instanceof Location) {
+                        $id = $val->getId();
+                        $res .= "AND locationid = $id";
+                    } else {
+                        $res .= "AND locationid = $val";
+                    }
+                    break;
+                }
+                case PUZ_FILTER_DISPOSITION: {
+                    if ($val instanceof Disposition) {
+                        $id = $val->getId();
+                        $res .= "AND dispositionid = $id";
+                    } else {
+                        $res .= "AND dispositionid = $val";
+                    }
+                    break;
+                }
+            }
+        }
+
+        $pos = strpos($res, "AND");
+        if ($pos !== false) {
+            $res = substr_replace($res, "WHERE", $pos, 3);
+        }
+
+        return $res;
     }
 
     public function findById(int $id, mixed $options = []): ?Puzzle
@@ -153,6 +242,40 @@ class PuzzleGateway
         } catch (PDOException $e) {
             print($e->getMessage());
             return null;
+        }
+    }
+
+    public function update(Puzzle|int $puzzle, array $values): bool {
+        if (empty($puzzle)) return false;
+        $id = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
+
+        $sets = "";
+        foreach ($values as $key => $value) {
+            $sets .= "$key = :$key,";
+        }
+
+        if ($sets == '') return false;
+
+        $sql = "UPDATE puzzleinv SET $sets WHERE puzzleid = :puzzleid";
+
+        $pos = strrpos($sql, ",");
+        if ($pos !== false) {
+            $sql = substr_replace($sql, "", $pos, 1);
+        }
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
+
+            foreach ($values as $key => $value) {
+                $stmt->bindParam(":$key", $value);
+            }
+
+            error_log($sql);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Database error while updating puzzle: " . $e->getMessage());
+            return false;
         }
     }
 }

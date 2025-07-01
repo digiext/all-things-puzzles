@@ -16,7 +16,7 @@ include 'header.php';
 include 'nav.php';
 
 $gateway = new UserGateway($db);
-$user = $gateway->findById(getUserId());
+$user = getLoggedInUser();
 
 ?>
 

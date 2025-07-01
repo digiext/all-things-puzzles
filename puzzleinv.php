@@ -1,7 +1,8 @@
 <?php
 global $db;
-include 'util/function.php';
-require 'util/db.php';
+require_once 'util/function.php';
+require_once 'util/constants.php';
+require_once 'util/db.php';
 
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\object\Puzzle;
@@ -15,19 +16,36 @@ $title = 'Puzzle Inventory';
 include 'header.php';
 include 'nav.php';
 
-$options = ["page" => 0, "maxperpage" => 8];
+$page = $_GET['page'] ?? 1;
+$maxperpage = $_GET['maxperpage'] ?? 8;
+
+$options = [
+    PAGE => $page - 1,
+    MAX_PER_PAGE => $maxperpage
+];
 
 $gateway = new PuzzleGateway($db);
 $puzzles = $gateway->findAll($options);
 
+$totalPuzzles = $gateway->count($options);
+$seen = $maxperpage * ($page - 1) + count($puzzles);
 
+$query = [];
+parse_str($_SERVER['QUERY_STRING'], $query);
 
+function queryForPage(int $page): string {
+    global $query;
+    return http_build_query(array_merge($query, ['page' => $page]));
+}
+
+$prevLink = $page <= 1 ? "#" : 'puzzleinv.php?' . queryForPage($page - 1);
+$nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page + 1);
 ?>
 
 
-<div class="container mb-2 mt-4 hstack justify-content-between">
-    <h3 class="text-center align-text-bottom">Puzzle Inventory</h3>
-    <div class="d-grid gap-2 d-md-flex">
+<div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
+    <h3 class="text-center align-text-bottom me-auto">Puzzle Inventory</h3>
+    <div>
         <a class="btn btn-primary" href="home.php">Home</a>
         <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
     </div>
@@ -43,9 +61,9 @@ $puzzles = $gateway->findAll($options);
                 <div class='card'>" ?>
             <?php
             if (empty($puzzle->getPicture())) {
-                echo "<img src='images/no-image-placeholder.svg' class='card-img-top' />";
+                echo "<img src='images/no-image-placeholder-horiz.svg' class='card-img-top' alt='Placeholder image' />";
             } else {
-                echo "<img src='" . $puzzle->getPicture() . "' class='card-img-top' />";
+                echo "<img src='" . $puzzle->getPicture() . "' class='card-img-top' alt='Puzzle image' />";
             } ?>
 
         <?php echo "<div class='card-body bg-secondary-subtle'>
@@ -65,8 +83,45 @@ $puzzles = $gateway->findAll($options);
             </div>";
         } ?>
     </div>
-
 </div>
+
+<nav aria-label="Puzzle inventory pagination" class="container d-flex align-items-center justify-content-end">
+    <ul class="pagination align-middle">
+        <li class="page-item">
+            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="puzzleinv.php?<?php echo queryForPage(1) ?>"><i class="bi bi-chevron-double-left"></i></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="<?php echo $prevLink?>"><i class="bi bi-chevron-left"></i></a>
+        </li>
+        <?php
+        if ($page == 1) {
+            echo "<li class='page-item active'><a class='page-link' href='#'>1</a></li>";
+
+            if ($totalPuzzles > ($maxperpage * ($page))) {
+                echo "<li class='page-item'><a class='page-link' href='puzzleinv.php?" . queryForPage($page + 1) . "'>" . $page + 1 . "</a></li>";
+            }
+
+            if ($totalPuzzles > ($maxperpage * ($page + 1))) {
+                echo "<li class='page-item'><a class='page-link' href='puzzleinv.php?" . queryForPage($page + 2) . "'>" . $page + 2 . "</a></li>";
+            }
+        } else {
+            if ($page >= 3 && !($totalPuzzles > $maxperpage * ($page))) {
+                echo "<li class='page-item'><a class='page-link' href='puzzleinv.php?" . queryForPage($page - 2) . "'>" . $page - 2 . "</a></li>";
+            }
+
+            echo "<li class='page-item'><a class='page-link' href='puzzleinv.php?" . queryForPage($page - 1) . "'>" . $page - 1 . "</a></li>";
+            echo "<li class='page-item active'><a class='page-link' href='#'>" . $page . "</a></li>";
+
+            if ($totalPuzzles > ($maxperpage * ($page))) {
+                echo "<li class='page-item'><a class='page-link' href='puzzleinv.php?" . queryForPage($page + 1) . "'>" . $page + 1 . "</a></li>";
+            }
+        }
+        ?>
+        <li class="page-item">
+            <a class="page-link <?php echo $nextLink === '#' ? 'disabled' : "" ?>" href="<?php echo $nextLink?>"><i class="bi bi-chevron-right"></i></a>
+        </li>
+    </ul>
+</nav>
 
 
 
@@ -90,5 +145,3 @@ $puzzles = $gateway->findAll($options);
                     //                    </tr>";
                     //            } 
                     ?>
-</tbody>
-</table>

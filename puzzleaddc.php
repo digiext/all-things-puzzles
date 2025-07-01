@@ -9,11 +9,16 @@ use puzzlethings\src\gateway\LocationGateway;
 global $db;
 require_once 'util/function.php';
 require_once 'util/db.php';
+require_once 'util/files.php';
+
+const UPLOAD_DIR = __DIR__ . '/images/uploads/thumbnails';
+
 
 $brandname = $_POST['brandName'];
 $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
+$hasfile = isset($_FILES['picture']);
 
 if (isset($_POST['submit'])) {
     $puzname = $_POST['puzname'];
@@ -48,13 +53,51 @@ if (isset($_POST['submit'])) {
     }
 
     $gateway = new PuzzleGateway($db);
-    $code = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
+    $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
+
 
     session_start();
-    if ($code === false) {
+    if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
     } else {
-        successAlert("Puzzle has been created");
+        if ($hasfile) {
+            if (!is_dir(UPLOAD_DIR)) {
+                mkdir('images');
+                mkdir('images/uploads');
+                mkdir('images/uploads/thumbnails');
+            }
+
+            $status = $_FILES['picture']['error'];
+            $tmp = $_FILES['picture']['tmp_name'];
+
+            if ($status !== UPLOAD_ERR_OK) {
+                warningAlert(FILE_MESSAGES[$status], "puzzleadd.php");
+            }
+
+            $filesize = filesize($tmp);
+            if ($filesize > MAX_FILE_SIZE) {
+                warningAlert("File too large! Must be under 5MB!", "puzzleadd.php");
+            }
+
+            $mimetype = getMimeType($tmp);
+            if (!in_array($mimetype, array_keys(ALLOWED_IMAGE_TYPES))) {
+                warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleadd.php");
+            }
+
+            $uploadedFile = $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+            $filepath = UPLOAD_DIR . '/' . $uploadedFile;
+
+            $success = move_uploaded_file($tmp, $filepath);
+            if ($success) {
+                $code = $gateway->update($puzzle, [
+                    PUZ_PICTURE_URL => '/images/uploads/thumbnails/' . $uploadedFile,
+                ]);
+
+                successAlert("Puzzle has been created!");
+            }
+
+            warningAlert("Puzzle successfully created, however, thumbnail failed to save!");
+        } else successAlert("Puzzle has been created");
     }
 
     header("Location: home.php");

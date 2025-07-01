@@ -2,6 +2,8 @@
 
 use Dotenv\Dotenv;
 use puzzlethings\src\gateway\AuthGateway;
+use puzzlethings\src\gateway\UserGateway;
+use puzzlethings\src\object\User;
 
 include 'constants.php';
 
@@ -70,6 +72,16 @@ function getUserID(): int|false {
     return decrypt($_SESSION[USER_ID]);
 }
 
+function getLoggedInUser(): User|false {
+    if (!isLoggedIn()) return false;
+
+    global $db;
+    require_once __DIR__ . '/db.php';
+
+    $gateway = new UserGateway($db);
+    return $gateway->findById(getUserID());
+}
+
 function isLoggedIn(): bool {
     if (isset($_SESSION[USER_ID])) return true;
 
@@ -106,6 +118,15 @@ function successAlertNoRedir($value): void {
 
 function successAlert($value, $redir = "index.php"): void {
     $_SESSION['success'] = $value;
+    header("Location: " . $redir);
+}
+
+function warningAlertNoRedir($value): void {
+    $_SESSION['warning'] = $value;
+}
+
+function warningAlert($value, $redir = "index.php"): void {
+    $_SESSION['warning'] = $value;
     header("Location: " . $redir);
 }
 

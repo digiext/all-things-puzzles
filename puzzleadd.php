@@ -34,7 +34,7 @@ $dispositions = $gateway->findAll();
 
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-8">
-        <form class="align-items-center" action="puzzleaddc.php" method="post">
+        <form enctype="multipart/form-data" class="align-items-center" action="puzzleaddc.php" method="post">
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
                 <input type="text" class="form-control" name="puzname" id="puzname">
@@ -182,6 +182,27 @@ $dispositions = $gateway->findAll();
                     </div>
                 </div>
             </div>
+
+            <div class="p-2 mb-2 mx-1">
+                <label for="picture" class="form-label"><strong>Picture</strong></label>
+                <div class="input-group">
+                    <input type="file" accept="image/png, image/jpeg" class="form-control" name="picture" id="picture" max="1">
+                    <button type="button" class="btn btn-outline-danger" id="pictureclear"><i class="bi bi-trash"></i> Clear</button>
+                </div>
+            </div>
+
+<!--            <div class="p-2 mb-2 mx-1">-->
+<!--                <label for="cost" class="form-label"><strong>Cost</strong></label>-->
+<!--                <div class="input-group">-->
+<!--                    <span class="input-group-text">$</span>-->
+<!--                    <input type="number" class="form-control" name="cost" id="cost" min="0" step="0.01">-->
+<!--                    <select class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" name="costCurrency" id="costCurrency">-->
+<!--                        <option value="USD" selected>USD</option>-->
+<!--                        <option value="CAD">CAD</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
             <div class="p-2 mb-2 mx-1">
                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
@@ -193,6 +214,7 @@ $dispositions = $gateway->findAll();
     <!-- Preview Card -->
     <div class="card" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
+        <img src='images/no-image-placeholder-horiz.svg' class='card-img-top img-fluid border rounded-3' alt='Puzzle image' id="cardpicture"/>
         <div class="card-body placeholder-glow">
             <h5 class="card-title placeholder col-12" id="cardname"></h5>
             <p class="card-subtitle placeholder col-12 text-body-secondary" id="cardbrand"></p>
@@ -224,6 +246,9 @@ $dispositions = $gateway->findAll();
         let cardSource = $('#cardsource');
         let puzzleUpc = $('#upc');
         let cardUpc = $('#cardupc');
+        let picture = $('#picture');
+        let pictureClear = $('#pictureclear');
+        let cardPicture = $('#cardpicture')
 
         let brandCheckbox = $('#createNewBrand');
         let brandDiv = $('#newBrandMenu');
@@ -350,6 +375,26 @@ $dispositions = $gateway->findAll();
             } else {
                 locationDiv.hide(200);
             }
+        })
+
+        picture.on('change', function() {
+            if (this.files && this.files[0]) {
+                let file = this.files[0];
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    cardPicture.attr('src', e.target.result)
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
+            }
+        })
+
+        pictureClear.on('click', function() {
+            picture.val(null);
+            cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
         })
     })
 </script>

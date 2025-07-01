@@ -78,7 +78,7 @@ class UserGateway
 
             if ($success && $returnuser) {
                 $id = $this->db->lastInsertId();
-                return new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, new DateTime("now"));
+                return new User($id, $username, $fullname, $email, false, $hashedPassword, $hash, 0, 0, date("Y-m-d H:i:s"));
             } else return $success;
         } catch (PDOException $e) {
             return $e;

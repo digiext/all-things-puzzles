@@ -4,7 +4,8 @@
     "twbs/bootstrap": "^5.3.7",
     "twbs/bootstrap-icons": "^1.13",
     "ext-pdo": "*",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "ext-fileinfo": "*"
   },
   "autoload": {
     "psr-4": {
