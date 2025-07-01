@@ -61,9 +61,9 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                 <div class='card'>" ?>
             <?php
             if (empty($puzzle->getPicture())) {
-                echo "<img src='images/no-image-placeholder-horiz.svg' class='card-img-top' alt='Placeholder image' />";
+                echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
             } else {
-                echo "<img src='" . $puzzle->getPicture() . "' class='card-img-top' alt='Puzzle image' />";
+                echo "<img src='" . $puzzle->getPicture() . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
             } ?>
 
         <?php echo "<div class='card-body bg-secondary-subtle'>
@@ -74,7 +74,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces-" . $puzzle->getId() . "'>" . $puzzle->getPieces() . "</span></li>
                         <li class='list-group-item hstack gap-2 bg-secondary-subtle'><span class='input-group-text py-1'>$</span><span id='cardcost-" . $puzzle->getId() . "'>" . $puzzle->getCost() . "</span><span id='cardcurrency-" . $puzzle->getId() . "'>USD</span></li>
                         <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource-" . $puzzle->getId() . "'>" . $puzzle->getSource()->getDescription() . "</span></li>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . $puzzle->getUpc() . "</span></li>
+                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . ($puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc()) . "</span></li>
                     </ul>
                     <div class='card-footer bg-secondary-subtle text-center'>
                         <a class='btn btn-primary' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>

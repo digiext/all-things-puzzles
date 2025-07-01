@@ -214,7 +214,7 @@ $dispositions = $gateway->findAll();
     <!-- Preview Card -->
     <div class="card" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
-        <img src='images/no-image-placeholder-horiz.svg' class='card-img-top img-fluid border rounded-3' alt='Puzzle image' id="cardpicture"/>
+        <img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
         <div class="card-body placeholder-glow">
             <h5 class="card-title placeholder col-12" id="cardname"></h5>
             <p class="card-subtitle placeholder col-12 text-body-secondary" id="cardbrand"></p>
@@ -388,13 +388,13 @@ $dispositions = $gateway->findAll();
 
                 reader.readAsDataURL(file);
             } else {
-                cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
+                cardPicture.attr('src', '/images/no-image-dark.svg');
             }
         })
 
         pictureClear.on('click', function() {
             picture.val(null);
-            cardPicture.attr('src', '/images/no-image-placeholder-horiz.svg');
+            cardPicture.attr('src', '/images/no-image-dark.svg');
         })
     })
 </script>

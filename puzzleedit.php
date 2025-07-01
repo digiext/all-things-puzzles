@@ -54,12 +54,12 @@ $puzzle = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="brand" class="form-label"><strong>Brand</strong></label>
                 <div class="">
-                    <select class="form-control" name="brand" id="brand" value="<?php $puzzle->getBrand()->getId(); ?>">
+                    <select class="form-control" name="brand" id="brand">
                         <?php
                         foreach ($brands as $brand) {
                             if (!($brand instanceof Brand)) continue;
                             echo
-                            "<option value='" . $brand->getId() . "'>" . $brand->getName() . "</option>";
+                            "<option " . ($brand->getId() === $puzzle->getBrand()->getId() ? "selected" : "") . " value='" . $brand->getId() . "'>" . $brand->getName() . "</option>";
                         } ?>
                     </select>
                 </div>
@@ -100,12 +100,12 @@ $puzzle = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="source" class="form-label"><strong>Source</strong></label>
                 <div class="">
-                    <select class="form-control" name="source" id="source" value="<?php $puzzle->getSource()->getId(); ?>">
+                    <select class="form-control" name="source" id="source">
                         <?php
                         foreach ($sources as $source) {
                             if (!($source instanceof Source)) continue;
                             echo
-                            "<option value='" . $source->getId() . "'>" . $source->getDescription() . "</option>";
+                            "<option " . ($source->getId() === $puzzle->getSource()->getId() ? "selected" : "") . " value='" . $source->getId() . "'>" . $source->getDescription() . "</option>";
                         } ?>
                     </select>
                 </div>
@@ -134,12 +134,12 @@ $puzzle = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="disposition" class="form-label"><strong>Disposition Status</strong></label>
                 <div class="">
-                    <select class="form-control" name="disposition" id="disposition" value="<?php $puzzle->getDisposition()->getId(); ?>">
+                    <select class="form-control" name="disposition" id="disposition">
                         <?php
                         foreach ($dispositions as $disposition) {
                             if (!($disposition instanceof Disposition)) continue;
                             echo
-                            "<option value='" . $disposition->getId() . "'>" . $disposition->getDescription() . "</option>";
+                            "<option " . ($disposition->getId() === $puzzle->getDisposition()->getId() ? "selected" : "") . " value='" . $disposition->getId() . "'>" . $disposition->getDescription() . "</option>";
                         } ?>
                     </select>
                 </div>
@@ -163,12 +163,12 @@ $puzzle = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="location" class="form-label"><strong>Location Status</strong></label>
                 <div class="">
-                    <select class="form-control" name="location" id="location" value="<?php $puzzle->getLocation()->getId(); ?>">
+                    <select class="form-control" name="location" id="location">
                         <?php
                         foreach ($locations as $location) {
                             if (!($location instanceof Location)) continue;
                             echo
-                            "<option " . $location->getId() == $puzzle->getLocation()->getId() ? "selected" : "" . " value='" . $location->getId() . "'>" . $location->getDescription() . "</option>";
+                            "<option " . ($location->getId() === $puzzle->getLocation()->getId() ? "selected" : "") . " value='" . $location->getId() . "'>" . $location->getDescription() . "</option>";
                         } ?>
                     </select>
                 </div>
@@ -220,16 +220,16 @@ $puzzle = $gateway->findById($id)
     <!-- Preview Card -->
     <div class="card" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
-        <img src='images/no-image-placeholder-horiz.svg' class='card-img-top img-fluid border rounded-3' alt='Puzzle image' id="cardpicture" />
-        <div class="card-body placeholder-glow">
-            <h5 class="card-title placeholder col-12" id="cardname"></h5>
-            <p class="card-subtitle placeholder col-12 text-body-secondary" id="cardbrand"></p>
+        <img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
+        <div class="card-body">
+            <h5 class="card-title" id="cardname"><?php echo $puzzle->getName() ?></h5>
+            <p class="card-subtitle text-body-secondary" id="cardbrand"><?php echo $puzzle->getBrand()->getName() ?></p>
         </div>
-        <ul class="list-group list-group-flush placeholder-glow">
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces" class="placeholder col-2"></span></li>
-            <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost" class="placeholder col-1"></span> <span id="cardcurrency">USD</span></li>
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource" class="placeholder col-3"></span></li>
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc" class="placeholder col-3"></span></li>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces"><?php echo $puzzle->getPieces() ?></span></li>
+            <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost"><?php echo $puzzle->getCost() ?></span><span id="cardcurrency">USD</span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource"><?php echo $puzzle->getSource()->getDescription() ?></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc"><?php echo $puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc() ?></span></li>
         </ul>
     </div>
 </div>
@@ -267,42 +267,34 @@ $puzzle = $gateway->findById($id)
 
         puzzleName.on('keyup', function() {
             if (puzzleName.val() !== '') {
-                cardName.removeClass('placeholder col-12');
                 cardName.text(puzzleName.val());
             } else {
-                cardName.addClass('placeholder col-12');
                 cardName.text('');
             }
         })
 
         puzzlePieces.on('keyup', function() {
             if (puzzlePieces.val() !== '') {
-                cardPieces.removeClass('placeholder col-2');
                 cardPieces.text(puzzlePieces.val());
             } else {
-                cardPieces.addClass('placeholder col-2');
                 cardPieces.text('');
             }
         })
 
         puzzleBrand.on('change', function() {
-            cardBrand.removeClass('placeholder col-12');
             cardBrand.text($(this).find('option:selected').text());
         })
 
         newBrand.on('keyup', function() {
             if (brandCheckbox.prop('checked') === true) {
-                cardBrand.removeClass('placeholder col-12');
                 cardBrand.text(newBrand.val());
             }
         })
 
         puzzleCost.on('keyup', function() {
             if (puzzleCost.val() !== '') {
-                cardCost.removeClass('placeholder col-1');
                 cardCost.text(puzzleCost.val());
             } else {
-                cardCost.addClass('placeholder col-1');
                 cardCost.text('');
             }
         })
@@ -312,24 +304,20 @@ $puzzle = $gateway->findById($id)
         })
 
         puzzleSource.on('change', function() {
-            cardSource.removeClass('placeholder col-3');
             cardSource.text($(this).find('option:selected').text());
         })
 
         newSource.on('keyup', function() {
             if (sourceCheckbox.prop('checked') === true) {
-                cardSource.removeClass('placeholder col-3');
                 cardSource.text(newSource.val());
             }
         })
 
         puzzleUpc.on('keyup', function() {
             if (puzzleUpc.val() !== '') {
-                cardUpc.removeClass('placeholder col-3');
                 cardUpc.text(puzzleUpc.val());
             } else {
-                cardUpc.addClass('placeholder col-3');
-                cardUpc.text('');
+                cardUpc.html("<i class='text-body-secondary'>None</i>");
             }
         })
 
@@ -337,15 +325,12 @@ $puzzle = $gateway->findById($id)
             if (brandCheckbox.prop('checked') === true) {
                 brandDiv.show(200);
                 if (newBrand.val() !== '') {
-                    cardBrand.removeClass('placeholder col-12');
                     cardBrand.text(newBrand.val());
                 } else {
-                    cardBrand.addClass('placeholder col-12');
                     cardBrand.text('');
                 }
             } else {
                 brandDiv.hide(200);
-                cardBrand.removeClass('placeholder col-12');
                 cardBrand.text(puzzleBrand.find('option:selected').text());
             }
         })
@@ -354,15 +339,12 @@ $puzzle = $gateway->findById($id)
             if (sourceCheckbox.prop('checked') === true) {
                 sourceDiv.show(200);
                 if (newSource.val() !== '') {
-                    cardSource.removeClass('placeholder col-3');
                     cardSource.text(newSource.val());
                 } else {
-                    cardSource.addClass('placeholder col-3');
                     cardSource.text('');
                 }
             } else {
                 sourceDiv.hide(200);
-                cardSource.removeClass('placeholder col-3');
                 cardSource.text(puzzleSource.find('option:selected').text());
             }
         })
