@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
     }
 
     $gateway = new PuzzleGateway($db);
-    $picture = '';
+    $picture = null;
     if ($hasfile) {
         if (!is_dir(UPLOAD_DIR_ABSOLUTE)) {
             mkdir('images');
@@ -92,10 +92,13 @@ if (isset($_POST['submit'])) {
         }
     } else {
         $picurl = $gateway->findById($id)->getPicture();
+
+        if (($picurl ?? '') != '') {
         $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
         if (!$success) {
             error_log("Failed deleting file $picture");
             warningAlertNoRedir("Failed removing picture from server");
+        }
         }
     }
 
@@ -118,7 +121,7 @@ if (isset($_POST['submit'])) {
     if ($code === false) {
         failAlert("Puzzle Not Updated!");
 
-        if ($hasfile) {
+        if ($hasfile && ($picurl ?? '') != '') {
             $success = unlink(UPLOAD_DIR_ABSOLUTE . '/' . $picture);
             if (!$success) {
                 error_log("Failed deleting file $picture");

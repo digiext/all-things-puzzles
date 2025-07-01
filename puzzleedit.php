@@ -221,7 +221,7 @@ $puzzle = $gateway->findById($id)
     <!-- Preview Card -->
     <div class="card" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
-        <img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
+        <img src='<?php echo ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : '/images/uploads/thumbnails/' . $puzzle->getPicture() ?>' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
         <div class="card-body">
             <h5 class="card-title" id="cardname"><?php echo $puzzle->getName() ?></h5>
             <p class="card-subtitle text-body-secondary" id="cardbrand"><?php echo $puzzle->getBrand()->getName() ?></p>
