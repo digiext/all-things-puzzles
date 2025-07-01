@@ -90,17 +90,18 @@ if (isset($_POST['submit'])) {
         if ($success) {
             $picture = $uploadedFile;
         }
-    } else {
-        $picurl = $gateway->findById($id)->getPicture();
-
-        if (($picurl ?? '') != '') {
-            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
-            if (!$success) {
-                error_log("Failed deleting file $picture");
-                warningAlertNoRedir("Failed removing picture from server");
-            }
-            }
     }
+//    } else {
+//        $picurl = $gateway->findById($id)->getPicture();
+//
+//        if (($picurl ?? '') != '') {
+//            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
+//            if (!$success) {
+//                error_log("Failed deleting file $picture");
+//                warningAlertNoRedir("Failed removing picture from server");
+//            }
+//            }
+//    }
 
     $values = [
         PUZ_NAME => $puzname,
