@@ -33,7 +33,8 @@ $seen = $maxperpage * ($page - 1) + count($puzzles);
 $query = [];
 parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
 
-function queryForPage(int $page): string {
+function queryForPage(int $page): string
+{
     global $query;
     return http_build_query(array_merge($query, ['page' => $page]));
 }
@@ -42,6 +43,7 @@ $prevLink = $page <= 1 ? "#" : 'puzzleinv.php?' . queryForPage($page - 1);
 $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page + 1);
 ?>
 
+<script src="scripts/puzzles.js"></script>
 
 <div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
     <h3 class="text-center align-text-bottom me-auto">Puzzle Inventory</h3>
@@ -58,7 +60,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             if (!($puzzle instanceof Puzzle)) continue;
             echo
             "<div class='col'>
-                <div class='card'>" ?>
+                <div class='card' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
             <?php
             if (empty($puzzle->getPicture())) {
                 echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
@@ -67,7 +69,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             } ?>
 
         <?php echo "<div class='card-body bg-secondary-subtle'>
-                        <h5 class='card-title bg-secondary-subtle' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
+                        <h5 class='card-title bg-secondary-subtle name' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
                         <p class='card-subtitle text-body-secondary bg-secondary-subtle' id='cardbrand-" . $puzzle->getId() . "'>" . $puzzle->getBrand()->getName() . "</p>
                     </div>
                     <ul class='list-group list-group-flush'>
@@ -77,7 +79,8 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . ($puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc()) . "</span></li>
                     </ul>
                     <div class='card-footer bg-secondary-subtle text-center'>
-                        <a class='btn btn-primary' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
+                        <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
+                        <button class='btn btn-danger delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></i> Delete Puzzle</td>
                     </div>
                 </div>
             </div>";
@@ -91,7 +94,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="puzzleinv.php?<?php echo queryForPage(1) ?>"><i class="bi bi-chevron-double-left"></i></a>
         </li>
         <li class="page-item">
-            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="<?php echo $prevLink?>"><i class="bi bi-chevron-left"></i></a>
+            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="<?php echo $prevLink ?>"><i class="bi bi-chevron-left"></i></a>
         </li>
         <?php
         if ($page == 1) {
@@ -118,12 +121,43 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
         }
         ?>
         <li class="page-item">
-            <a class="page-link <?php echo $nextLink === '#' ? 'disabled' : "" ?>" href="<?php echo $nextLink?>"><i class="bi bi-chevron-right"></i></a>
+            <a class="page-link <?php echo $nextLink === '#' ? 'disabled' : "" ?>" href="<?php echo $nextLink ?>"><i class="bi bi-chevron-right"></i></a>
         </li>
     </ul>
 </nav>
 
-
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteLabel">Delete Confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="column" action="puzzledelete.php" method="post" name="login">
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">Are you <strong>sure</strong> you want to delete this puzzle?</div>
+                    <div class="col-auto">
+                        <label for="deleteId" class="col-form-label">ID</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control id" id="deleteId" name="id" value="<?php echo $puzzles[0]->getId(); ?>" readonly>
+                    </div>
+                    <div class="col-auto">
+                        <label for="deletePuzzle" class="col-form-label">Puzzle</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="deletePuzzle" name="puzzle" value="<?php echo $puzzles[0]->getName(); ?>" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-success" name="submit">Yes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!--            --><?php //foreach ($puzzles as $puzzle) {
                     //                if (!($puzzle instanceof Puzzle)) continue;
