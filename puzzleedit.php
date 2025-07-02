@@ -42,6 +42,8 @@ $puzzle = $gateway->findById($id)
     <div class="col-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
+            <input type="hidden" tabindex="-1" name="id" value="<?php echo $puzzle->getPicture() ?>">
+
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
                 <input type="text" class="form-control" name="puzname" id="puzname" value="<?php echo $puzzle->getName(); ?>">

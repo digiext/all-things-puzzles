@@ -26,6 +26,7 @@ $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] !== UPLOAD_E
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
+    $oldpicture = $_POST['oldpicture'];
     $puzname = $_POST['puzname'];
     $pieces = $_POST['pieces'];
     $brand = $_POST['brand'];
@@ -112,7 +113,7 @@ if (isset($_POST['submit'])) {
         PUZ_SOURCE_ID => $source instanceof Source ? $source->getId() : $source,
         PUZ_LOCATION_ID => $location instanceof Location ? $location->getId() : $location,
         PUZ_DISPOSITION_ID => $disposition instanceof Disposition ? $disposition->getId() : $disposition,
-        PUZ_PICTURE_URL => $picture,
+        PUZ_PICTURE_URL => $hasfile ? $picture : $oldpicture,
         PUZ_UPC => $upc,
     ];
 
@@ -133,5 +134,5 @@ if (isset($_POST['submit'])) {
         successAlert("Puzzle Updated!");
     }
 
-    header("Location: home.php");
+    header("Location: puzzleinv.php");
 }
