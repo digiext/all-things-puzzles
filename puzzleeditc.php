@@ -26,7 +26,7 @@ $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] !== UPLOAD_E
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
-    $oldpicture = $_POST['currpicture'];
+    $oldpicture = $_POST['oldpicture'];
     $deleteoldpic = $_POST['deleteoldpic'];
 
     $puzname = $_POST['puzname'];
