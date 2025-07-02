@@ -11,7 +11,8 @@ require_once 'util/function.php';
 require_once 'util/db.php';
 require_once 'util/files.php';
 
-const UPLOAD_DIR = __DIR__ . '/images/uploads/thumbnails';
+const UPLOAD_DIR = '/images/uploads/thumbnails';
+const UPLOAD_DIR_ABSOLUTE = __DIR__ . UPLOAD_DIR;
 
 
 $brandname = $_POST['brandName'];
@@ -90,7 +91,7 @@ if (isset($_POST['submit'])) {
             $success = move_uploaded_file($tmp, $filepath);
             if ($success) {
                 $code = $gateway->update($puzzle, [
-                    PUZ_PICTURE_URL => $uploadedFile,
+                    PUZ_PICTURE_URL => UPLOAD_DIR . '/' . $uploadedFile,
                 ]);
 
                 successAlert("Puzzle has been created!");
