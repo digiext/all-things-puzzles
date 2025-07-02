@@ -42,7 +42,8 @@ $puzzle = $gateway->findById($id)
     <div class="col-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
-            <input type="hidden" tabindex="-1" name="oldpicture" value="<?php echo $puzzle->getPicture() ?>">
+            <input type="hidden" tabindex="-1" name="oldpicture" id="currpicture" value="<?php echo $puzzle->getPicture() ?>">
+            <input type="hidden" tabindex="-1" name="deleteoldpic" id="deleteoldpic" value="false">
 
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
@@ -223,7 +224,10 @@ $puzzle = $gateway->findById($id)
     <!-- Preview Card -->
     <div class="card" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
-        <img src='<?php echo ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : 'images/uploads/thumbnails/' . $puzzle->getPicture() ?>' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
+        <div class="card-img-top position-relative">
+            <img src='<?php echo ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : 'images/uploads/thumbnails/' . $puzzle->getPicture() ?>' class='object-fit-cover w-100' alt='Puzzle image' id="cardpicture" height="200">
+            <button class="position-absolute top-0 start-100 translate-middle badge border rounded-3 bg-danger p-2" id="deleteImageButton"><i class="bi bi-trash"></i></button>
+        </div>
         <div class="card-body">
             <h5 class="card-title" id="cardname"><?php echo $puzzle->getName() ?></h5>
             <p class="card-subtitle text-body-secondary" id="cardbrand"><?php echo $puzzle->getBrand()->getName() ?></p>
@@ -257,7 +261,10 @@ $puzzle = $gateway->findById($id)
         let cardUpc = $('#cardupc');
         let picture = $('#picture');
         let pictureClear = $('#pictureclear');
+        let pictureDelete = $('#deleteImageButton');
         let cardPicture = $('#cardpicture')
+        let currpicture = $('#currpicture');
+        let deleteoldpic = $('#deleteoldpic');
 
         let brandCheckbox = $('#createNewBrand');
         let brandDiv = $('#newBrandMenu');
@@ -385,7 +392,13 @@ $puzzle = $gateway->findById($id)
 
         pictureClear.on('click', function() {
             picture.val(null);
+            cardPicture.attr('src', '/images/uploads/thumbnails/' + currpicture.val());
+        })
+
+        pictureDelete.on('click', function() {
+            picture.val(null);
             cardPicture.attr('src', '/images/no-image-dark.svg');
+            deleteoldpic.val("true");
         })
     })
 </script>
