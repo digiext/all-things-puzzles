@@ -281,4 +281,17 @@ class PuzzleGateway
             return false;
         }
     }
+
+    public function delete(Puzzle|int $id): bool {
+        $sql = "DELETE FROM puzzleinv WHERE puzzleid = :puzzleid";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':puzzleid', $id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Database error while deleting puzzle: " . $e->getMessage());
+            return false;
+        }
+    }
 }
