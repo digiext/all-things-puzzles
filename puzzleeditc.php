@@ -26,7 +26,9 @@ $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] !== UPLOAD_E
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
-    $oldpicture = $_POST['oldpicture'];
+    $oldpicture = $_POST['currpicture'];
+    $deleteoldpic = $_POST['deleteoldpic'];
+
     $puzname = $_POST['puzname'];
     $pieces = $_POST['pieces'];
     $brand = $_POST['brand'];
@@ -61,7 +63,7 @@ if (isset($_POST['submit'])) {
     $gateway = new PuzzleGateway($db);
     $picture = null;
     if ($hasfile) {
-        if (!is_dir(UPLOAD_DIR_ABSOLUTE)) {
+        if (!is_dir(UPLOAD_DIR)) {
             mkdir('images');
             mkdir('images/uploads');
             mkdir('images/uploads/thumbnails');
@@ -85,24 +87,26 @@ if (isset($_POST['submit'])) {
         }
 
         $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
-        $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
+        $filepath = UPLOAD_DIR . '/' . $uploadedFile;
 
         $success = move_uploaded_file($tmp, $filepath);
         if ($success) {
             $picture = $uploadedFile;
         }
     }
-//    } else {
-//        $picurl = $gateway->findById($id)->getPicture();
-//
-//        if (($picurl ?? '') != '') {
-//            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
-//            if (!$success) {
-//                error_log("Failed deleting file $picture");
-//                warningAlertNoRedir("Failed removing picture from server");
-//            }
-//            }
-//    }
+
+
+    if ($deleteoldpic === true || $deleteoldpic === 'true') {
+        $picurl = $gateway->findById($id)->getPicture();
+
+        if (($picurl ?? '') != '') {
+            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
+            if (!$success) {
+                error_log("Failed deleting file $picture");
+                warningAlertNoRedir("Failed removing picture from server");
+            }
+            }
+    }
 
     $values = [
         PUZ_NAME => $puzname,
@@ -113,7 +117,7 @@ if (isset($_POST['submit'])) {
         PUZ_SOURCE_ID => $source instanceof Source ? $source->getId() : $source,
         PUZ_LOCATION_ID => $location instanceof Location ? $location->getId() : $location,
         PUZ_DISPOSITION_ID => $disposition instanceof Disposition ? $disposition->getId() : $disposition,
-        PUZ_PICTURE_URL => $hasfile ? $picture : $oldpicture,
+        PUZ_PICTURE_URL => $hasfile ? $picture : ($deleteoldpic ? null : $oldpicture),
         PUZ_UPC => $upc,
     ];
 
@@ -124,7 +128,7 @@ if (isset($_POST['submit'])) {
         failAlert("Puzzle Not Updated!");
 
         if ($hasfile && ($picurl ?? '') != '') {
-            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/' . $picture);
+            $success = unlink(UPLOAD_DIR . '/' . $picture);
             if (!$success) {
                 error_log("Failed deleting file $picture");
                 warningAlertNoRedir("Failed removing picture from server");
