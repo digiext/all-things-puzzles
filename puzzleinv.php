@@ -18,10 +18,23 @@ include 'nav.php';
 
 $page = $_GET['page'] ?? 1;
 $maxperpage = $_GET['maxperpage'] ?? 8;
+$sort = $_GET['sort'] ?? PUZ_ID;
+$sortDirection = $_GET['sort_direction'] ?? SQL_SORT_ASC;
+
+$query = [];
+parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
+
+function queryForPage(int $page, array $extras = []): string
+{
+    global $query;
+    return http_build_query(array_merge($query, ['page' => $page], $extras));
+}
 
 $options = [
     PAGE => $page - 1,
-    MAX_PER_PAGE => $maxperpage
+    MAX_PER_PAGE => $maxperpage,
+    SORT => $sort,
+    SORT_DIRECTION => $sortDirection
 ];
 
 $gateway = new PuzzleGateway($db);
@@ -29,15 +42,6 @@ $puzzles = $gateway->findAll($options);
 
 $totalPuzzles = $gateway->count($options);
 $seen = $maxperpage * ($page - 1) + count($puzzles);
-
-$query = [];
-parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
-
-function queryForPage(int $page): string
-{
-    global $query;
-    return http_build_query(array_merge($query, ['page' => $page]));
-}
 
 $prevLink = $page <= 1 ? "#" : 'puzzleinv.php?' . queryForPage($page - 1);
 $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page + 1);
@@ -47,6 +51,17 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
 
 <div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
     <h3 class="text-center align-text-bottom me-auto">Puzzle Inventory</h3>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Sort</button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_ID]) ?>">Default Sort</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_NAME]) ?>">Puzzle Name</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_PIECES]) ?>">Puzzle Pieces</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_BRAND_ID]) ?>">Puzzle Brands</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_COST]) ?>">Puzzle Cost</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_UPC]) ?>">Puzzle UPC</a></li>
+        </ul>
+    </div>
     <div>
         <a class="btn btn-primary" href="home.php">Home</a>
         <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
