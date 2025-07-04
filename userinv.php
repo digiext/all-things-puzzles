@@ -17,7 +17,7 @@ include 'header.php';
 include 'nav.php';
 
 $page = $_GET['page'] ?? 1;
-$maxperpage = $_GET['maxperpage'] ?? 4;
+$maxperpage = $_GET['maxperpage'] ?? 10;
 $sort = $_GET['sort'] ?? PUZ_ID;
 $sortDirection = $_GET['sort_direction'] ?? SQL_SORT_ASC;
 
@@ -50,7 +50,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page +
 <script src="scripts/puzzles.js"></script>
 
 <div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
-    <h3 class="text-center align-text-bottom me-auto">User Inventory</h3>
+    <h3 class="text-center align-text-bottom me-auto">User Inventory Management</h3>
 
     <div>
         <a class="btn btn-primary" href="home.php">Home</a>
@@ -58,71 +58,75 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page +
     </div>
 </div>
 
-<div class="container my-2">
-    <div class="row row-cols-4 g-3">
-        <?php
-        foreach ($puzzles as $puzzle) {
-            if (!($puzzle instanceof Puzzle)) continue;
-            echo
-            "<div class='col'>
-                <div class='card h-100' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
-            <?php
-            if (empty($puzzle->getPicture())) {
-                echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
-            } else {
-                echo "<img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
-            } ?>
+<div class="container-fluid row justify-content-center">
+    <div class="container my-2 col">
+        <h4>Master Inventory</h4>
+        <table
+            id="table"
+            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-toggle="table"
+            data-pagination="true"
+            data-search="false"
+            data-buttons-toolbar=".buttons-toolbar"
+            data-page-list="10,25,50,100,all"
+            data-search-on-enter-key="false"
+            data-id-field="id">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">Picture</th>
+                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="brand">Name</th>
+                    <th scope="col" class="text-center">Pieces</th>
+                    <th scope="col" class="text-center">Add</th>
+                </tr>
+            </thead>
 
-        <?php echo "<div class='card-body bg-secondary-subtle'>
-                        <h5 class='card-title bg-secondary-subtle name' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
-                        <p class='card-subtitle text-body-secondary bg-secondary-subtle' id='cardbrand-" . $puzzle->getId() . "'>" . $puzzle->getBrand()->getName() . "</p>
-                    </div>
-                    <ul class='list-group list-group-flush'>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces-" . $puzzle->getId() . "'>" . $puzzle->getPieces() . "</span></li>
-                    </ul>
-                    <div class='card-footer bg-secondary-subtle text-center'>
-                        <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
-                    </div>
-                </div>
-            </div>";
-        } ?>
+            <tbody class="table-group-divider">
+                <?php foreach ($puzzles as $puzzle) {
+                    if (!($puzzle instanceof Puzzle)) continue;
+                    echo
+                    "<tr class='puzzle-row'> 
+                    <th scope='row' class='text-center align-middle id''><img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
+                    <td class='align-middle name'>" . $puzzle->getName() . "</td>
+                        <td class='align-middle name'>" . $puzzle->getPieces() . "</td>
+                        <td class='text-center'><button class='btn btn-secondary ' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-plus'></td>
+                    </tr>";
+                } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="container my-2 col">
+        <h4>User Inventory</h4>
+        <table
+            id="table"
+            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-toggle="table"
+            data-pagination="true"
+            data-search="false"
+            data-buttons-toolbar=".buttons-toolbar"
+            data-page-list="10,25,50,100,all"
+            data-search-on-enter-key="false"
+            data-id-field="id">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">Picture</th>
+                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="brand">Name</th>
+                    <th scope="col" class="text-center">Pieces</th>
+                    <th scope="col" class="text-center">Remove</th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+                <?php foreach ($puzzles as $puzzle) {
+                    if (!($puzzle instanceof Puzzle)) continue;
+                    echo
+                    "<tr class='brand-row'>
+                        <th scope='row' class='text-center align-middle id''>" . $puzzle->getPicture() . "</th>
+                        <td class='align-middle name'>" . $puzzle->getName() . "</td>
+                        <td class='align-middle name'>" . $puzzle->getPieces() . "</td>
+                        <td class='text-center'><button class='btn btn-secondary ' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-dash'></td>
+                    </tr>";
+                } ?>
+            </tbody>
+        </table>
     </div>
 </div>
-
-<nav aria-label="Puzzle inventory pagination" class="container d-flex align-items-center justify-content-end">
-    <ul class="pagination align-middle">
-        <li class="page-item">
-            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="userinv.php?<?php echo queryForPage(1) ?>"><i class="bi bi-chevron-double-left"></i></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link <?php echo $page <= 1 ? 'disabled' : "" ?>" href="<?php echo $prevLink ?>"><i class="bi bi-chevron-left"></i></a>
-        </li>
-        <?php
-        if ($page == 1) {
-            echo "<li class='page-item active'><a class='page-link' href='#'>1</a></li>";
-
-            if ($totalPuzzles > ($maxperpage * ($page))) {
-                echo "<li class='page-item'><a class='page-link' href='userinv.php?" . queryForPage($page + 1) . "'>" . $page + 1 . "</a></li>";
-            }
-
-            if ($totalPuzzles > ($maxperpage * ($page + 1))) {
-                echo "<li class='page-item'><a class='page-link' href='userinv.php?" . queryForPage($page + 2) . "'>" . $page + 2 . "</a></li>";
-            }
-        } else {
-            if ($page >= 3 && !($totalPuzzles > $maxperpage * ($page))) {
-                echo "<li class='page-item'><a class='page-link' href='userinv.php?" . queryForPage($page - 2) . "'>" . $page - 2 . "</a></li>";
-            }
-
-            echo "<li class='page-item'><a class='page-link' href='userinv.php?" . queryForPage($page - 1) . "'>" . $page - 1 . "</a></li>";
-            echo "<li class='page-item active'><a class='page-link' href='#'>" . $page . "</a></li>";
-
-            if ($totalPuzzles > ($maxperpage * ($page))) {
-                echo "<li class='page-item'><a class='page-link' href='userinv.php?" . queryForPage($page + 1) . "'>" . $page + 1 . "</a></li>";
-            }
-        }
-        ?>
-        <li class="page-item">
-            <a class="page-link <?php echo $nextLink === '#' ? 'disabled' : "" ?>" href="<?php echo $nextLink ?>"><i class="bi bi-chevron-right"></i></a>
-        </li>
-    </ul>
-</nav>
