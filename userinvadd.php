@@ -6,6 +6,9 @@ require_once 'util/db.php';
 
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\object\Puzzle;
+use puzzlethings\src\gateway\UserPuzzleGateway;
+use puzzlethings\src\object\User;
+use puzzlethings\src\object\UserPuzzle;
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
@@ -45,6 +48,12 @@ $seen = $maxperpage * ($page - 1) + count($puzzles);
 
 $prevLink = $page <= 1 ? "#" : 'userinv.php?' . queryForPage($page - 1);
 $nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page + 1);
+
+$userid = getUserID();
+
+$ugateway = new UserPuzzleGateway($db);
+$userpuzzles = $ugateway->findByUserId($userid);
+
 ?>
 
 <script src="scripts/puzzles.js"></script>
@@ -88,7 +97,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page +
                     <th scope='row' class='text-center align-middle id''><img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
                     <td class='align-middle name'>" . $puzzle->getName() . "</td>
                         <td class='align-middle name'>" . $puzzle->getPieces() . "</td>
-                        <td class='text-center'><button class='btn btn-secondary ' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-plus'></td>
+                        <td class='text-center'><a class='btn btn-secondary ' href='userinvaddc.php?id=" . $puzzle->getId() . "'><i class='bi bi-plus'></a></td>
                     </tr>";
                 } ?>
             </tbody>
@@ -116,14 +125,14 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page +
             </thead>
 
             <tbody class="table-group-divider">
-                <?php foreach ($puzzles as $puzzle) {
-                    if (!($puzzle instanceof Puzzle)) continue;
+                <?php foreach ($userpuzzles as $userpuzzle) {
+                    if (!($userpuzzle instanceof UserPuzzle)) continue;
                     echo
                     "<tr class='brand-row'>
-                        <th scope='row' class='text-center align-middle id''>" . $puzzle->getPicture() . "</th>
-                        <td class='align-middle name'>" . $puzzle->getName() . "</td>
-                        <td class='align-middle name'>" . $puzzle->getPieces() . "</td>
-                        <td class='text-center'><button class='btn btn-secondary ' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-dash'></td>
+                        <th scope='row' class='text-center align-middle''><img src='images/uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
+                        <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
+                        <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
+                        <td class='text-center'><a class='btn btn-secondary ' href='userinvremove.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-dash'></a></td>
                     </tr>";
                 } ?>
             </tbody>

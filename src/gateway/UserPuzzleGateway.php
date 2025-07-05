@@ -212,6 +212,25 @@ class UserPuzzleGateway
         }
     }
 
+    public function findByUserId(int $id, mixed $options = []): ?UserPuzzle
+    {
+        $sql = "SELECT * FROM userinv WHERE userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            if ($stmt->rowCount() == 0) return null;
+
+            return UserPuzzle::of($result, $this->db);
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
     // public function findByName(string $name, mixed $options = []): ?Puzzle
     // {
     //     $sql = "SELECT * FROM puzzleinv WHERE name LIKE :name";
@@ -299,6 +318,25 @@ class UserPuzzleGateway
         } catch (PDOException $e) {
             error_log("Database error while deleting puzzle: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function completed(): array
+    {
+        $sql = "SELECT * FROM userinv ORDER BY enddate DESC LIMIT 5";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $completed = array();
+
+            foreach ($result as $res) {
+                $completed[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $completed;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
         }
     }
 }

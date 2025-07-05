@@ -1,5 +1,13 @@
 <?php
-include 'util/function.php';
+global $db;
+require_once 'util/function.php';
+require_once 'util/constants.php';
+require_once 'util/db.php';
+
+use puzzlethings\src\gateway\PuzzleGateway;
+use puzzlethings\src\object\Puzzle;
+use puzzlethings\src\gateway\UserPuzzleGateway;
+use puzzlethings\src\object\UserPuzzle;
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
@@ -9,6 +17,12 @@ if (!isLoggedIn()) {
 $title = 'Home Page';
 include 'header.php';
 include 'nav.php';
+
+$gateway = new PuzzleGateway($db);
+$recents = $gateway->recent();
+
+$gateway = new UserPuzzleGateway($db);
+$completed = $gateway->completed();
 ?>
 
 <br>
@@ -21,11 +35,11 @@ include 'nav.php';
                     5 Most Recent Puzzles
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">A fifth item</li>
+                    <?php foreach ($recents as $puzzle) {
+                        if (!($puzzle instanceof Puzzle)) continue;
+                        echo
+                        "<li class='list-group-item'>" . $puzzle->getName() . "</li>";
+                    } ?>
                 </ul>
             </div>
         </div>
@@ -35,11 +49,11 @@ include 'nav.php';
                     5 Most Recent Completed Puzzles
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">A fifth item</li>
+                    <?php foreach ($completed as $puzzle) {
+                        if (!($puzzle instanceof UserPuzzle)) continue;
+                        echo
+                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . "</li>";
+                    } ?>
                 </ul>
             </div>
         </div>
@@ -60,51 +74,30 @@ include 'nav.php';
     </div>
 </div>
 <br>
-<h3 class="text-center">Puzzle Management</h3>
-<div class="container text-center my-2">
-    <div class="row">
-        <div class="col-6">
+<div class="container text-center">
+    <div class="row g-5 justify-content-center">
+        <div class="col-4">
+            <h3 class="text-center">Puzzle Management</h3>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add Puzzle</a>
+            </div>
             <div class="card">
-                <div class="card-header">
-                    Add Puzzle
-                </div>
-                <a class="btn btn-secondary" href="puzzleadd.php" type="button">Add</a>
+                <a class="btn btn-secondary btn-lg" href="puzzleinv.php" type="button">Puzzle Inventory</a>
             </div>
         </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    Puzzle Inventory
-                </div>
-                <a class="btn btn-secondary" href="puzzleinv.php" type="button">Inventory</a>
+        <div class="col">
+            <h3 class="text-center">User Puzzle Management</h3>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="userinvadd.php" type="button">Add Puzzles</a>
+            </div>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="userinv.php" type="button">User Inventory</a>
             </div>
         </div>
-    </div>
-</div>
-<br>
-<h3 class="text-center">User Puzzle Management</h3>
-<div class="container text-center my-2">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    User Puzzle Inventory
-                </div>
-                <a class="btn btn-secondary" href="userinv.php" type="button">Inventory</a>
-            </div>
-        </div>
-    </div>
-</div>
-<br>
-<h3 class="text-center">Administration</h3>
-<div class="container text-center my-2">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    Admin Area
-                </div>
-                <a class="btn btn-secondary" href="admin.php" type="button">Admin</a>
+        <div class="col">
+            <h3 class="text-center">Administration</h3>
+            <div class="card my-2">
+                <a class="btn btn-info btn-lg" href="admin.php" type="button">Admin Area</a>
             </div>
         </div>
     </div>
