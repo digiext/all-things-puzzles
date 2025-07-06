@@ -251,10 +251,10 @@ class UserPuzzleGateway
     //     }
     // }
 
-    public function update(UserPuzzle|int $puzzle, array $values): bool
+    public function update(UserPuzzle|int $userinvid, array $values): bool
     {
-        if (empty($puzzle)) return false;
-        $id = $puzzle instanceof UserPuzzle ? $puzzle->getId() : $puzzle;
+        if (empty($userinvid)) return false;
+        $id = $userinvid instanceof UserPuzzle ? $userinvid->getId() : $userinvid;
 
         $sets = "";
         foreach ($values as $key => $value) {
@@ -263,7 +263,7 @@ class UserPuzzleGateway
 
         if ($sets == '') return false;
 
-        $sql = "UPDATE userinv SET $sets WHERE puzzleid = :puzzleid";
+        $sql = "UPDATE userinv SET $sets WHERE userinvid = :userinvid";
 
         $pos = strrpos($sql, ", ");
         if ($pos !== false) {
@@ -275,7 +275,7 @@ class UserPuzzleGateway
             // $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
 
             $exec = [
-                ":puzzleid" => $id,
+                ":userinvid" => $id,
             ];
             foreach ($values as $key => $value) {
                 $exec[":$key"] = $value;

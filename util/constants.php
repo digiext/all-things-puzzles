@@ -38,3 +38,13 @@ const PUZ_FILTER_COST = "cost";
 const PUZ_FILTER_SOURCE = "source";
 const PUZ_FILTER_LOCATION = "location";
 const PUZ_FILTER_DISPOSITION = "disposition";
+
+const USR_INV_ID = "userinvid";
+const USR_INV_STATUS = "statusid";
+const USR_INV_MISSING = "missingpieces";
+const USR_INV_STARTDATE = "startdate";
+const USR_INV_ENDDATE = "enddate";
+const USR_INV_TOTALDAYS = "totaldays";
+const USR_INV_DIFFICULTY = "difficultyrating";
+const USR_INV_QUALITY = "qualityrating";
+const USR_INV_OWNERSHIP = "ownershipid";

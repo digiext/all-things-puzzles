@@ -36,9 +36,9 @@ $userpuzzle = $gateway->findById($id)
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
-    <div class="col-8">
+    <div class="col">
         <form enctype="multipart/form-data" class="align-items-center" action="userinveditc.php" id="useredit" method="post">
-            <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
+            <input type="hidden" tabindex="-1" name="id" value="<?php echo $userpuzzle->getId() ?>">
 
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
@@ -73,14 +73,14 @@ $userpuzzle = $gateway->findById($id)
 
             <div class="p-2 mb-2 mx-1">
                 <label for="start" class="form-label"><strong>Start Date</strong></label>
-                <input type="date" class="form-control" name="start" id="start" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getStart())); ?>" disabled>
+                <input type="date" class="form-control" name="startdate" id="startdate" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getStart())); ?>">
 
                 <a class="btn btn-secondary my-2" onclick="startDate();">Start Puzzle</a>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="end" class="form-label"><strong>End Date</strong></label>
-                <input type="date" class="form-control" name="end" id="end" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>" disabled>
+                <input type="date" class="form-control" name="enddate" id="enddate" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>">
                 <a class="btn btn-secondary mt-2" onclick="endDate();">Complete Puzzle</a>
             </div>
 
@@ -133,12 +133,12 @@ $userpuzzle = $gateway->findById($id)
 
 <script type="text/javascript">
     function startDate() {
-        document.getElementById("start").valueAsDate = new Date()
-        document.getElementById("start").style.backgroundColor = "red";
+        document.getElementById("startdate").valueAsDate = new Date()
+        document.getElementById("startdate").style.backgroundColor = "#58151c";
     }
 
     function endDate() {
-        document.getElementById("end").valueAsDate = new Date();
-        document.getElementById("end").style.backgroundColor = "red";
+        document.getElementById("enddate").valueAsDate = new Date();
+        document.getElementById("enddate").style.backgroundColor = "#58151c";
     }
 </script>
