@@ -19,13 +19,19 @@ include 'header.php';
 include 'nav.php';
 
 $gateway = new PuzzleGateway($db);
-$puzzles = $gateway->findAll($options);
+$allpuzzles = $gateway->findAll($options);
 
 $userid = getUserID();
 
 $gateway = new UserPuzzleGateway($db);
-$userpuzzles = $gateway->findAll();
+$userpuzzles = $gateway->findByUserId($userid);
 
+$userPuzIDs = [];
+foreach ($userpuzzles as $upuz) {
+    array_push($userPuzIDs, $upuz->getPuzzle()->getId());
+}
+
+$puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $userPuzIDs));
 ?>
 
 <script src="scripts/puzzles.js"></script>

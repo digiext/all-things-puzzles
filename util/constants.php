@@ -39,6 +39,7 @@ const PUZ_FILTER_SOURCE = "source";
 const PUZ_FILTER_LOCATION = "location";
 const PUZ_FILTER_DISPOSITION = "disposition";
 
+// USER INVENTORY GATEWAY
 const USR_INV_ID = "userinvid";
 const USR_INV_STATUS = "statusid";
 const USR_INV_MISSING = "missingpieces";

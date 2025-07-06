@@ -322,7 +322,7 @@ class UserPuzzleGateway
         }
     }
 
-    public function findByUserId(int $id): ?UserPuzzle
+    public function findByUserId(int $id): ?array
     {
         $sql = "SELECT * FROM userinv WHERE userid = :id";
 
@@ -330,12 +330,16 @@ class UserPuzzleGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() == 0) return null;
 
-            return UserPuzzle::of($result, $this->db);
+            $upuzzles = array();
+            foreach ($result as $res) {
+                $upuzzles[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $upuzzles;
         } catch (PDOException $e) {
             return null;
         }
