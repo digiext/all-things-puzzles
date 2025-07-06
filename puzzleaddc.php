@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
             $status = $_FILES['picture']['error'];
             $tmp = $_FILES['picture']['tmp_name'];
 
-            if ($status !== UPLOAD_ERR_OK) {
+            if ($status !== UPLOAD_ERR_OK && $status !== UPLOAD_ERR_NO_FILE) {
                 warningAlert(FILE_MESSAGES[$status], "puzzleadd.php");
             }
 
@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
                 warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleadd.php");
             }
 
-            $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+            $uploadedFile = str_replace([" ", "%"], "_", urlencode($puzzle->getName())) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
             $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
             $success = move_uploaded_file($tmp, $filepath);

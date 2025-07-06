@@ -22,7 +22,7 @@ $brandname = $_POST['brandName'];
 $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
-$hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] !== UPLOAD_ERR_NO_FILE;
+$hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
 
     $gateway = new PuzzleGateway($db);
     $puzzle = $gateway->findById($id);
-    $picture = null;
+    $picture = $deleteoldpic ? null : $oldpicture;
 
     if ($hasfile) {
         if (!is_dir(UPLOAD_DIR)) {
@@ -88,7 +88,7 @@ if (isset($_POST['submit'])) {
             warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleedit.php?id=" . $id);
         }
 
-        $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+        $uploadedFile = str_replace([" ", "%"], "_", urlencode($puzzle->getName())) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
         $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
         $success = move_uploaded_file($tmp, $filepath);
@@ -97,11 +97,11 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if ($deleteoldpic === true || $deleteoldpic === 'true') {
+    if ($deleteoldpic) {
         $picurl = $puzzle->getPicture();
 
         if (($picurl ?? '') != '') {
-            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
+            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/' .  $picurl);
             if (!$success) {
                 error_log("Failed deleting file $picture");
                 warningAlertNoRedir("Failed removing picture from server");
@@ -118,13 +118,13 @@ if (isset($_POST['submit'])) {
         PUZ_SOURCE_ID => $source instanceof Source ? $source->getId() : $source,
         PUZ_LOCATION_ID => $location instanceof Location ? $location->getId() : $location,
         PUZ_DISPOSITION_ID => $disposition instanceof Disposition ? $disposition->getId() : $disposition,
-        PUZ_PICTURE_URL => $hasfile ? $picture : ($deleteoldpic ? null : $oldpicture),
+        PUZ_PICTURE_URL => $picture,
         PUZ_UPC => $upc,
     ];
 
     $code = $gateway->update($id, $values);
 
-    session_start();
+    //session_start();
     if ($code === false) {
         failAlert("Puzzle Not Updated!");
 
