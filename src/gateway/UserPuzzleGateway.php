@@ -347,7 +347,7 @@ class UserPuzzleGateway
 
     public function highestrated(): array
     {
-        $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv ORDER BY (rating) DESC LIMIT 5";
+        $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv WHERE (difficultyrating+qualityrating)/2 !=0 ORDER BY (rating) DESC LIMIT 5";
 
         try {
             $stmt = $this->db->query($sql);
