@@ -56,7 +56,6 @@ if (isset($_POST['submit'])) {
     $gateway = new PuzzleGateway($db);
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
-
     session_start();
     if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
@@ -85,13 +84,13 @@ if (isset($_POST['submit'])) {
                 warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleadd.php");
             }
 
-            $uploadedFile = base64_encode(file_get_contents($tmp)) . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+            $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
             $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
             $success = move_uploaded_file($tmp, $filepath);
             if ($success) {
                 $code = $gateway->update($puzzle, [
-                    PUZ_PICTURE_URL => UPLOAD_DIR . '/' . $uploadedFile,
+                    PUZ_PICTURE_URL => $uploadedFile,
                 ]);
 
                 successAlert("Puzzle has been created!");

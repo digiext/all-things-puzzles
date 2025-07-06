@@ -61,7 +61,9 @@ if (isset($_POST['submit'])) {
     }
 
     $gateway = new PuzzleGateway($db);
+    $puzzle = $gateway->findById($id);
     $picture = null;
+
     if ($hasfile) {
         if (!is_dir(UPLOAD_DIR)) {
             mkdir('images');
@@ -86,8 +88,8 @@ if (isset($_POST['submit'])) {
             warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleedit.php?id=" . $id);
         }
 
-        $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
-        $filepath = UPLOAD_DIR . '/' . $uploadedFile;
+        $uploadedFile = str_replace(" ", "_", htmlspecialchars($puzname)) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+        $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
         $success = move_uploaded_file($tmp, $filepath);
         if ($success) {
@@ -95,9 +97,8 @@ if (isset($_POST['submit'])) {
         }
     }
 
-
     if ($deleteoldpic === true || $deleteoldpic === 'true') {
-        $picurl = $gateway->findById($id)->getPicture();
+        $picurl = $puzzle->getPicture();
 
         if (($picurl ?? '') != '') {
             $success = unlink(UPLOAD_DIR_ABSOLUTE . '/'.  $picurl);
@@ -105,7 +106,7 @@ if (isset($_POST['submit'])) {
                 error_log("Failed deleting file $picture");
                 warningAlertNoRedir("Failed removing picture from server");
             }
-            }
+        }
     }
 
     $values = [

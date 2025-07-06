@@ -45,7 +45,8 @@ class AuthGateway {
             $success = $stmt->execute();
 
             if ($success) {
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $res === false ? null : $res;
             } else return null;
         } catch (PDOException $e) {
             error_log("Database error while fetching token by selector: " . $e->getMessage());
