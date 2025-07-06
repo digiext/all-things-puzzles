@@ -302,7 +302,7 @@ class PuzzleGateway
 
     public function recent(): array
     {
-        $sql = "SELECT * FROM puzzleinv WHERE dateacquired != '1970-01-01' ORDER BY dateacquired DESC LIMIT 5";
+        $sql = "SELECT * FROM puzzleinv ORDER BY addeddate DESC LIMIT 5";
 
         try {
             $stmt = $this->db->query($sql);

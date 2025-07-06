@@ -344,4 +344,23 @@ class UserPuzzleGateway
             return null;
         }
     }
+
+    public function highestrated(): array
+    {
+        $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv ORDER BY (rating) DESC LIMIT 5";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $highestrated = array();
+
+            foreach ($result as $res) {
+                $highestrated[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $highestrated;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 }
