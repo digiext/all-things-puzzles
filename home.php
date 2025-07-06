@@ -79,7 +79,7 @@ $completed = $gateway->completed();
         <div class="col-4">
             <h3 class="text-center">Puzzle Management</h3>
             <div class="card my-2">
-                <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add Puzzle</a>
+                <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add/Remove Puzzles</a>
             </div>
             <div class="card">
                 <a class="btn btn-secondary btn-lg" href="puzzleinv.php" type="button">Puzzle Inventory</a>
@@ -88,7 +88,7 @@ $completed = $gateway->completed();
         <div class="col">
             <h3 class="text-center">User Puzzle Management</h3>
             <div class="card my-2">
-                <a class="btn btn-secondary btn-lg" href="userinvadd.php" type="button">Add Puzzles</a>
+                <a class="btn btn-secondary btn-lg" href="userinvadd.php" type="button">Add/Remove Puzzles</a>
             </div>
             <div class="card my-2">
                 <a class="btn btn-secondary btn-lg" href="userinv.php" type="button">User Inventory</a>
