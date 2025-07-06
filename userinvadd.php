@@ -36,7 +36,7 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
 
 <script src="scripts/puzzles.js"></script>
 
-<div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
+<div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
     <h3 class="text-center align-text-bottom me-auto">User Inventory Management</h3>
 
     <div>
@@ -44,7 +44,7 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
         <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
     </div>
 </div>
-
+<hr>
 <div class="container-fluid row justify-content-center">
     <div class="container my-2 col">
         <h4>Master Inventory</h4>

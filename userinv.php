@@ -40,8 +40,7 @@ $userpuzzles = $gateway->findByUserId($userid);
         data-buttons-toolbar=".buttons-toolbar"
         data-page-list="10,25,50,100,all"
         data-search-on-enter-key="false"
-        data-id-field="id"
-        data-show-columns="true">
+        data-id-field="id">
         <thead>
             <tr>
                 <th scope="col" class="text-center align-middle">Picture</th>
@@ -63,7 +62,7 @@ $userpuzzles = $gateway->findByUserId($userid);
                 if (!($userpuzzle instanceof UserPuzzle)) continue;
                 echo
                 "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''><img src='images/" . (empty($userpuzzle->getPuzzle()->getPicture()) ? "no-image-dark.svg"  : "uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture()) . "' class='img-fluid' alt='Puzzle image'></th>
+                        <th scope='row' class='text-center align-middle''><img src='images/" . (empty($userpuzzle->getPuzzle()->getPicture()) ? "no-image-dark.svg"  : "uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture()) . "' class='img-fluid' alt='Puzzle image' height=200></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getMissingPieces() . "</td>

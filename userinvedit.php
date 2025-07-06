@@ -85,7 +85,7 @@ $userpuzzle = $gateway->findById($id)
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="difficulty" class="form-label"><strong>Quality Rating</strong></label>
+                <label for="difficulty" class="form-label"><strong>Difficulty Rating</strong></label>
                 <input type="number" class="form-control" name="difficulty" id="difficulty" min="0" max="5" step="1" value="<?php echo $userpuzzle->getDifficulty(); ?>">
             </div>
 
