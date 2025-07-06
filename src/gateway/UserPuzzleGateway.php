@@ -21,12 +21,12 @@ class UserPuzzleGateway
         $this->db = $db;
     }
 
-    public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $start, string $end, int $totaldays, float $difficultyrating, float $qualityrating, Ownership|int $ownership): UserPuzzle|false
+    public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, Ownership|int $ownership): UserPuzzle|false
     {
         $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, ownershipid) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :ownershipid)";
 
-        $startdate = date("Y-m-d H:i:s", strtotime($start));
-        $enddate = date("Y-m-d H:i:s", strtotime($end));
+        $startdate = date("Y-m-d H:i:s", strtotime($startdate));
+        $enddate = date("Y-m-d H:i:s", strtotime($enddate));
         $userId = $user instanceof User ? $user->getId() : $user;
         $puzzleId = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
         $statusId = $status instanceof Status ? $status->getId() : $status;
@@ -212,24 +212,6 @@ class UserPuzzleGateway
         }
     }
 
-    public function findByUserId(int $id, mixed $options = []): ?UserPuzzle
-    {
-        $sql = "SELECT * FROM userinv WHERE userid = :id";
-
-        try {
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-            if ($stmt->rowCount() == 0) return null;
-
-            return UserPuzzle::of($result, $this->db);
-        } catch (PDOException $e) {
-            return null;
-        }
-    }
 
     // public function findByName(string $name, mixed $options = []): ?Puzzle
     // {
@@ -323,7 +305,7 @@ class UserPuzzleGateway
 
     public function completed(): array
     {
-        $sql = "SELECT * FROM userinv ORDER BY enddate DESC LIMIT 5";
+        $sql = "SELECT * FROM userinv WHERE enddate != '1970-01-01' ORDER BY enddate DESC LIMIT 5";
 
         try {
             $stmt = $this->db->query($sql);
@@ -337,6 +319,25 @@ class UserPuzzleGateway
             return $completed;
         } catch (PDOException $e) {
             exit($e->getMessage());
+        }
+    }
+
+    public function findByUserId(int $id): ?UserPuzzle
+    {
+        $sql = "SELECT * FROM userinv WHERE userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            if ($stmt->rowCount() == 0) return null;
+
+            return UserPuzzle::of($result, $this->db);
+        } catch (PDOException $e) {
+            return null;
         }
     }
 }

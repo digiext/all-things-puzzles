@@ -28,4 +28,4 @@ if ($puzzle === false) {
     successAlert("Puzzle added to user inventory");
 }
 
-header("Location: userinv.php");
+header("Location: userinvadd.php");

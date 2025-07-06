@@ -7,7 +7,6 @@ require_once 'util/db.php';
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\object\Puzzle;
 use puzzlethings\src\gateway\UserPuzzleGateway;
-use puzzlethings\src\object\User;
 use puzzlethings\src\object\UserPuzzle;
 
 //If Not Logged In Reroute to index.php
@@ -19,40 +18,13 @@ $title = 'User Puzzle Inventory';
 include 'header.php';
 include 'nav.php';
 
-$page = $_GET['page'] ?? 1;
-$maxperpage = $_GET['maxperpage'] ?? 10;
-$sort = $_GET['sort'] ?? PUZ_ID;
-$sortDirection = $_GET['sort_direction'] ?? SQL_SORT_ASC;
-
-$query = [];
-parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
-
-function queryForPage(int $page, array $extras = []): string
-{
-    global $query;
-    return http_build_query(array_merge($query, ['page' => $page], $extras));
-}
-
-$options = [
-    PAGE => $page - 1,
-    MAX_PER_PAGE => $maxperpage,
-    SORT => $sort,
-    SORT_DIRECTION => $sortDirection
-];
-
 $gateway = new PuzzleGateway($db);
 $puzzles = $gateway->findAll($options);
 
-$totalPuzzles = $gateway->count($options);
-$seen = $maxperpage * ($page - 1) + count($puzzles);
-
-$prevLink = $page <= 1 ? "#" : 'userinv.php?' . queryForPage($page - 1);
-$nextLink = $totalPuzzles <= $seen ? "#" : 'userinv.php?' . queryForPage($page + 1);
-
 $userid = getUserID();
 
-$ugateway = new UserPuzzleGateway($db);
-$userpuzzles = $ugateway->findByUserId($userid);
+$gateway = new UserPuzzleGateway($db);
+$userpuzzles = $gateway->findAll();
 
 ?>
 
@@ -82,9 +54,9 @@ $userpuzzles = $ugateway->findByUserId($userid);
             data-id-field="id">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">Picture</th>
-                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="brand">Name</th>
-                    <th scope="col" class="text-center">Pieces</th>
+                    <th scope="col" class="text-center align-middle">Picture</th>
+                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="name">Name</th>
+                    <th scope="col" class="text-center" data-sortable="true" data-field="pieces">Pieces</th>
                     <th scope="col" class="text-center">Add</th>
                 </tr>
             </thead>
@@ -117,9 +89,9 @@ $userpuzzles = $ugateway->findByUserId($userid);
             data-id-field="id">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center align-middle" data-sortable="true" data-field="id">Picture</th>
-                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="brand">Name</th>
-                    <th scope="col" class="text-center">Pieces</th>
+                    <th scope="col" class="text-center align-middle">Picture</th>
+                    <th scope="col" class="col-11 align-middle" data-sortable="true" data-field="name">Name</th>
+                    <th scope="col" class="text-center" data-sortable="true" data-field="pieces">Pieces</th>
                     <th scope="col" class="text-center">Remove</th>
                 </tr>
             </thead>
@@ -128,7 +100,7 @@ $userpuzzles = $ugateway->findByUserId($userid);
                 <?php foreach ($userpuzzles as $userpuzzle) {
                     if (!($userpuzzle instanceof UserPuzzle)) continue;
                     echo
-                    "<tr class='brand-row'>
+                    "<tr class='user-puzzle-row'>
                         <th scope='row' class='text-center align-middle''><img src='images/uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>

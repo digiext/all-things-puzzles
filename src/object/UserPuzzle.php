@@ -10,7 +10,7 @@ use puzzlethings\src\gateway\PuzzleGateway;
 class UserPuzzle implements \JsonSerializable
 {
     private int $id;
-    private ?string $start, $end;
+    private ?string $startdate, $enddate;
     private ?int $missingpieces, $totaldays;
     private ?float $difficultyrating, $qualityrating;
     private ?User $user;
@@ -20,15 +20,15 @@ class UserPuzzle implements \JsonSerializable
 
 
 
-    public function __construct(int $id, ?User $user, ?Puzzle $puzzle, ?Status $status, ?int $missingpieces, ?string $start, ?string $end, ?int $totaldays, ?float $difficultyrating, ?float $qualityrating, ?Ownership $ownership)
+    public function __construct(int $id, ?User $user, ?Puzzle $puzzle, ?Status $status, ?int $missingpieces, ?string $startdate, ?string $enddate, ?int $totaldays, ?float $difficultyrating, ?float $qualityrating, ?Ownership $ownership)
     {
         $this->id = $id;
         $this->user = $user;
         $this->puzzle = $puzzle;
         $this->status = $status;
         $this->missingpieces = $missingpieces;
-        $this->start = $start;
-        $this->end = $end;
+        $this->startdate = $startdate;
+        $this->enddate = $enddate;
         $this->totaldays = $totaldays;
         $this->difficultyrating = $difficultyrating;
         $this->qualityrating = $qualityrating;
@@ -42,7 +42,7 @@ class UserPuzzle implements \JsonSerializable
         $status = (new StatusGateway($db))->findById($res['statusid']);
         $ownership = (new OwnershipGateway($db))->findById($res['ownershipid']);
 
-        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['start'], $res['end'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $ownership);
+        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['startdate'], $res['enddate'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $ownership);
     }
 
     public function getId(): int
@@ -72,12 +72,12 @@ class UserPuzzle implements \JsonSerializable
 
     public function getStart(): ?string
     {
-        return $this->start;
+        return $this->startdate;
     }
 
     public function getEnd(): ?string
     {
-        return $this->end;
+        return $this->enddate;
     }
 
     public function getTotal(): ?int
@@ -108,8 +108,8 @@ class UserPuzzle implements \JsonSerializable
             'puzzle' => $this->puzzle,
             'status' => $this->status,
             'missingpieces' => $this->missingpieces,
-            'start' => $this->start,
-            'end' => $this->end,
+            'start' => $this->startdate,
+            'end' => $this->enddate,
             'totaldays' => $this->totaldays,
             'difficultyrating' => $this->difficultyrating,
             'qualityrating' => $this->qualityrating,
