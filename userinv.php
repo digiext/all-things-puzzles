@@ -62,7 +62,7 @@ $userpuzzles = $gateway->findByUserId($userid);
                 if (!($userpuzzle instanceof UserPuzzle)) continue;
                 echo
                 "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''><img src='images/" . (empty($userpuzzle->getPuzzle()->getPicture()) ? "no-image-dark.svg"  : "uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture()) . "' alt='Puzzle image' height=200></th>
+                        <th scope='row' class='text-center align-middle''><img src='images/" . (empty($userpuzzle->getPuzzle()->getPicture()) ? "no-image-dark.svg"  : "uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture()) . "' alt='Puzzle image' height=100></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getMissingPieces() . "</td>
