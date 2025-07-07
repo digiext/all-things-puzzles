@@ -17,12 +17,12 @@ $brand = $puzzlewish->getBrand()->getId();
 $upc = $puzzlewish->getUpc();
 $cost = 0;
 $acquired = '';
-$source = 0;
-$location = 0;
-$disposition = 0;
+$source = 5;
+$location = 1;
+$disposition = 1;
 
 $gateway = new PuzzleGateway($db);
-$code = $gateway->create($name, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
+$code = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
 if ($code) {
     $gateway = new PuzzleWishGateway($db);
