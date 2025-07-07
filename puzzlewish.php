@@ -19,7 +19,8 @@ include 'nav.php';
 $userid = getUserID();
 
 $gateway = new PuzzleWishGateway($db);
-$userpuzzles = $gateway->findByUserId($userid);
+$puzzlewishes = $gateway->findByUserId($userid);
+
 ?>
 
 <div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
@@ -49,21 +50,23 @@ $userpuzzles = $gateway->findByUserId($userid);
                 <th scope="col" class="text-center">Brand</th>
                 <th scope="col" class="text-center">UPC</th>
                 <th scope="col" class="text-center">Edit</th>
+                <th scope="col" class="text-center">Move to Owned</th>
                 <th scope="col" class="text-center">Delete</th>
             </tr>
         </thead>
 
         <tbody class="table-group-divider">
-            <?php foreach ($userpuzzles as $userpuzzle) {
-                if (!($userpuzzle instanceof PuzzleWish)) continue;
+            <?php foreach ($puzzlewishes as $puzzlewish) {
+                if (!($puzzlewish instanceof PuzzleWish)) continue;
                 echo
                 "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''>" . ($userpuzzle->getName()) . "></th>
-                        <td class='align-middle name'>" . $userpuzzle->getPieces() . "</td>
-                        <td class='align-middle'>" . $userpuzzle->getBrand() . "</td>
-                        <td class='align-middle'>" . $userpuzzle->getUpc() . "</td>
-                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishedit.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-pencil'></a></td>
-                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishdelete.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-trash'></a></td>
+                        <th scope='row' class='text-center align-middle''>" . ($puzzlewish->getName()) . "</th>
+                        <td class='align-middle name'>" . $puzzlewish->getPieces() . "</td>
+                        <td class='align-middle'>" . $puzzlewish->getBrand()->getName() . "</td>
+                        <td class='align-middle'>" . $puzzlewish->getUpc() . "</td>
+                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishedit.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-pencil'></a></td>
+                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishmove.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-arrow-bar-right'></a></td>
+                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishdelete.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-trash'></a></td>
                     </tr>";
             } ?>
         </tbody>
