@@ -106,3 +106,14 @@ $highestrated = $gateway->highestrated();
         </div>
     </div>
 </div>
+<br>
+<div class="container text-center">
+    <div class="row g-5 justify-content-center">
+        <div class="col-4">
+            <h3 class="text-center">Puzzle Wishlist</h3>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="puzzlewish.php" type="button">Wishlist</a>
+            </div>
+        </div>
+    </div>
+</div>
