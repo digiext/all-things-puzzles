@@ -24,26 +24,25 @@ include 'nav.php';
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header">
-                    Brands
-                </div>
                 <a class="btn btn-primary" href="admin/brands.php" role="button">Brands</a>
             </div>
         </div>
         <div class="col">
             <div class="card">
-                <div class="card-header">
-                    Location
-                </div>
                 <a class="btn btn-primary" href="admin/locations.php" role="button">Location</a>
             </div>
         </div>
         <div class="col">
             <div class="card">
-                <div class="card-header">
-                    Source
-                </div>
                 <a class="btn btn-primary" href="admin/sources.php" role="button">Source</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="card">
+                <a class="btn btn-primary" href="admin/categories.php" role="button">Categories</a>
             </div>
         </div>
     </div>
@@ -58,25 +57,16 @@ if (isAdmin()) {
             <div class='row'>
                 <div class='col'>
                     <div class='card'>
-                        <div class='card-header'>
-                            Disposition
-                        </div>
                         <a class='btn btn-secondary' href='admin/disposition.php' role='button'>Disposition</a>
                     </div>
                 </div>
                 <div class='col'>
                     <div class='card'>
-                        <div class='card-header'>
-                            Ownership
-                        </div>
                         <a class='btn btn-secondary' href='admin/ownership.php' role='button'>Ownership</a>
                     </div>
                 </div>
                 <div class='col'>
                     <div class='card'>
-                        <div class='card-header'>
-                            Status
-                        </div>
                         <a class='btn btn-secondary' href='admin/status.php' role='button'>Status</a>
                     </div>
                 </div>

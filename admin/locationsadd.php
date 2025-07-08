@@ -19,7 +19,7 @@ include '../nav.php';
 ?>
 
 <div class="container">
-    <h3>Fill in form below for adding a brand</h3>
+    <h3>Fill in form below for adding a location</h3>
     <form class="row" action="locationsaddc.php" method="post" name="locationsaddc">
         <div class="mb-3">
             <label for="brand" class="form-label">Location</label>
