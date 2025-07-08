@@ -18,6 +18,10 @@ $title = 'Add/Remove User Puzzles';
 include 'header.php';
 include 'nav.php';
 
+$options = [
+    MAX_PER_PAGE => 1000
+];
+
 $gateway = new PuzzleGateway($db);
 $allpuzzles = $gateway->findAll($options);
 
@@ -36,26 +40,20 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
 
 <script src="scripts/puzzles.js"></script>
 
-<div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
-    <h3 class="text-center align-text-bottom me-auto">User Inventory Management</h3>
-
-    <div>
-        <a class="btn btn-primary" href="home.php">Home</a>
-        <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
-    </div>
-</div>
-<hr>
-<div class="container-fluid row justify-content-center">
+<div class="container-fluid mt-2 row justify-content-center">
     <div class="container my-2 col">
-        <h4>Master Inventory</h4>
+        <div class="hstack mb-2 justify-content-between">
+            <h4>Master Inventory</h4>
+            <div class="ma-buttons-toolbar"></div>
+        </div>
         <table
             id="table"
             data-classes="table table-dark table-bordered table-striped table-hover"
             data-toggle="table"
             data-pagination="true"
-            data-search="false"
-            data-buttons-toolbar=".buttons-toolbar"
+            data-search="true"
             data-page-list="10,25,50,100,all"
+            data-buttons-toolbar=".ma-buttons-toolbar"
             data-search-on-enter-key="false"
             data-id-field="id">
             <thead>
@@ -82,14 +80,18 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
         </table>
     </div>
     <div class="container my-2 col">
-        <h4>User Inventory</h4>
+        <div class="hstack mb-2 justify-content-end">
+            <h4 class="me-auto">User Inventory</h4>
+            <div class="us-buttons-toolbar"></div>
+            <a class="ms-2 btn btn-primary" href="home.php">Home</a>
+        </div>
         <table
             id="table"
             data-classes="table table-dark table-bordered table-striped table-hover"
             data-toggle="table"
             data-pagination="true"
-            data-search="false"
-            data-buttons-toolbar=".buttons-toolbar"
+            data-search="true"
+            data-buttons-toolbar=".us-buttons-toolbar"
             data-page-list="10,25,50,100,all"
             data-search-on-enter-key="false"
             data-id-field="id">
