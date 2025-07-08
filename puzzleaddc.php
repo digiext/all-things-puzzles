@@ -5,6 +5,7 @@ use puzzlethings\src\gateway\BrandGateway;
 use puzzlethings\src\gateway\SourceGateway;
 use puzzlethings\src\gateway\DispositionGateway;
 use puzzlethings\src\gateway\LocationGateway;
+use puzzlethings\src\gateway\CategoryGateway;
 
 global $db;
 require_once 'util/function.php';
@@ -19,6 +20,7 @@ $brandname = $_POST['brandName'];
 $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
+$categorydesc = $_POST['categoryDesc'];
 $hasfile = isset($_FILES['picture']);
 
 if (isset($_POST['submit'])) {
@@ -31,6 +33,7 @@ if (isset($_POST['submit'])) {
     $upc = $_POST['upc'];
     $disposition = $_POST['disposition'];
     $location = $_POST['location'];
+    $category = $_POST['category'];
 
     if (!empty($brandname)) {
         $gateway = new BrandGateway($db);
@@ -52,12 +55,20 @@ if (isset($_POST['submit'])) {
         $code = $gateway->create($locationdesc);
         $location = $code;
     }
+    if (!empty($categorydesc)) {
+        $gateway = new CategoryGateway($db);
+        $code = $gateway->create($categorydesc);
+        $category = $code;
+    }
 
     $gateway = new PuzzleGateway($db);
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
+    $cgateway = new CategoryGateway($db);
+    $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
+
     session_start();
-    if ($puzzle === false) {
+    if ($puzzle === false && $puzcat === false) {
         failAlert("Puzzle Not Created!");
     } else {
         if ($hasfile) {

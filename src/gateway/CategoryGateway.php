@@ -32,6 +32,24 @@ class CategoryGateway
         }
     }
 
+    public function createPuzzle(string $puzzleid, $categoryid): bool
+    {
+        $sql = "INSERT INTO puzcat (puzzleid,categoryid) VALUES (:puzzleid,:categoryid)";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':puzzleid', $puzzleid);
+            $stmt->bindParam(':categoryid', $categoryid);
+            $stmt->execute();
+
+            $id = $this->db->lastInsertId();
+            // return new Category($id, $desc);
+            return true;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM categories";

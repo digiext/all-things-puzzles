@@ -11,6 +11,8 @@ use puzzlethings\src\gateway\LocationGateway;
 use puzzlethings\src\object\Location;
 use puzzlethings\src\gateway\DispositionGateway;
 use puzzlethings\src\object\Disposition;
+use puzzlethings\src\gateway\CategoryGateway;
+use puzzlethings\src\object\Category;
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
@@ -29,6 +31,8 @@ $gateway = new LocationGateway($db);
 $locations = $gateway->findAll();
 $gateway = new DispositionGateway($db);
 $dispositions = $gateway->findAll();
+$gateway = new CategoryGateway($db);
+$categories = $gateway->findAll();
 
 ?>
 
@@ -70,6 +74,35 @@ $dispositions = $gateway->findAll();
                     <div class="p-2 mb-2 mx-1">
                         <label for="brandName" class="form-label"><strong>Brand Name</strong></label>
                         <input type="text" class="form-control" name="brandName" id="brandName">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mb-2 mx-1">
+                <label for="category" class="form-label"><strong>Category</strong></label>
+                <div class="">
+                    <select class="form-control" name="category" id="category">
+                        <?php
+                        foreach ($categories as $category) {
+                            if (!($category instanceof Category)) continue;
+                            echo
+                            "<option value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
+                        } ?>
+                    </select>
+                </div>
+                <div class="form-check my-1">
+                    <input type="checkbox" class="form-check-input" name="createNewCategory" id="createNewCategory">
+                    <label for="createNewCategory" class="form-check-label">Category not listed</label>
+                </div>
+            </div>
+
+            <div id="newCategoryMenu" class="hstack gap-3 p-2 mb-2 mx-2" style="display: none;">
+                <div class="vr col-auto"></div>
+                <div class="col-12">
+
+                    <div class="p-2 mb-2 mx-1">
+                        <label for="categoryDesc" class="form-label"><strong>Category Name</strong></label>
+                        <input type="text" class="form-control" name="categoryDesc" id="categoryDesc">
                     </div>
                 </div>
             </div>
@@ -191,17 +224,17 @@ $dispositions = $gateway->findAll();
                 </div>
             </div>
 
-<!--            <div class="p-2 mb-2 mx-1">-->
-<!--                <label for="cost" class="form-label"><strong>Cost</strong></label>-->
-<!--                <div class="input-group">-->
-<!--                    <span class="input-group-text">$</span>-->
-<!--                    <input type="number" class="form-control" name="cost" id="cost" min="0" step="0.01">-->
-<!--                    <select class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" name="costCurrency" id="costCurrency">-->
-<!--                        <option value="USD" selected>USD</option>-->
-<!--                        <option value="CAD">CAD</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="p-2 mb-2 mx-1">-->
+            <!--                <label for="cost" class="form-label"><strong>Cost</strong></label>-->
+            <!--                <div class="input-group">-->
+            <!--                    <span class="input-group-text">$</span>-->
+            <!--                    <input type="number" class="form-control" name="cost" id="cost" min="0" step="0.01">-->
+            <!--                    <select class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" name="costCurrency" id="costCurrency">-->
+            <!--                        <option value="USD" selected>USD</option>-->
+            <!--                        <option value="CAD">CAD</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="p-2 mb-2 mx-1">
                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
@@ -221,6 +254,7 @@ $dispositions = $gateway->findAll();
         </div>
         <ul class="list-group list-group-flush placeholder-glow">
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces" class="placeholder col-2"></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="placeholder col-2"></span></li>
             <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost" class="placeholder col-1"></span> <span id="cardcurrency">USD</span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource" class="placeholder col-3"></span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc" class="placeholder col-3"></span></li>
@@ -237,6 +271,8 @@ $dispositions = $gateway->findAll();
         let puzzleBrand = $('#brand');
         let newBrand = $('#brandName');
         let cardBrand = $('#cardbrand')
+        let newCategory = $('#categoryDesc');
+        let cardCategory = $('#cardcategory')
         let puzzleCost = $('#cost');
         let cardCost = $('#cardcost');
         let puzzleCostCurrency = $('#costCurrency')
@@ -258,6 +294,8 @@ $dispositions = $gateway->findAll();
         let dispositionDiv = $('#newDispositionMenu');
         let locationCheckbox = $('#createNewLocation');
         let locationDiv = $('#newLocationMenu');
+        let categoryCheckbox = $('#createNewCategory');
+        let categoryDiv = $('#newCategoryMenu');
 
         puzzleName.on('keyup', function() {
             if (puzzleName.val() !== '') {
@@ -288,6 +326,18 @@ $dispositions = $gateway->findAll();
             if (brandCheckbox.prop('checked') === true) {
                 cardBrand.removeClass('placeholder col-12');
                 cardBrand.text(newBrand.val());
+            }
+        })
+
+        puzzleCategory.on('change', function() {
+            cardCategory.removeClass('placeholder col-12');
+            cardCategory.text($(this).find('option:selected').text());
+        })
+
+        newCategory.on('keyup', function() {
+            if (categoryCheckbox.prop('checked') === true) {
+                cardCategory.removeClass('placeholder col-12');
+                cardCategory.text(newCategory.val());
             }
         })
 
@@ -341,6 +391,23 @@ $dispositions = $gateway->findAll();
                 brandDiv.hide(200);
                 cardBrand.removeClass('placeholder col-12');
                 cardBrand.text(puzzleBrand.find('option:selected').text());
+            }
+        })
+
+        categoryCheckbox.on('change', function() {
+            if (categoryCheckbox.prop('checked') === true) {
+                categoryDiv.show(200);
+                if (newCategory.val() !== '') {
+                    cardCategory.removeClass('placeholder col-12');
+                    cardCategory.text(newCategory.val());
+                } else {
+                    cardCategory.addClass('placeholder col-12');
+                    cardCategory.text('');
+                }
+            } else {
+                categoryDiv.hide(200);
+                cardCategory.removeClass('placeholder col-12');
+                cardCategory.text(puzzleCategory.find('option:selected').text());
             }
         })
 
