@@ -15,7 +15,7 @@ include 'nav.php';
     <br>
     <h1>Welcome to All Things Puzzles!</h1>
     <br>
-    <h4>All Things Puzzles is a inventory management system of your personal puzzle collection. </h4>
+    <h4>All Things Puzzles is an inventory management system of your personal puzzle collection. </h4>
     <br>
     <h3>Features
         <ul>
