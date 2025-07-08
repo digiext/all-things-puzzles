@@ -65,10 +65,10 @@ if (isset($_POST['submit'])) {
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
     $cgateway = new CategoryGateway($db);
-    $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
+    $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category->getId());
 
     session_start();
-    if ($puzzle === false && $puzcat === false) {
+    if ($puzzle === false || $puzcat === false) {
         failAlert("Puzzle Not Created!");
     } else {
         if ($hasfile) {

@@ -92,7 +92,7 @@ $categories = $gateway->findAll();
                         <label for="deleteCategory" class="col-form-label">Category</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deleteCategory" name="Category" value="<?php echo $category->getDescription(); ?>" readonly>
+                        <input type="text" class="form-control" id="deleteCategory" name="category" value="<?php echo $category->getDescription(); ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
