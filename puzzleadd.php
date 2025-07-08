@@ -271,6 +271,7 @@ $categories = $gateway->findAll();
         let puzzleBrand = $('#brand');
         let newBrand = $('#brandName');
         let cardBrand = $('#cardbrand')
+        let puzzleCategory = $('#category')
         let newCategory = $('#categoryDesc');
         let cardCategory = $('#cardcategory')
         let puzzleCost = $('#cost');
@@ -398,15 +399,15 @@ $categories = $gateway->findAll();
             if (categoryCheckbox.prop('checked') === true) {
                 categoryDiv.show(200);
                 if (newCategory.val() !== '') {
-                    cardCategory.removeClass('placeholder col-12');
+                    cardCategory.removeClass('placeholder col-3');
                     cardCategory.text(newCategory.val());
                 } else {
-                    cardCategory.addClass('placeholder col-12');
+                    cardCategory.addClass('placeholder col-3');
                     cardCategory.text('');
                 }
             } else {
                 categoryDiv.hide(200);
-                cardCategory.removeClass('placeholder col-12');
+                cardCategory.removeClass('placeholder col-3');
                 cardCategory.text(puzzleCategory.find('option:selected').text());
             }
         })
