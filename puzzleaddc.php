@@ -74,6 +74,10 @@ if (isset($_POST['submit'])) {
                 warningAlert(FILE_MESSAGES[$status], "puzzleadd.php");
             }
 
+            if ($status === UPLOAD_ERR_NO_FILE) {
+                successAlert("Puzzle has been created!");
+            }
+
             $filesize = filesize($tmp);
             if ($filesize > MAX_FILE_SIZE) {
                 warningAlert("File too large! Must be under 5MB!", "puzzleadd.php");

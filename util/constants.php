@@ -31,6 +31,8 @@ const PUZ_DISPOSITION_ID = "dispositionid";
 const PUZ_PICTURE_URL = "pictureurl";
 const PUZ_UPC = "upc";
 
+const PUZ_SORT_BRAND_NAME = "brand.brandname";
+
 const PUZ_FILTER_NAME = "name";
 const PUZ_FILTER_PIECES = "pieces";
 const PUZ_FILTER_BRAND = "brand";

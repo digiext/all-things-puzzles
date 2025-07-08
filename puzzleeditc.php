@@ -74,26 +74,28 @@ if (isset($_POST['submit'])) {
         $status = $_FILES['picture']['error'];
         $tmp = $_FILES['picture']['tmp_name'];
 
-        if ($status !== UPLOAD_ERR_OK) {
+        if ($status !== UPLOAD_ERR_OK && $status !== UPLOAD_ERR_NO_FILE) {
             warningAlert(FILE_MESSAGES[$status], "puzzleedit.php?id=" . $id);
         }
 
-        $filesize = filesize($tmp);
-        if ($filesize > MAX_FILE_SIZE) {
-            warningAlert("File too large! Must be under 5MB!", "puzzleedit.php?id=" . $id);
-        }
+        if ($status !== UPLOAD_ERR_NO_FILE) {
+            $filesize = filesize($tmp);
+            if ($filesize > MAX_FILE_SIZE) {
+                warningAlert("File too large! Must be under 5MB!", "puzzleedit.php?id=" . $id);
+            }
 
-        $mimetype = getMimeType($tmp);
-        if (!in_array($mimetype, array_keys(ALLOWED_IMAGE_TYPES))) {
-            warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleedit.php?id=" . $id);
-        }
+            $mimetype = getMimeType($tmp);
+            if (!in_array($mimetype, array_keys(ALLOWED_IMAGE_TYPES))) {
+                warningAlert("Invalid file type! Must be a PNG or JPEG", "puzzleedit.php?id=" . $id);
+            }
 
-        $uploadedFile = str_replace([" ", "%"], "_", urlencode($puzzle->getName())) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
-        $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
+            $uploadedFile = str_replace([" ", "%"], "_", urlencode($puzzle->getName())) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
+            $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
-        $success = move_uploaded_file($tmp, $filepath);
-        if ($success) {
-            $picture = $uploadedFile;
+            $success = move_uploaded_file($tmp, $filepath);
+            if ($success) {
+                $picture = $uploadedFile;
+            }
         }
     }
 

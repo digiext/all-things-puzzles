@@ -57,7 +57,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_ID]) ?>">Default Sort</a></li>
             <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_NAME]) ?>">Puzzle Name</a></li>
             <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_PIECES]) ?>">Puzzle Pieces</a></li>
-            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_BRAND_ID]) ?>">Puzzle Brands</a></li>
+            <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_SORT_BRAND_NAME]) ?>">Puzzle Brands</a></li>
             <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_COST]) ?>">Puzzle Cost</a></li>
             <li><a class="dropdown-item" href="puzzleinv.php?<?php echo queryForPage(1, [SORT => PUZ_UPC]) ?>">Puzzle UPC</a></li>
         </ul>
