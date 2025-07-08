@@ -6,13 +6,10 @@ use PDO;
 use PDOException;
 use puzzlethings\src\object\{
     Brand,
-    Source,
-    Location,
-    Disposition,
-    Puzzle
+    PuzzleWish,
 };
 
-class PuzzleGateway
+class PuzzleWishGateway
 {
     private PDO $db;
 
@@ -21,41 +18,28 @@ class PuzzleGateway
         $this->db = $db;
     }
 
-    public function create(string $name, int $pieces, Brand|int $brand, float $cost, string $dateAcquired, Source|int $source, Location|int $location, Disposition|int $disposition, string $upc): Puzzle|false
+    public function create(int $userid, string $name, int $pieces, Brand|int $brand, string $upc): PuzzleWish|false
     {
-        $sql = "INSERT INTO puzzleinv (puzname, pieces, brandid, cost, dateacquired, sourceid, locationid, dispositionid, upc) VALUES (:name, :pieces, :brandid, :cost, :dateacquired, :sourceid, :locationid, :dispositionid, :upc)";
+        $sql = "INSERT INTO puzzlewish (userid, puzname, pieces, brandid, upc) VALUES (:userid, :name, :pieces, :brandid, :upc)";
 
-        $date = date("Y-m-d H:i:s", strtotime($dateAcquired));
         $brandId = $brand instanceof Brand ? $brand->getId() : $brand;
-        $sourceId = $source instanceof Source ? $source->getId() : $source;
-        $locationId = $location instanceof Location ? $location->getId() : $location;
-        $dispositionId = $disposition instanceof Disposition ? $disposition->getId() : $disposition;
 
         try {
             $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':userid', $userid);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':pieces', $pieces);
             $stmt->bindParam(':brandid', $brandId);
-            $stmt->bindParam(':cost', $cost);
-            $stmt->bindParam(':dateacquired', $date);
-            $stmt->bindParam(':sourceid', $sourceId);
-            $stmt->bindParam(':locationid', $locationId);
-            $stmt->bindParam(':dispositionid', $dispositionId);
             $stmt->bindParam(':upc', $upc);
             $stmt->execute();
 
             $id = $this->db->lastInsertId();
-            return Puzzle::of([
-                "puzzleid" => $id,
+            return PuzzleWish::of([
+                "wishid" => $id,
+                "userid" => $userid,
                 "puzname" => $name,
                 "pieces" => $pieces,
                 "brandid" => $brandId,
-                "cost" => $cost,
-                "dateacquired" => $date,
-                "sourceid" => $sourceId,
-                "locationid" => $locationId,
-                "dispositionid" => $dispositionId,
-                "pictureurl" => '',
                 "upc" => $upc
             ], $this->db);
         } catch (PDOException $e) {
@@ -69,7 +53,7 @@ class PuzzleGateway
     ]): int
     {
         $filters = $this->determineFilters($options[FILTERS] ?? []);
-        $sql = "SELECT COUNT(*) FROM puzzleinv $filters";
+        $sql = "SELECT COUNT(*) FROM puzzlewish $filters";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -100,7 +84,7 @@ class PuzzleGateway
         $offset = $page * $maxPerPage;
         $filters = $this->determineFilters($filters);
 
-        $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv $filters INNER JOIN brand ON puzzleinv.brandid = brand.brandid ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
+        $sql = "SELECT * FROM puzzlewish $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -108,7 +92,7 @@ class PuzzleGateway
             $puzzles = array();
 
             foreach ($result as $res) {
-                $puzzles[] = Puzzle::of($res, $this->db);
+                $puzzles[] = PuzzleWish::of($res, $this->db);
             }
 
             return $puzzles;
@@ -145,41 +129,6 @@ class PuzzleGateway
                         }
                         break;
                     }
-                case PUZ_FILTER_COST: {
-                        if (is_array($val)) {
-                            $res .= "AND cost BETWEEN $val[0] AND $val[1]";
-                        } else {
-                            $res .= "AND cost = $val";
-                        }
-                        break;
-                    }
-                case PUZ_FILTER_SOURCE: {
-                        if ($val instanceof Source) {
-                            $id = $val->getId();
-                            $res .= "AND sourceid = $id";
-                        } else {
-                            $res .= "AND sourceid = $val";
-                        }
-                        break;
-                    }
-                case PUZ_FILTER_LOCATION: {
-                        if ($val instanceof Location) {
-                            $id = $val->getId();
-                            $res .= "AND locationid = $id";
-                        } else {
-                            $res .= "AND locationid = $val";
-                        }
-                        break;
-                    }
-                case PUZ_FILTER_DISPOSITION: {
-                        if ($val instanceof Disposition) {
-                            $id = $val->getId();
-                            $res .= "AND dispositionid = $id";
-                        } else {
-                            $res .= "AND dispositionid = $val";
-                        }
-                        break;
-                    }
             }
         }
 
@@ -191,9 +140,9 @@ class PuzzleGateway
         return $res;
     }
 
-    public function findById(int $id, mixed $options = []): ?Puzzle
+    public function findById(int $id, mixed $options = []): ?PuzzleWish
     {
-        $sql = "SELECT * FROM puzzleinv WHERE puzzleid = :id";
+        $sql = "SELECT * FROM puzzlewish WHERE wishid = :id";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -204,15 +153,38 @@ class PuzzleGateway
 
             if ($stmt->rowCount() == 0) return null;
 
-            return Puzzle::of($result, $this->db);
+            return PuzzleWish::of($result, $this->db);
         } catch (PDOException $e) {
             return null;
         }
     }
 
-    public function findByName(string $name, mixed $options = []): ?Puzzle
+    public function findByUserId(int $id): ?array
     {
-        $sql = "SELECT * FROM puzzleinv WHERE puzname LIKE :name";
+        $sql = "SELECT * FROM puzzlewish WHERE userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() == 0) return null;
+
+            $upuzzles = array();
+            foreach ($result as $res) {
+                $upuzzles[] = PuzzleWish::of($res, $this->db);
+            }
+
+            return $upuzzles;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    public function findByName(string $name, mixed $options = []): ?PuzzleWish
+    {
+        $sql = "SELECT * FROM puzzlewish WHERE puzname LIKE :name";
 
         $before = null;
         $after = null;
@@ -241,17 +213,17 @@ class PuzzleGateway
 
             if ($stmt->rowCount() == 0) return null;
 
-            return Puzzle::of($result, $this->db);
+            return PuzzleWish::of($result, $this->db);
         } catch (PDOException $e) {
             print($e->getMessage());
             return null;
         }
     }
 
-    public function update(Puzzle|int $puzzle, array $values): bool
+    public function update(PuzzleWish|int $puzzle, array $values): bool
     {
         if (empty($puzzle)) return false;
-        $id = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
+        $id = $puzzle instanceof PuzzleWish ? $puzzle->getId() : $puzzle;
 
         $sets = "";
         foreach ($values as $key => $value) {
@@ -260,7 +232,7 @@ class PuzzleGateway
 
         if ($sets == '') return false;
 
-        $sql = "UPDATE puzzleinv SET $sets WHERE puzzleid = :puzzleid";
+        $sql = "UPDATE puzzlewish SET $sets WHERE wishid = :wishid";
 
         $pos = strrpos($sql, ", ");
         if ($pos !== false) {
@@ -272,7 +244,7 @@ class PuzzleGateway
             // $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
 
             $exec = [
-                ":puzzleid" => $id,
+                ":wishid" => $id,
             ];
             foreach ($values as $key => $value) {
                 $exec[":$key"] = $value;
@@ -286,36 +258,17 @@ class PuzzleGateway
         }
     }
 
-    public function delete(Puzzle|int $id): bool
+    public function delete(PuzzleWish|int $id): bool
     {
-        $sql = "DELETE FROM puzzleinv WHERE puzzleid = :puzzleid";
+        $sql = "DELETE FROM puzzlewish WHERE wishid = :wishid";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':puzzleid', $id);
+            $stmt->bindParam(':wishid', $id);
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("Database error while deleting puzzle: " . $e->getMessage());
             return false;
-        }
-    }
-
-    public function recent(): array
-    {
-        $sql = "SELECT * FROM puzzleinv ORDER BY addeddate DESC LIMIT 5";
-
-        try {
-            $stmt = $this->db->query($sql);
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $recents = array();
-
-            foreach ($result as $res) {
-                $recents[] = Puzzle::of($res, $this->db);
-            }
-
-            return $recents;
-        } catch (PDOException $e) {
-            exit($e->getMessage());
         }
     }
 }

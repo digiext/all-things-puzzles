@@ -11,3 +11,4 @@
 <script src="<?php echo BASE_URL ?>/scripts/bootstrap.bundle.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/jquery-3.7.1.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/bootstrap-table.min.js"></script>
+<script src="<?php echo BASE_URL ?>/scripts/popper.min.js"></script>

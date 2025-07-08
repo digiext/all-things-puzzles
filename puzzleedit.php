@@ -18,7 +18,7 @@ if (!isLoggedIn()) {
     header("Location: index.php");
 }
 
-$title = 'Add Puzzle';
+$title = 'Edit Puzzle';
 include 'header.php';
 include 'nav.php';
 

@@ -23,6 +23,10 @@ $recents = $gateway->recent();
 
 $gateway = new UserPuzzleGateway($db);
 $completed = $gateway->completed();
+
+$gateway = new UserPuzzleGateway($db);
+$highestrated = $gateway->highestrated();
+
 ?>
 
 <br>
@@ -63,11 +67,11 @@ $completed = $gateway->completed();
                     Top 5 Highest Rated Puzzles
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">A fifth item</li>
+                    <?php foreach ($highestrated as $puzzle) {
+                        if (!($puzzle instanceof UserPuzzle)) continue;
+                        echo
+                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . "</li>";
+                    } ?>
                 </ul>
             </div>
         </div>
@@ -79,7 +83,7 @@ $completed = $gateway->completed();
         <div class="col-4">
             <h3 class="text-center">Puzzle Management</h3>
             <div class="card my-2">
-                <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add/Remove Puzzles</a>
+                <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add Puzzle</a>
             </div>
             <div class="card">
                 <a class="btn btn-secondary btn-lg" href="puzzleinv.php" type="button">Puzzle Inventory</a>
@@ -102,3 +106,16 @@ $completed = $gateway->completed();
         </div>
     </div>
 </div>
+<br>
+<div class="container text-center">
+    <div class="row g-5 justify-content-center">
+        <div class="col-4">
+            <h3 class="text-center">Puzzle Wishlist</h3>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="puzzlewish.php" type="button">Wishlist</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php include 'footer.php'; ?>

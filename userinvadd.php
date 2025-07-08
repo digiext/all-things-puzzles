@@ -14,7 +14,7 @@ if (!isLoggedIn()) {
     header("Location: index.php");
 }
 
-$title = 'User Puzzle Inventory';
+$title = 'Add/Remove User Puzzles';
 include 'header.php';
 include 'nav.php';
 
