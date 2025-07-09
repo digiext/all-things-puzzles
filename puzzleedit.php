@@ -12,6 +12,8 @@ use puzzlethings\src\object\Location;
 use puzzlethings\src\gateway\DispositionGateway;
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\object\Disposition;
+use puzzlethings\src\gateway\CategoryGateway;
+use puzzlethings\src\object\Category;
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
@@ -32,9 +34,13 @@ $gateway = new LocationGateway($db);
 $locations = $gateway->findAll();
 $gateway = new DispositionGateway($db);
 $dispositions = $gateway->findAll();
+$gateway = new CategoryGateway($db);
+$categories = $gateway->findAll();
 
 $gateway = new PuzzleGateway($db);
-$puzzle = $gateway->findById($id)
+$puzzle = $gateway->findById($id);
+
+$puzcat = $gateway->findCatId($id);
 
 ?>
 
@@ -80,6 +86,35 @@ $puzzle = $gateway->findById($id)
                     <div class="p-2 mb-2 mx-1">
                         <label for="brandName" class="form-label"><strong>Brand Name</strong></label>
                         <input type="text" class="form-control" name="brandName" id="brandName">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mb-2 mx-1">
+                <label for="category" class="form-label"><strong>Category</strong> - Hold Ctrl to select multiple</label>
+                <div class="">
+                    <select class="form-control" multiple size="5" name="category" id="category">
+                        <?php
+                        foreach ($categories as $category) {
+                            if (!($category instanceof Category)) continue;
+                            echo
+                            "<option value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
+                        } ?>
+                    </select>
+                </div>
+                <div class="form-check my-1">
+                    <input type="checkbox" class="form-check-input" name="createNewCategory" id="createNewCategory">
+                    <label for="createNewCategory" class="form-check-label">Category not listed</label>
+                </div>
+            </div>
+
+            <div id="newCategoryMenu" class="hstack gap-3 p-2 mb-2 mx-2" style="display: none;">
+                <div class="vr col-auto"></div>
+                <div class="col-12">
+
+                    <div class="p-2 mb-2 mx-1">
+                        <label for="categoryDesc" class="form-label"><strong>Category Name</strong></label>
+                        <input type="text" class="form-control" name="categoryDesc" id="categoryDesc">
                     </div>
                 </div>
             </div>
@@ -250,6 +285,9 @@ $puzzle = $gateway->findById($id)
         let puzzleBrand = $('#brand');
         let newBrand = $('#brandName');
         let cardBrand = $('#cardbrand')
+        let puzzleCategory = $('#category')
+        let newCategory = $('#categoryDesc');
+        let cardCategory = $('#cardcategory')
         let puzzleCost = $('#cost');
         let cardCost = $('#cardcost');
         let puzzleCostCurrency = $('#costCurrency')
@@ -301,6 +339,18 @@ $puzzle = $gateway->findById($id)
             }
         })
 
+        puzzleCategory.on('change', function() {
+            cardCategory.removeClass('placeholder col-12');
+            cardCategory.text($(this).find('option:selected').text());
+        })
+
+        newCategory.on('keyup', function() {
+            if (categoryCheckbox.prop('checked') === true) {
+                cardCategory.removeClass('placeholder col-12');
+                cardCategory.text(newCategory.val());
+            }
+        })
+
         puzzleCost.on('keyup', function() {
             if (puzzleCost.val() !== '') {
                 cardCost.text(puzzleCost.val());
@@ -342,6 +392,23 @@ $puzzle = $gateway->findById($id)
             } else {
                 brandDiv.hide(200);
                 cardBrand.text(puzzleBrand.find('option:selected').text());
+            }
+        })
+
+        categoryCheckbox.on('change', function() {
+            if (categoryCheckbox.prop('checked') === true) {
+                categoryDiv.show(200);
+                if (newCategory.val() !== '') {
+                    cardCategory.removeClass('placeholder col-3');
+                    cardCategory.text(newCategory.val());
+                } else {
+                    cardCategory.addClass('placeholder col-3');
+                    cardCategory.text('');
+                }
+            } else {
+                categoryDiv.hide(200);
+                cardCategory.removeClass('placeholder col-3');
+                cardCategory.text(puzzleCategory.find('option:selected').text());
             }
         })
 

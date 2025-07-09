@@ -210,6 +210,26 @@ class PuzzleGateway
         }
     }
 
+    public function findCatId(int $id): ?array
+    {
+        $sql = "SELECT puzcat.*, categories.*, puzzleinv.* FROM puzcat LEFT JOIN categories ON puzcat.categoryid = categories.categoryid LEFT JOIN puzzleinv ON puzcat.puzzleid = puzzleinv.puzzleid WHERE puzzleid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            if ($stmt->rowCount() == 0) return null;
+
+            $catids = array();
+            return $catids;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
     public function findByName(string $name, mixed $options = []): ?Puzzle
     {
         $sql = "SELECT * FROM puzzleinv WHERE puzname LIKE :name";

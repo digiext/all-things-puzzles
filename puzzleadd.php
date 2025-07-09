@@ -79,9 +79,9 @@ $categories = $gateway->findAll();
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="category" class="form-label"><strong>Category</strong></label>
+                <label for="category" class="form-label"><strong>Category</strong> - Hold Ctrl to select multiple</label>
                 <div class="">
-                    <select class="form-control" name="category" id="category">
+                    <select class="form-control" multiple size="5" name="category" id="category">
                         <?php
                         foreach ($categories as $category) {
                             if (!($category instanceof Category)) continue;
