@@ -212,7 +212,7 @@ class PuzzleGateway
 
     public function findCatId(int $id): ?array
     {
-        $sql = "SELECT puzcat.*, categories.*, puzzleinv.* FROM puzcat LEFT JOIN categories ON puzcat.categoryid = categories.categoryid LEFT JOIN puzzleinv ON puzcat.puzzleid = puzzleinv.puzzleid WHERE puzzleid = :id";
+        $sql = "SELECT puzcat.* FROM puzcat WHERE puzcat.puzzleid = :id";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -224,6 +224,10 @@ class PuzzleGateway
             if ($stmt->rowCount() == 0) return null;
 
             $catids = array();
+            foreach ($result as $res) {
+                $catids[] = $res;
+            }
+
             return $catids;
         } catch (PDOException $e) {
             return null;

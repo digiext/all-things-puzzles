@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     $upc = $_POST['upc'];
     $disposition = $_POST['disposition'];
     $location = $_POST['location'];
-    $category = $_POST['category'];
+    $categories = $_POST['category'];
 
     if (!empty($brandname)) {
         $gateway = new BrandGateway($db);
@@ -65,10 +65,12 @@ if (isset($_POST['submit'])) {
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
     $cgateway = new CategoryGateway($db);
-    $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category->getId());
+    foreach ($categories as $category) {
+        $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
+    }
 
     session_start();
-    if ($puzzle === false || $puzcat === false) {
+    if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
     } else {
         if ($hasfile) {

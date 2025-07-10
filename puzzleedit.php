@@ -42,6 +42,8 @@ $puzzle = $gateway->findById($id);
 
 $puzcat = $gateway->findCatId($id);
 
+var_dump($puzcat);
+
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
@@ -98,7 +100,7 @@ $puzcat = $gateway->findCatId($id);
                         foreach ($categories as $category) {
                             if (!($category instanceof Category)) continue;
                             echo
-                            "<option value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
+                            "<option " . ($category->getId() === $puzcat["categoryid"] ? "selected" : "") . " value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
                         } ?>
                     </select>
                 </div>
