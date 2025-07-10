@@ -25,7 +25,9 @@ if ((($_POST['startdate']) != '1970-01-01') && (($_POST['enddate']) != '1970-01-
 
 $difficultyrating = $_POST['difficulty'];
 $qualityrating = $_POST['quality'];
+$overallrating = $_POST['overall'];
 $ownership = $_POST['ownership'];
+$loanedoutto = $_POST['loanedoutto'];
 
 $values = [
     USR_INV_STATUS => $status instanceof Status ? $status->getId() : $status,
@@ -35,7 +37,9 @@ $values = [
     USR_INV_TOTALDAYS => $totaldays,
     USR_INV_DIFFICULTY => $difficultyrating,
     USR_INV_QUALITY => $qualityrating,
+    USR_INV_OVERALL => $overallrating,
     USR_INV_OWNERSHIP => $ownership instanceof Ownership ? $ownership->getId() : $ownership,
+    USR_INV_LOANED => $loanedoutto
 ];
 
 echo var_dump($values);

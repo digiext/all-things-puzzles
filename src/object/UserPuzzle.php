@@ -10,9 +10,9 @@ use puzzlethings\src\gateway\PuzzleGateway;
 class UserPuzzle implements \JsonSerializable
 {
     private int $id;
-    private ?string $startdate, $enddate;
+    private ?string $startdate, $enddate, $loanedoutto;
     private ?int $missingpieces, $totaldays;
-    private ?float $difficultyrating, $qualityrating;
+    private ?float $difficultyrating, $qualityrating, $overallrating;
     private ?User $user;
     private ?Puzzle $puzzle;
     private ?Status $status;
@@ -20,7 +20,7 @@ class UserPuzzle implements \JsonSerializable
 
 
 
-    public function __construct(int $id, ?User $user, ?Puzzle $puzzle, ?Status $status, ?int $missingpieces, ?string $startdate, ?string $enddate, ?int $totaldays, ?float $difficultyrating, ?float $qualityrating, ?Ownership $ownership)
+    public function __construct(int $id, ?User $user, ?Puzzle $puzzle, ?Status $status, ?int $missingpieces, ?string $startdate, ?string $enddate, ?int $totaldays, ?float $difficultyrating, ?float $qualityrating, ?float $overallrating, ?Ownership $ownership, ?string $loanedoutto)
     {
         $this->id = $id;
         $this->user = $user;
@@ -32,7 +32,9 @@ class UserPuzzle implements \JsonSerializable
         $this->totaldays = $totaldays;
         $this->difficultyrating = $difficultyrating;
         $this->qualityrating = $qualityrating;
+        $this->overallrating = $overallrating;
         $this->ownership = $ownership;
+        $this->loanedoutto = $loanedoutto;
     }
 
     public static function of($res, $db): UserPuzzle
@@ -42,7 +44,7 @@ class UserPuzzle implements \JsonSerializable
         $status = (new StatusGateway($db))->findById($res['statusid']);
         $ownership = (new OwnershipGateway($db))->findById($res['ownershipid']);
 
-        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['startdate'], $res['enddate'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $ownership);
+        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['startdate'], $res['enddate'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $res['overallrating'], $ownership, $res['loanedoutto']);
     }
 
     public function getId(): int
@@ -95,9 +97,19 @@ class UserPuzzle implements \JsonSerializable
         return $this->qualityrating;
     }
 
+    public function getOverall(): ?float
+    {
+        return $this->overallrating;
+    }
+
     public function getOwnership(): ?Ownership
     {
         return $this->ownership;
+    }
+
+    public function getLoaned(): ?string
+    {
+        return $this->loanedoutto;
     }
 
     public function jsonSerialize(): mixed
@@ -113,7 +125,9 @@ class UserPuzzle implements \JsonSerializable
             'totaldays' => $this->totaldays,
             'difficultyrating' => $this->difficultyrating,
             'qualityrating' => $this->qualityrating,
+            'overallrating' => $this->overallrating,
             'ownership' => $this->ownership,
+            'loanedoutto' => $this->loanedoutto,
         ];
     }
 }

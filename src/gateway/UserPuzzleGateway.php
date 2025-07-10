@@ -21,9 +21,9 @@ class UserPuzzleGateway
         $this->db = $db;
     }
 
-    public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, Ownership|int $ownership): UserPuzzle|false
+    public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, float $overallrating, Ownership|int $ownership, string $loanedoutto): UserPuzzle|false
     {
-        $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, ownershipid) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :ownershipid)";
+        $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, overallrating, ownershipid, loanedoutto) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :overallrating, :ownershipid, :loanedoutto)";
 
         $startdate = date("Y-m-d H:i:s", strtotime($startdate));
         $enddate = date("Y-m-d H:i:s", strtotime($enddate));
@@ -43,7 +43,9 @@ class UserPuzzleGateway
             $stmt->bindParam(':totaldays', $totaldays);
             $stmt->bindParam(':difficultyrating', $difficultyrating);
             $stmt->bindParam(':qualityrating', $qualityrating);
+            $stmt->bindParam(':overallrating', $overallrating);
             $stmt->bindParam(':ownershipid', $ownershipId);
+            $stmt->bindParam(':loanedoutto', $loanedoutto);
             $stmt->execute();
 
             $id = $this->db->lastInsertId();
@@ -58,7 +60,9 @@ class UserPuzzleGateway
                 "totaldays" => $totaldays,
                 "difficultyrating" => $difficultyrating,
                 "qualityrating" => $qualityrating,
-                "ownershipid" => $ownershipId
+                "overallrating" => $overallrating,
+                "ownershipid" => $ownershipId,
+                "loanedoutto" => $loanedoutto
             ], $this->db);
         } catch (PDOException $e) {
             error_log("Database error while adding puzzle: " . $e->getMessage());
@@ -347,7 +351,9 @@ class UserPuzzleGateway
 
     public function highestrated(): array
     {
-        $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv WHERE (difficultyrating+qualityrating)/2 !=0 ORDER BY (rating) DESC LIMIT 5";
+        // $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv WHERE (difficultyrating+qualityrating)/2 !=0 ORDER BY (rating) DESC LIMIT 5";
+
+        $sql = "SELECT * FROM userinv WHERE overallrating !=0 ORDER BY overallrating DESC LIMIT 5";
 
         try {
             $stmt = $this->db->query($sql);

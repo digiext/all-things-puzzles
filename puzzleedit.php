@@ -99,6 +99,7 @@ var_dump($puzcat);
                         <?php
                         foreach ($categories as $category) {
                             if (!($category instanceof Category)) continue;
+
                             echo
                             "<option " . ($category->getId() === $puzcat["categoryid"] ? "selected" : "") . " value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
                         } ?>

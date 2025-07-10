@@ -50,4 +50,6 @@ const USR_INV_ENDDATE = "enddate";
 const USR_INV_TOTALDAYS = "totaldays";
 const USR_INV_DIFFICULTY = "difficultyrating";
 const USR_INV_QUALITY = "qualityrating";
+const USR_INV_OVERALL = "overallrating";
 const USR_INV_OWNERSHIP = "ownershipid";
+const USR_INV_LOANED = "loanedoutto";

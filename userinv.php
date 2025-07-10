@@ -52,7 +52,9 @@ $userpuzzles = $gateway->findByUserId($userid);
                 <th scope="col" class="text-center">End Date</th>
                 <th scope="col" class="text-center">Difficulty</th>
                 <th scope="col" class="text-center">Quality</th>
+                <th scope="col" class="text-center">Overall</th>
                 <th scope="col" class="text-center">Ownership</th>
+                <th scope="col" class="text-center">Loaned To</th>
                 <th scope="col" class="text-center">Edit</th>
             </tr>
         </thead>
@@ -71,7 +73,9 @@ $userpuzzles = $gateway->findByUserId($userid);
                         <td class='align-middle'>" . $userpuzzle->getEnd() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getDifficulty() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getQuality() . "</td>
+                        <td class='align-middle'>" . $userpuzzle->getOverall() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getOwnership()->getDescription() . "</td>
+                        <td class='align-middle'>" . $userpuzzle->getLoaned() . "</td>
                         <td class='text-center'><a class='btn btn-secondary id' href='userinvedit.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-pencil'></a></td>
                     </tr>";
             } ?>

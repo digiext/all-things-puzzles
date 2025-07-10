@@ -95,6 +95,11 @@ $userpuzzle = $gateway->findById($id)
             </div>
 
             <div class="p-2 mb-2 mx-1">
+                <label for="overall" class="form-label"><strong>Overall Rating</strong></label>
+                <input type="number" class="form-control" name="overall" id="overall" min="0" max="5" step="0.5" value="<?php echo $userpuzzle->getOverall(); ?>">
+            </div>
+
+            <div class="p-2 mb-2 mx-1">
                 <label for="ownership" class="form-label"><strong>Ownership Status</strong></label>
                 <div class="">
                     <select class="form-control" name="ownership" id="ownership">
@@ -107,6 +112,10 @@ $userpuzzle = $gateway->findById($id)
                     </select>
                 </div>
 
+            </div>
+            <div class="p-2 mb-2 mx-1">
+                <label for="loanedoutto" class="form-label"><strong>Loaned To</strong></label>
+                <input type="text" class="form-control" name="loanedoutto" id="loanedoutto" value="<?php echo $userpuzzle->getLoaned(); ?>">
             </div>
 
 

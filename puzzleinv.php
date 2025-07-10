@@ -75,7 +75,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             if (!($puzzle instanceof Puzzle)) continue;
             echo
             "<div class='col'>
-                <div class='card' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
+                <div class='card h-100' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
             <?php
             if (empty($puzzle->getPicture())) {
                 echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
