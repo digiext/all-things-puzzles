@@ -25,6 +25,7 @@ $id = $_GET['id'];
 
 $gateway = new StatusGateway($db);
 $statuses = $gateway->findAll();
+$complete = $gateway->findByName("Completed");
 $gateway = new OwnershipGateway($db);
 $ownerships = $gateway->findAll();
 $gateway = new PuzzleGateway($db);
@@ -80,7 +81,7 @@ $userpuzzle = $gateway->findById($id)
 
             <div class="p-2 mb-2 mx-1">
                 <label for="end" class="form-label"><strong>End Date</strong></label>
-                <input type="date" class="form-control" name="enddate" id="enddate" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>">
+                <input type="date" class="form-control" name="enddate" id="enddate" onchange="statusComplete();" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>">
                 <a class="btn btn-secondary mt-2" onclick="endDate();">Complete Puzzle</a>
             </div>
 
@@ -141,13 +142,20 @@ $userpuzzle = $gateway->findById($id)
 </div>
 
 <script type="text/javascript">
+    // Set start date input field to today's date and a red color
     function startDate() {
         document.getElementById("startdate").valueAsDate = new Date()
         document.getElementById("startdate").style.backgroundColor = "#58151c";
     }
 
+    // Set end date input field to today's date and a red color
     function endDate() {
         document.getElementById("enddate").valueAsDate = new Date();
         document.getElementById("enddate").style.backgroundColor = "#58151c";
+    }
+
+    // If end date field is changed set status to completed
+    function statusComplete() {
+        document.getElementById("status").value = "<?php echo $complete; ?>"
     }
 </script>
