@@ -69,12 +69,12 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
 </div>
 
 <div class="container my-2">
-    <div class="row row-cols-4 g-3">
+    <div class="row g-3">
         <?php
         foreach ($puzzles as $puzzle) {
             if (!($puzzle instanceof Puzzle)) continue;
             echo
-            "<div class='col'>
+            "<div class='col-md-3 col-sm-12'>
                 <div class='card h-100' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
             <?php
             if (empty($puzzle->getPicture())) {
