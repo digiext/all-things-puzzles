@@ -32,7 +32,8 @@ class LocationGateway
         }
     }
 
-    public function count(): int {
+    public function count(): int
+    {
         $sql = "SELECT COUNT(*) FROM location";
 
         try {
@@ -108,6 +109,22 @@ class LocationGateway
             return $stmt->execute();
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    // Function to return location id by looking up a description
+    public function findByName(string $desc): int
+    {
+        $sql = "SELECT locationid FROM location WHERE locationdesc = :desc";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':desc', $desc, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while looking up location id: " . $e->getMessage());
+            return -1;
         }
     }
 }

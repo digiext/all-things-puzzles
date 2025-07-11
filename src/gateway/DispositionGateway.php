@@ -119,7 +119,7 @@ class DispositionGateway
     }
 
     // Function to return disposition id by looking up a description
-    public function findByName($desc): int
+    public function findByName(string $desc): int
     {
         $sql = "SELECT dispositionid FROM disposition WHERE dispositiondesc = :desc";
 

@@ -31,7 +31,8 @@ class StatusGateway
         }
     }
 
-    public function count(): int {
+    public function count(): int
+    {
         $sql = "SELECT COUNT(*) FROM brand";
 
         try {
@@ -114,6 +115,22 @@ class StatusGateway
             return $stmt->execute();
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    // Function to return status id by looking up a description
+    public function findByName(string $desc): int
+    {
+        $sql = "SELECT statusid FROM status WHERE statusdesc = :desc";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':desc', $desc, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while looking up status id: " . $e->getMessage());
+            return -1;
         }
     }
 }

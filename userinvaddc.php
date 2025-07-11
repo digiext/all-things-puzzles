@@ -1,6 +1,7 @@
 <?php
 
 use puzzlethings\src\gateway\UserPuzzleGateway;
+use puzzlethings\src\gateway\StatusGateway;
 
 global $db;
 require_once 'util/function.php';
@@ -9,7 +10,8 @@ require_once 'util/files.php';
 
 $puzzleid = $_GET['id'];
 $userid = getUserID();
-$status = 1;
+$gateway = new StatusGateway($db);
+$status = $gateway->findByName('To Do');
 $missingpieces = 0;
 $start = '';
 $end = '';

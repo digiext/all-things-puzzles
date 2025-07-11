@@ -64,11 +64,28 @@ $puzzlewishes = $gateway->findByUserId($userid);
                         <td class='align-middle name'>" . $puzzlewish->getPieces() . "</td>
                         <td class='align-middle'>" . $puzzlewish->getBrand()->getName() . "</td>
                         <td class='align-middle'>" . $puzzlewish->getUpc() . "</td>
-                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishedit.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-pencil'></a></td>
-                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishmove.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-arrow-bar-right'></a></td>
-                        <td class='text-center'><a class='btn btn-secondary id' href='puzzlewishdelete.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-trash'></a></td>
+                        <td class='text-center'><a class='btn btn-secondary' href='puzzlewishedit.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-pencil'></a></td>
+                        <td class='text-center'><button class='btn btn-secondary' type='submit' data-bs-toggle='modal' data-bs-target='#destination'><i class='bi bi-arrow-bar-right'></a></td>
+                        <td class='text-center'><a class='btn btn-secondary' href='puzzlewishdelete.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-trash'></a></td>
                     </tr>";
             } ?>
         </tbody>
     </table>
+</div>
+
+<!-- Destination Modal -->
+<div class="modal fade" id="destination" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="destLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="destLabel">Destination Selection</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="modal-dialog">Select where you want this puzzle to be sent to</h4>
+                <a class="btn btn-primary mb-2" href="puzzlewishmove.php?id=<?php echo $puzzlewish->getId(); ?>">Master Puzzle Inventory</a>
+                <a class="btn btn-info" href="puzzlewishmoveboth.php?id=<?php echo $puzzlewish->getId(); ?>">Master and User Puzzle Inventory</a>
+            </div>
+        </div>
+    </div>
 </div>
