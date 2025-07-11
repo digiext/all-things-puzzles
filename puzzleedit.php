@@ -43,7 +43,7 @@ $puzcat = $gateway->findCatId($id) ?? [];
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
-    <div class="col-8">
+    <div class="col-12 col-md-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
             <input type="hidden" tabindex="-1" name="currpicture" id="currpicture" value="<?php echo $puzzle->getPicture() ?>">
@@ -256,7 +256,7 @@ $puzcat = $gateway->findCatId($id) ?? [];
 
     <div class="vr"></div>
     <!-- Preview Card -->
-    <div class="card" style="width: 100%">
+    <div class="card d-none d-md-flex" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
         <div class="card-img-top position-relative">
             <img src='<?php echo ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : 'images/uploads/thumbnails/' . $puzzle->getPicture() ?>' class='object-fit-cover w-100' alt='Puzzle image' id="cardpicture" height="200">
