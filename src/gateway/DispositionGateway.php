@@ -31,7 +31,8 @@ class DispositionGateway
         }
     }
 
-    public function count(): int {
+    public function count(): int
+    {
         $sql = "SELECT COUNT(*) FROM disposition";
 
         try {
@@ -114,6 +115,22 @@ class DispositionGateway
             return $stmt->execute();
         } catch (PDOException) {
             return false;
+        }
+    }
+
+    // Function to return disposition id by looking up a description
+    public function findByName($desc): int
+    {
+        $sql = "SELECT dispositionid FROM disposition WHERE dispositiondesc = :desc";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':desc', $desc, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while looking up disposition id: " . $e->getMessage());
+            return -1;
         }
     }
 }
