@@ -236,7 +236,7 @@ class PuzzleGateway
 
     public function findCatNames(int $id): ?array
     {
-        $sql = "SELECT categories.categorydesc FROM puzcat INNER JOIN categories ON puzcat.categoryid = categories.categoryid WHERE puzcat.puzzleid = :id";
+        $sql = "SELECT categories.categorydesc FROM puzcat INNER JOIN categories ON puzcat.categoryid = categories.categoryid WHERE puzcat.puzzleid = :id ORDER BY categories.categorydesc";
 
         try {
             $stmt = $this->db->prepare($sql);

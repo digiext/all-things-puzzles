@@ -40,23 +40,29 @@ $categories = $gateway->findAll();
 $gateway = new PuzzleGateway($db);
 $puzzle = $gateway->findById($id);
 $puzcat = $gateway->findCatId($id) ?? [];
+$puzcatnames = $gateway->findCatNames($id) ?? [];
 ?>
+
+<script src="scripts/puzzle_validator.js" data-from="edit"></script>
+<script src="scripts/puzzle_edit.js"></script>
 
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-12 col-md-8">
-        <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
+        <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post" id="form">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
             <input type="hidden" tabindex="-1" name="currpicture" id="currpicture" value="<?php echo $puzzle->getPicture() ?>">
             <input type="hidden" tabindex="-1" name="deleteoldpic" id="deleteoldpic" value="false">
 
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
-                <input type="text" class="form-control" name="puzname" id="puzname" value="<?php echo $puzzle->getName(); ?>">
+                <input type="text" class="form-control" name="puzname" id="puzname" value="<?php echo $puzzle->getName(); ?>" required>
+                <div id="nameFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="pieces" class="form-label"><strong>Piece Count</strong></label>
-                <input type="number" class="form-control" name="pieces" id="pieces" min="1" value="<?php echo $puzzle->getPieces(); ?>">
+                <input type="number" class="form-control" name="pieces" id="pieces" min="1" value="<?php echo $puzzle->getPieces(); ?>" required>
+                <div id="piecesFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
@@ -112,7 +118,7 @@ $puzcat = $gateway->findCatId($id) ?? [];
                 <div class="col-12">
 
                     <div class="p-2 mb-2 mx-1">
-                        <label for="categoryDesc" class="form-label"><strong>Category Name</strong></label>
+                        <label for="categoryDesc" class="form-label"><strong>Categories </strong>(separate by comma)</label>
                         <input type="text" class="form-control" name="categoryDesc" id="categoryDesc">
                     </div>
                 </div>
@@ -127,6 +133,7 @@ $puzcat = $gateway->findCatId($id) ?? [];
                         <option value="USD" selected>USD</option>
                         <option value="CAD">CAD</option>
                     </select>
+                    <div id="costFeedback"></div>
                 </div>
             </div>
 
@@ -165,8 +172,9 @@ $puzcat = $gateway->findCatId($id) ?? [];
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="upc" class="form-label"><strong>UPC</strong></label>
-                <input type="number" class="form-control" name="upc" id="upc" maxlength="12" minlength="12" value="<?php echo $puzzle->getUpc(); ?>">
+                <label for="upc" class="form-label"><strong>UPC / ISBN</strong></label>
+                <input type="number" class="form-control" name="upc" id="upc" maxlength="13" minlength="12" value="<?php echo $puzzle->getUpc(); ?>">
+                <div id="upcFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
@@ -248,7 +256,7 @@ $puzcat = $gateway->findCatId($id) ?? [];
             <!--            </div>-->
 
             <div class="p-2 mb-2 mx-1">
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="puzzleinv.php">Cancel</a>
             </div>
         </form>
@@ -259,7 +267,19 @@ $puzcat = $gateway->findCatId($id) ?? [];
     <div class="card d-none d-md-flex" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
         <div class="card-img-top position-relative">
-            <img src='<?php echo ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : 'images/uploads/thumbnails/' . $puzzle->getPicture() ?>' class='object-fit-cover w-100' alt='Puzzle image' id="cardpicture" height="200">
+            <?php
+            $thumbnail = ($puzzle->getPicture() ?? '') === '' ? 'images/no-image-dark.svg' : getThumbnail($puzzle->getPicture());
+            ?>
+            <img src='<?php echo $thumbnail ?>' class='object-fit-cover w-100' alt='Puzzle image' id="cardpicture" height="200">
+            <?php
+            if (str_starts_with($thumbnail, $_ENV['IMAGE_MIRROR'])) {
+                echo "
+                <div class='alert alert-warning mb-0 p-1 rounded-top-0 text-center' role='alert'>
+                    Uploaded images will be saved locally <strong>ONLY</strong>!<br>They <strong>WILL NOT</strong> be saved to your image mirror!
+                </div>
+                ";
+            }
+            ?>
             <button class="position-absolute top-0 start-100 translate-middle badge border rounded-3 bg-danger p-2" id="deleteImageButton"><i class="bi bi-trash"></i></button>
         </div>
         <div class="card-body">
@@ -268,209 +288,10 @@ $puzcat = $gateway->findCatId($id) ?? [];
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces"><?php echo $puzzle->getPieces() ?></span></li>
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="col-10"><?php echo join(", ", $categories) ?></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="col-10"><?php $cattxt = join(", ", $puzcatnames); echo $cattxt === '' ? "<i class='text-body-secondary'>None</i>" : $cattxt ?></span></li>
             <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost"><?php echo $puzzle->getCost() ?></span><span id="cardcurrency">USD</span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource"><?php echo $puzzle->getSource()->getDescription() ?></span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc"><?php echo $puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc() ?></span></li>
         </ul>
     </div>
 </div>
-
-<script>
-    $(function() {
-        let puzzleName = $('#puzname');
-        let cardName = $('#cardname');
-        let puzzlePieces = $('#pieces');
-        let cardPieces = $('#cardpieces');
-        let puzzleBrand = $('#brand');
-        let newBrand = $('#brandName');
-        let cardBrand = $('#cardbrand')
-        let puzzleCategory = $('#category')
-        let newCategory = $('#categoryDesc');
-        let cardCategory = $('#cardcategory')
-        let puzzleCost = $('#cost');
-        let cardCost = $('#cardcost');
-        let puzzleCostCurrency = $('#costCurrency')
-        let cardCurrency = $('#cardcurrency');
-        let puzzleSource = $('#source');
-        let newSource = $('#sourceDesc')
-        let cardSource = $('#cardsource');
-        let puzzleUpc = $('#upc');
-        let cardUpc = $('#cardupc');
-        let picture = $('#picture');
-        let pictureClear = $('#pictureclear');
-        let pictureDelete = $('#deleteImageButton');
-        let cardPicture = $('#cardpicture')
-        let currpicture = $('#currpicture');
-        let deleteoldpic = $('#deleteoldpic');
-
-        let brandCheckbox = $('#createNewBrand');
-        let brandDiv = $('#newBrandMenu');
-        let categoryCheckbox = $('#createNewCategory');
-        let categoryDiv = $('#newCategoryMenu');
-        let sourceCheckbox = $('#createNewSource');
-        let sourceDiv = $('#newSourceMenu');
-        let dispositionCheckbox = $('#createNewDisposition');
-        let dispositionDiv = $('#newDispositionMenu');
-        let locationCheckbox = $('#createNewLocation');
-        let locationDiv = $('#newLocationMenu');
-
-        picture.on('change', function() {
-            if (this.files && this.files[0]) {
-                let file = this.files[0];
-                let reader = new FileReader();
-
-                reader.onload = function(e) {
-                    cardPicture.attr('src', e.target.result)
-                }
-
-                reader.readAsDataURL(file);
-            } else {
-                cardPicture.attr('src', '/images/no-image-dark.svg');
-            }
-
-            deleteoldpic.val("true");
-        })
-
-        pictureClear.on('click', function() {
-            picture.val(null);
-            cardPicture.attr('src', '/images/uploads/thumbnails/' + currpicture.val());
-            deleteoldpic.val("false");
-        })
-
-        pictureDelete.on('click', function() {
-            picture.val(null);
-            cardPicture.attr('src', '/images/no-image-dark.svg');
-            deleteoldpic.val("true");
-        })
-
-        puzzleName.on('keyup', function() {
-            if (puzzleName.val() !== '') {
-                cardName.text(puzzleName.val());
-            } else {
-                cardName.text('');
-            }
-        })
-
-        puzzlePieces.on('keyup', function() {
-            if (puzzlePieces.val() !== '') {
-                cardPieces.text(puzzlePieces.val());
-            } else {
-                cardPieces.text('');
-            }
-        })
-
-        puzzleBrand.on('change', function() {
-            cardBrand.text($(this).find('option:selected').text());
-        })
-
-        newBrand.on('keyup', function() {
-            if (brandCheckbox.prop('checked') === true) {
-                cardBrand.text(newBrand.val());
-            }
-        })
-
-        puzzleCategory.on('change', function() {
-            cardCategory.removeClass('placeholder col-12');
-            cardCategory.text($(this).find('option:selected').text());
-        })
-
-        newCategory.on('keyup', function() {
-            if (categoryCheckbox.prop('checked') === true) {
-                cardCategory.removeClass('placeholder col-12');
-                cardCategory.text(newCategory.val());
-            }
-        })
-
-        puzzleCost.on('keyup', function() {
-            if (puzzleCost.val() !== '') {
-                cardCost.text(puzzleCost.val());
-            } else {
-                cardCost.text('');
-            }
-        })
-
-        puzzleCostCurrency.on('change', function() {
-            cardCurrency.text($(this).find('option:selected').text());
-        })
-
-        puzzleSource.on('change', function() {
-            cardSource.text($(this).find('option:selected').text());
-        })
-
-        newSource.on('keyup', function() {
-            if (sourceCheckbox.prop('checked') === true) {
-                cardSource.text(newSource.val());
-            }
-        })
-
-        puzzleUpc.on('keyup', function() {
-            if (puzzleUpc.val() !== '') {
-                cardUpc.text(puzzleUpc.val());
-            } else {
-                cardUpc.html("<i class='text-body-secondary'>None</i>");
-            }
-        })
-
-        brandCheckbox.on('change', function() {
-            if (brandCheckbox.prop('checked') === true) {
-                brandDiv.show(200);
-                if (newBrand.val() !== '') {
-                    cardBrand.text(newBrand.val());
-                } else {
-                    cardBrand.text('');
-                }
-            } else {
-                brandDiv.hide(200);
-                cardBrand.text(puzzleBrand.find('option:selected').text());
-            }
-        })
-
-        categoryCheckbox.on('change', function() {
-            if (categoryCheckbox.prop('checked') === true) {
-                categoryDiv.show(200);
-                if (newCategory.val() !== '') {
-                    cardCategory.removeClass('placeholder col-3');
-                    cardCategory.text(newCategory.val());
-                } else {
-                    cardCategory.addClass('placeholder col-3');
-                    cardCategory.text('');
-                }
-            } else {
-                categoryDiv.hide(200);
-                cardCategory.removeClass('placeholder col-3');
-                cardCategory.text(puzzleCategory.find('option:selected').text());
-            }
-        })
-
-        sourceCheckbox.on('change', function() {
-            if (sourceCheckbox.prop('checked') === true) {
-                sourceDiv.show(200);
-                if (newSource.val() !== '') {
-                    cardSource.text(newSource.val());
-                } else {
-                    cardSource.text('');
-                }
-            } else {
-                sourceDiv.hide(200);
-                cardSource.text(puzzleSource.find('option:selected').text());
-            }
-        })
-
-        dispositionCheckbox.on('change', function() {
-            if (dispositionCheckbox.prop('checked') === true) {
-                dispositionDiv.show(200);
-            } else {
-                dispositionDiv.hide(200);
-            }
-        })
-
-        locationCheckbox.on('change', function() {
-            if (locationCheckbox.prop('checked') === true) {
-                locationDiv.show(200);
-            } else {
-                locationDiv.hide(200);
-            }
-        })
-    })
-</script>

@@ -131,6 +131,13 @@ if (isset($_POST['submit'])) {
         $delfailed |= !$cgateway->deletePuzzle($id, $category);
     }
 
+    $newCategories = explode(",", $_POST['categoryDesc'] ?? "");
+    foreach ($newCategories as $newcategory) {
+        if ($newcategory === '') continue;
+        $cat = $cgateway->create(trim($newcategory));
+        $addfailed |= !$cgateway->createPuzzle($id, $cat->getId());
+    }
+
     $values = [
         PUZ_NAME => $puzname,
         PUZ_PIECES => $pieces,

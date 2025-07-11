@@ -73,31 +73,36 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
         <?php
         foreach ($puzzles as $puzzle) {
             if (!($puzzle instanceof Puzzle)) continue;
+            $puzcatnames = $gateway->findCatNames($puzzle->getId()) ?? [];
+            $cattxt = join(", ", $puzcatnames);
+
             echo
             "<div class='col-md-3 col-sm-12'>
-                <div class='card h-100' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>" ?>
-            <?php
+                <div class='card h-100' data-id='" . $puzzle->getId() . "' data-name='" . $puzzle->getName() . "'>";
+
             if (empty($puzzle->getPicture())) {
                 echo "<img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Placeholder image' height=200>";
             } else {
-                echo "<img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
-            } ?>
+                echo "<img src='" . getThumbnail($puzzle->getPicture()) . "' class='card-img-top mw-100 object-fit-cover' alt='Puzzle image' height=200>";
+            }
 
-        <?php echo "<div class='card-body bg-secondary-subtle'>
-                        <h5 class='card-title bg-secondary-subtle name' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
-                        <p class='card-subtitle text-body-secondary bg-secondary-subtle' id='cardbrand-" . $puzzle->getId() . "'>" . $puzzle->getBrand()->getName() . "</p>
-                    </div>
-                    <ul class='list-group list-group-flush'>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces-" . $puzzle->getId() . "'>" . $puzzle->getPieces() . "</span></li>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><span class='input-group-text py-1'>$</span><span id='cardcost-" . $puzzle->getId() . "'>" . $puzzle->getCost() . "</span><span id='cardcurrency-" . $puzzle->getId() . "'>USD</span></li>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource-" . $puzzle->getId() . "'>" . $puzzle->getSource()->getDescription() . "</span></li>
-                        <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . ($puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc()) . "</span></li>
-                    </ul>
-                    <div class='card-footer bg-secondary-subtle text-center'>
-                        <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
-                        <button class='btn btn-danger delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></i> Delete Puzzle</td>
-                    </div>
+            echo " 
+                <div class='card-body bg-secondary-subtle'>
+                    <h5 class='card-title bg-secondary-subtle name' id='cardname-" . $puzzle->getId() . "'>" . $puzzle->getName() . "</h5>
+                    <p class='card-subtitle text-body-secondary bg-secondary-subtle' id='cardbrand-" . $puzzle->getId() . "'>" . $puzzle->getBrand()->getName() . "</p>
                 </div>
+                <ul class='list-group list-group-flush'>
+                    <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces-" . $puzzle->getId() . "'>" . $puzzle->getPieces() . "</span></li>
+                    <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-folder'></i><span id='cardcategory-" . $puzzle->getId() . "' class='col-10'>" . ($cattxt === '' ? "<i class='text-body-secondary'>None</i>" : $cattxt) . "</span></li>
+                    <li class='list-group-item hstack gap-2 bg-secondary-subtle'><span class='input-group-text py-1'>$</span><span id='cardcost-" . $puzzle->getId() . "'>" . $puzzle->getCost() . "</span><span id='cardcurrency-" . $puzzle->getId() . "'>USD</span></li>
+                    <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource-" . $puzzle->getId() . "'>" . $puzzle->getSource()->getDescription() . "</span></li>
+                    <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . ($puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc()) . "</span></li>
+                </ul>
+                <div class='card-footer bg-secondary-subtle text-center'>
+                    <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
+                    <button class='btn btn-danger delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></i> Delete Puzzle</td>
+                </div>
+            </div>
             </div>";
         } ?>
     </div>

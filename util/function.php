@@ -175,6 +175,18 @@ function rrmdir($dir): void {
     }
 }
 
+function getThumbnail($path) {
+    if (($path ?? '') === '') {
+        return 'images/no-image-dark.svg';
+    } else if (file_exists('images/uploads/thumbnails/' . $path)) {
+        return 'images/uploads/thumbnails/' . $path;
+    } else if (isset($_ENV['IMAGE_MIRROR']) && fopen($_ENV['IMAGE_MIRROR'] . 'thumbnails/' . $path, "r")) {
+        return $_ENV['IMAGE_MIRROR'] . 'thumbnails/' . $path;
+    } else {
+        return 'images/fail-load-image-dark.svg';
+    }
+}
+
 function getNiceDateRepresentation($date): string {
     $timestamp = strtotime($date);
     if ((int) date("j", $timestamp) % 10 == 1 && (int) date("j", $timestamp) != 11) {

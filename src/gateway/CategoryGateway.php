@@ -76,7 +76,7 @@ class CategoryGateway
 
     public function findAll(): array
     {
-        $sql = "SELECT * FROM categories";
+        $sql = "SELECT * FROM categories ORDER BY categorydesc";
 
         try {
             $stmt = $this->db->query($sql);

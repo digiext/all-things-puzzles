@@ -69,6 +69,13 @@ if (isset($_POST['submit'])) {
         $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
     }
 
+    $newCategories = explode(",", $_POST['categoryDesc'] ?? "");
+    foreach ($newCategories as $newcategory) {
+        if ($newcategory === '') continue;
+        $cat = $cgateway->create(trim($newcategory));
+        $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
+    }
+
     session_start();
     if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
