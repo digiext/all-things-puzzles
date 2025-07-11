@@ -72,6 +72,17 @@ function getUserID(): int|false {
     return decrypt($_SESSION[USER_ID]);
 }
 
+function getUserName(): string|false {
+    if (!isLoggedIn()) return false;
+    if (isset($_SESSION[USER_NAME])) {
+        return decrypt($_SESSION[USER_NAME]);
+    } else {
+        $uname = getLoggedInUser()->getUsername();
+        $_SESSION[USER_NAME] = encrypt($uname);
+        return $uname;
+    }
+}
+
 function getLoggedInUser(): User|false {
     if (!isLoggedIn()) return false;
 

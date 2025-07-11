@@ -20,6 +20,7 @@
                 <!-- Sign In/Register Links Changes based on LoggedIn cookie -->
                 <?php if (isLoggedIn()) {
                     echo "<div class='text-end'>";
+                    echo "<span class='m-1 navbar-text'>Hi, @" . getUserName() . "</span>";
                     echo "<a class='btn btn-outline-light m-1' type='submit' href='" . BASE_URL . "/profile.php'>Profile</a>";
                     echo "<a class='btn btn-warning' type='submit' href='" . BASE_URL . "/signout.php'>Logout</a>";
                     echo "</div>";

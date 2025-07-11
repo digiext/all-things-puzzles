@@ -39,18 +39,14 @@ $categories = $gateway->findAll();
 
 $gateway = new PuzzleGateway($db);
 $puzzle = $gateway->findById($id);
-
-$puzcat = $gateway->findCatId($id);
-
-var_dump($puzcat);
-
+$puzcat = $gateway->findCatId($id) ?? [];
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleeditc.php" method="post">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
-            <input type="hidden" tabindex="-1" name="oldpicture" id="currpicture" value="<?php echo $puzzle->getPicture() ?>">
+            <input type="hidden" tabindex="-1" name="currpicture" id="currpicture" value="<?php echo $puzzle->getPicture() ?>">
             <input type="hidden" tabindex="-1" name="deleteoldpic" id="deleteoldpic" value="false">
 
             <div class="p-2 mb-2 mx-1">
@@ -95,13 +91,13 @@ var_dump($puzcat);
             <div class="p-2 mb-2 mx-1">
                 <label for="category" class="form-label"><strong>Category</strong> - Hold Ctrl to select multiple</label>
                 <div class="">
-                    <select class="form-control" multiple size="5" name="category" id="category">
+                    <select class="form-control" multiple size="5" name="category[]" id="category">
                         <?php
                         foreach ($categories as $category) {
                             if (!($category instanceof Category)) continue;
 
                             echo
-                            "<option " . ($category->getId() === $puzcat["categoryid"] ? "selected" : "") . " value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
+                            "<option " . (in_array($category->getId(), $puzcat) ? "selected" : "") . " value='" . $category->getId() . "'>" . $category->getDescription() . "</option>";
                         } ?>
                     </select>
                 </div>
@@ -272,6 +268,7 @@ var_dump($puzcat);
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces"><?php echo $puzzle->getPieces() ?></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="col-10"><?php echo join(", ", $categories) ?></span></li>
             <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost"><?php echo $puzzle->getCost() ?></span><span id="cardcurrency">USD</span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource"><?php echo $puzzle->getSource()->getDescription() ?></span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc"><?php echo $puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc() ?></span></li>
@@ -309,12 +306,43 @@ var_dump($puzcat);
 
         let brandCheckbox = $('#createNewBrand');
         let brandDiv = $('#newBrandMenu');
+        let categoryCheckbox = $('#createNewCategory');
+        let categoryDiv = $('#newCategoryMenu');
         let sourceCheckbox = $('#createNewSource');
         let sourceDiv = $('#newSourceMenu');
         let dispositionCheckbox = $('#createNewDisposition');
         let dispositionDiv = $('#newDispositionMenu');
         let locationCheckbox = $('#createNewLocation');
         let locationDiv = $('#newLocationMenu');
+
+        picture.on('change', function() {
+            if (this.files && this.files[0]) {
+                let file = this.files[0];
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    cardPicture.attr('src', e.target.result)
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                cardPicture.attr('src', '/images/no-image-dark.svg');
+            }
+
+            deleteoldpic.val("true");
+        })
+
+        pictureClear.on('click', function() {
+            picture.val(null);
+            cardPicture.attr('src', '/images/uploads/thumbnails/' + currpicture.val());
+            deleteoldpic.val("false");
+        })
+
+        pictureDelete.on('click', function() {
+            picture.val(null);
+            cardPicture.attr('src', '/images/no-image-dark.svg');
+            deleteoldpic.val("true");
+        })
 
         puzzleName.on('keyup', function() {
             if (puzzleName.val() !== '') {
@@ -443,32 +471,6 @@ var_dump($puzcat);
             } else {
                 locationDiv.hide(200);
             }
-        })
-
-        picture.on('change', function() {
-            if (this.files && this.files[0]) {
-                let file = this.files[0];
-                let reader = new FileReader();
-
-                reader.onload = function(e) {
-                    cardPicture.attr('src', e.target.result)
-                }
-
-                reader.readAsDataURL(file);
-            } else {
-                cardPicture.attr('src', '/images/no-image-dark.svg');
-            }
-        })
-
-        pictureClear.on('click', function() {
-            picture.val(null);
-            cardPicture.attr('src', '/images/uploads/thumbnails/' + currpicture.val());
-        })
-
-        pictureDelete.on('click', function() {
-            picture.val(null);
-            cardPicture.attr('src', '/images/no-image-dark.svg');
-            deleteoldpic.val("true");
         })
     })
 </script>

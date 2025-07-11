@@ -212,14 +212,37 @@ class PuzzleGateway
 
     public function findCatId(int $id): ?array
     {
-        $sql = "SELECT puzcat.* FROM puzcat WHERE puzcat.puzzleid = :id";
+        $sql = "SELECT puzcat.categoryid FROM puzcat WHERE puzcat.puzzleid = :id";
 
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
+            if ($stmt->rowCount() == 0) return null;
+
+            $catids = array();
+            foreach ($result as $res) {
+                $catids[] = $res;
+            }
+
+            return $catids;
+        } catch (PDOException $e) {
+            error_log("Database error while finding category IDs: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function findCatNames(int $id): ?array
+    {
+        $sql = "SELECT categories.categorydesc FROM puzcat INNER JOIN categories ON puzcat.categoryid = categories.categoryid WHERE puzcat.puzzleid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             if ($stmt->rowCount() == 0) return null;
 

@@ -1,5 +1,6 @@
 <?php
 
+use puzzlethings\src\gateway\CategoryGateway;
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\gateway\BrandGateway;
 use puzzlethings\src\gateway\SourceGateway;
@@ -26,8 +27,8 @@ $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ER
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
-    $oldpicture = $_POST['oldpicture'];
-    $deleteoldpic = $_POST['deleteoldpic'];
+    $currpicture = $_POST['currpicture'];
+    $deleteoldpic = boolval(filter_var($_POST['deleteoldpic'], FILTER_VALIDATE_BOOLEAN));
 
     $puzname = $_POST['puzname'];
     $pieces = $_POST['pieces'];
@@ -62,7 +63,7 @@ if (isset($_POST['submit'])) {
 
     $gateway = new PuzzleGateway($db);
     $puzzle = $gateway->findById($id);
-    $picture = $deleteoldpic ? null : $oldpicture;
+    $picture = $deleteoldpic ? null : $currpicture;
 
     if ($hasfile) {
         if (!is_dir(UPLOAD_DIR)) {
@@ -97,18 +98,37 @@ if (isset($_POST['submit'])) {
                 $picture = $uploadedFile;
             }
         }
-    }
-
-    if ($deleteoldpic) {
-        $picurl = $puzzle->getPicture();
 
         if (($picurl ?? '') != '') {
-            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/' .  $picurl);
+            $success = unlink(UPLOAD_DIR_ABSOLUTE . '/' .  $currpicture);
             if (!$success) {
                 error_log("Failed deleting file $picture");
                 warningAlertNoRedir("Failed removing picture from server");
             }
         }
+    } else {
+        if ($deleteoldpic) {
+            $picture = null;
+        }
+    }
+
+    $categories = $_POST['category'];
+    $dbcategories = $gateway->findCatId($id);
+
+    $addcategories = array_filter($categories, fn ($cat) => !in_array($cat, $dbcategories));
+    $delcategories = array_filter($dbcategories, fn ($cat) => !in_array($cat, $categories));
+
+    $addfailed = false;
+    $delfailed = false;
+
+    $cgateway = new CategoryGateway($db);
+
+    foreach ($addcategories as $category) {
+        $addfailed |= !$cgateway->createPuzzle($id, $category);
+    }
+
+    foreach ($delcategories as $category) {
+        $delfailed |= !$cgateway->deletePuzzle($id, $category);
     }
 
     $values = [
@@ -126,7 +146,10 @@ if (isset($_POST['submit'])) {
 
     $code = $gateway->update($id, $values);
 
-    //session_start();
+    if ($addfailed || $delfailed) {
+        warningAlert("Failed to update categories!");
+    }
+
     if ($code === false) {
         failAlert("Puzzle Not Updated!");
 

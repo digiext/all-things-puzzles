@@ -35,21 +35,22 @@ $gateway = new CategoryGateway($db);
 $categories = $gateway->findAll();
 
 ?>
+<script src="scripts/puzzle_validator.js"></script>
 
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-8">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleaddc.php" method="post">
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dname">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
                 <input type="text" class="form-control" name="puzname" id="puzname">
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dpieces">
                 <label for="pieces" class="form-label"><strong>Piece Count</strong></label>
                 <input type="number" class="form-control" name="pieces" id="pieces" min="1">
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dbrand">
                 <label for="brand" class="form-label"><strong>Brand</strong></label>
                 <div class="">
                     <select class="form-control" name="brand" id="brand">
@@ -78,7 +79,7 @@ $categories = $gateway->findAll();
                 </div>
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dcategory">
                 <label for="category" class="form-label"><strong>Category</strong> - Hold Ctrl to select multiple</label>
                 <div class="">
                     <select class="form-control" multiple size="5" name="category[]" id="category">
@@ -107,7 +108,7 @@ $categories = $gateway->findAll();
                 </div>
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dcost">
                 <label for="cost" class="form-label"><strong>Cost</strong></label>
                 <div class="input-group">
                     <span class="input-group-text">$</span>
@@ -119,12 +120,12 @@ $categories = $gateway->findAll();
                 </div>
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dacquired">
                 <label for="acquired" class="form-label"><strong>Date Acquired</strong></label>
                 <input type="date" class="form-control" name="acquired" id="acquired">
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="dsource">
                 <label for="source" class="form-label"><strong>Source</strong></label>
                 <div class="">
                     <select class="form-control" name="source" id="source">
@@ -254,7 +255,7 @@ $categories = $gateway->findAll();
         </div>
         <ul class="list-group list-group-flush placeholder-glow">
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces" class="placeholder col-2"></span></li>
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="placeholder col-2"></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="placeholder col-10"></span></li>
             <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost" class="placeholder col-1"></span> <span id="cardcurrency">USD</span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource" class="placeholder col-3"></span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc" class="placeholder col-3"></span></li>
@@ -285,7 +286,7 @@ $categories = $gateway->findAll();
         let cardUpc = $('#cardupc');
         let picture = $('#picture');
         let pictureClear = $('#pictureclear');
-        let cardPicture = $('#cardpicture')
+        let cardPicture = $('#cardpicture');
 
         let brandCheckbox = $('#createNewBrand');
         let brandDiv = $('#newBrandMenu');
@@ -331,8 +332,16 @@ $categories = $gateway->findAll();
         })
 
         puzzleCategory.on('change', function() {
-            cardCategory.removeClass('placeholder col-12');
-            cardCategory.text($(this).find('option:selected').text());
+            cardCategory.removeClass('placeholder');
+            let sel = $(this).find('option:selected');
+            let desc = [];
+
+            sel.each(function() {
+                desc.push($(this).text());
+                console.log($(this).val() + " = " + $(this).text());
+            });
+
+            cardCategory.text(desc.join(", "));
         })
 
         newCategory.on('keyup', function() {

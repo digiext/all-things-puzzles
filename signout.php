@@ -15,6 +15,7 @@ if (isset($_COOKIE[REMEMBER_ME])) {
 
 unset($_SESSION[USER_ID]);
 unset($_SESSION[USER_GROUP_ID]);
+unset($_SESSION[USER_NAME]);
 
 session_destroy();
 

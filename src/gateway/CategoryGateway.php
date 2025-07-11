@@ -40,11 +40,21 @@ class CategoryGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':puzzleid', $puzzleid);
             $stmt->bindParam(':categoryid', $categoryid);
-            $stmt->execute();
+            return $stmt->execute();
+        } catch (PDOException) {
+            return false;
+        }
+    }
 
-            $id = $this->db->lastInsertId();
-            // return new Category($id, $desc);
-            return true;
+    public function deletePuzzle(string $puzzleid, $categoryid): bool
+    {
+        $sql = "DELETE FROM puzcat WHERE puzzleid = :puzzleid AND categoryid = :categoryid";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':puzzleid', $puzzleid);
+            $stmt->bindParam(':categoryid', $categoryid);
+            return $stmt->execute();
         } catch (PDOException) {
             return false;
         }
