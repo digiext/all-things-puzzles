@@ -112,11 +112,11 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    $categories = $_POST['category'];
-    $dbcategories = $gateway->findCatId($id);
+    $categories = $_POST['category'] ?? [];
+    $dbcategories = $gateway->findCatId($id) ?? [];
 
-    $addcategories = array_filter($categories, fn ($cat) => !in_array($cat, $dbcategories));
-    $delcategories = array_filter($dbcategories, fn ($cat) => !in_array($cat, $categories));
+    $addcategories = array_filter($categories, fn($cat) => !in_array($cat, $dbcategories));
+    $delcategories = array_filter($dbcategories, fn($cat) => !in_array($cat, $categories));
 
     $addfailed = false;
     $delfailed = false;
