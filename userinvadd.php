@@ -70,7 +70,7 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
                     if (!($puzzle instanceof Puzzle)) continue;
                     echo
                     "<tr class='puzzle-row'> 
-                    <th scope='row' class='text-center align-middle id''><img src='images/uploads/thumbnails/" . $puzzle->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
+                    <th scope='row' class='text-center align-middle id''><img src='" . getThumbnail($puzzle->getPicture()) . "' class='img-fluid' alt='Puzzle image'></th>
                     <td class='align-middle name'>" . $puzzle->getName() . "</td>
                         <td class='align-middle name'>" . $puzzle->getPieces() . "</td>
                         <td class='text-center'><a class='btn btn-secondary ' href='userinvaddc.php?id=" . $puzzle->getId() . "'><i class='bi bi-plus'></a></td>
@@ -109,7 +109,7 @@ $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $user
                     if (!($userpuzzle instanceof UserPuzzle)) continue;
                     echo
                     "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''><img src='images/uploads/thumbnails/" . $userpuzzle->getPuzzle()->getPicture() . "' class='img-fluid' alt='Puzzle image'></th>
+                        <th scope='row' class='text-center align-middle''><img src='" . getThumbnail($userpuzzle->getPuzzle()->getPicture()) . "' class='img-fluid' alt='Puzzle image'></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
                         <td class='text-center'><a class='btn btn-secondary ' href='userinvremove.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-dash'></a></td>

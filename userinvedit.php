@@ -152,6 +152,7 @@ $userpuzzle = $gateway->findById($id)
     function endDate() {
         document.getElementById("enddate").valueAsDate = new Date();
         document.getElementById("enddate").style.backgroundColor = "#58151c";
+        document.getElementById("status").value = "<?php echo $complete; ?>"
     }
 
     // If end date field is changed set status to completed
