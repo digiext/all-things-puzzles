@@ -30,8 +30,8 @@ $highestrated = $gateway->highestrated();
 ?>
 
 <br>
-<h3 class="text-center d-none d-sm-none">Puzzle Stats</h3>
-<div class="container d-none d-sm-none text-center">
+<h3 class="text-center d-none d-sm-block">Puzzle Stats</h3>
+<div class="container d-none d-sm-block text-center">
     <div class="row g-2">
         <div class="col">
             <div class="card">
