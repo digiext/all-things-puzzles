@@ -18,6 +18,7 @@ class PuzzleWishGateway
         $this->db = $db;
     }
 
+    // Create new record in puzzlewish table
     public function create(int $userid, string $name, int $pieces, Brand|int $brand, string $upc): PuzzleWish|false
     {
         $sql = "INSERT INTO puzzlewish (userid, puzname, pieces, brandid, upc) VALUES (:userid, :name, :pieces, :brandid, :upc)";
@@ -48,6 +49,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Count total records in puzzlewish table based on filters
     public function count($options = [
         FILTERS => []
     ]): int
@@ -65,6 +67,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Find all records in puzzlewish table based on sort and filter options passed
     public function findAll(mixed $options = [
         PAGE => 0,
         MAX_PER_PAGE => 10,
@@ -102,6 +105,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Determine what filter to apply to puzzlewish table based on what options are passed 
     private function determineFilters(mixed $filters = []): string
     {
         $res = "";
@@ -140,6 +144,7 @@ class PuzzleWishGateway
         return $res;
     }
 
+    // Find specific record from puzzlewish table based on wishid
     public function findById(int $id, mixed $options = []): ?PuzzleWish
     {
         $sql = "SELECT * FROM puzzlewish WHERE wishid = :id";
@@ -159,6 +164,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Find records from puzzlewish table based on userid
     public function findByUserId(int $id): ?array
     {
         $sql = "SELECT * FROM puzzlewish WHERE userid = :id";
@@ -182,6 +188,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Find records from puzzlewish table based on puzzle name
     public function findByName(string $name, mixed $options = []): ?PuzzleWish
     {
         $sql = "SELECT * FROM puzzlewish WHERE puzname LIKE :name";
@@ -220,6 +227,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Update puzzlewish record based on wishid
     public function update(PuzzleWish|int $puzzle, array $values): bool
     {
         if (empty($puzzle)) return false;
@@ -258,6 +266,7 @@ class PuzzleWishGateway
         }
     }
 
+    // Delete record from puzzlewish table based on wishid
     public function delete(PuzzleWish|int $id): bool
     {
         $sql = "DELETE FROM puzzlewish WHERE wishid = :wishid";

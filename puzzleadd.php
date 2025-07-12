@@ -40,7 +40,7 @@ $categories = $gateway->findAll();
 <script src="scripts/puzzle_add.js"></script>
 
 <div class="container mb-2 mt-4 hstack gap-3">
-    <div class="col-8">
+    <div class="col-md-8 col-sm-12">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzleaddc.php" method="post" id="form">
             <div class="p-2 mb-2 mx-1" id="dname">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
@@ -250,9 +250,9 @@ $categories = $gateway->findAll();
         </form>
     </div>
 
-    <div class="vr"></div>
+    <div class="vr d-none d-sm-block"></div>
     <!-- Preview Card -->
-    <div class="card" style="width: 100%">
+    <div class="card d-none d-sm-block" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
         <img src='images/no-image-dark.svg' class='card-img-top object-fit-cover' alt='Puzzle image' id="cardpicture" height="200">
         <div class="card-body placeholder-glow">

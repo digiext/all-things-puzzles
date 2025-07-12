@@ -21,6 +21,7 @@ class PuzzleGateway
         $this->db = $db;
     }
 
+    // Create new record in puzzleinv table
     public function create(string $name, int $pieces, Brand|int $brand, float $cost, string $dateAcquired, Source|int $source, Location|int $location, Disposition|int $disposition, string $upc): Puzzle|false
     {
         $sql = "INSERT INTO puzzleinv (puzname, pieces, brandid, cost, dateacquired, sourceid, locationid, dispositionid, upc) VALUES (:name, :pieces, :brandid, :cost, :dateacquired, :sourceid, :locationid, :dispositionid, :upc)";
@@ -64,6 +65,7 @@ class PuzzleGateway
         }
     }
 
+    // Count records based on filter in puzzleinv table
     public function count($options = [
         FILTERS => []
     ]): int
@@ -81,6 +83,7 @@ class PuzzleGateway
         }
     }
 
+    // Find all records with sort and filter options on puzzleinv table
     public function findAll(mixed $options = [
         PAGE => 0,
         MAX_PER_PAGE => 10,
@@ -118,6 +121,7 @@ class PuzzleGateway
         }
     }
 
+    // Determine what filter to apply to puzzleinv table based on what options are passed
     private function determineFilters(mixed $filters = []): string
     {
         $res = "";
@@ -191,6 +195,7 @@ class PuzzleGateway
         return $res;
     }
 
+    // Find record in puzzleinv table based on puzzleid
     public function findById(int $id, mixed $options = []): ?Puzzle
     {
         $sql = "SELECT * FROM puzzleinv WHERE puzzleid = :id";
@@ -210,6 +215,7 @@ class PuzzleGateway
         }
     }
 
+    // Find categoryid from puzcat table based on puzzleid
     public function findCatId(int $id): ?array
     {
         $sql = "SELECT puzcat.categoryid FROM puzcat WHERE puzcat.puzzleid = :id";
@@ -234,6 +240,7 @@ class PuzzleGateway
         }
     }
 
+    // Find category descriptions from puzcat table based on puzzleid
     public function findCatNames(int $id): ?array
     {
         $sql = "SELECT categories.categorydesc FROM puzcat INNER JOIN categories ON puzcat.categoryid = categories.categoryid WHERE puzcat.puzzleid = :id ORDER BY categories.categorydesc";
@@ -257,6 +264,7 @@ class PuzzleGateway
         }
     }
 
+    // Find record from puzzleinv table based on puzzle name
     public function findByName(string $name, mixed $options = []): ?Puzzle
     {
         $sql = "SELECT * FROM puzzleinv WHERE puzname LIKE :name";
@@ -295,6 +303,7 @@ class PuzzleGateway
         }
     }
 
+    // Update puzzle record in puzzleinv table
     public function update(Puzzle|int $puzzle, array $values): bool
     {
         if (empty($puzzle)) return false;
@@ -333,6 +342,7 @@ class PuzzleGateway
         }
     }
 
+    // Delete record from table puzzleinv based on puzzleid
     public function delete(Puzzle|int $id): bool
     {
         $sql = "DELETE FROM puzzleinv WHERE puzzleid = :puzzleid";
@@ -347,6 +357,7 @@ class PuzzleGateway
         }
     }
 
+    // List top 5 most recent puzzles added based on addeddate
     public function recent(): array
     {
         $sql = "SELECT * FROM puzzleinv ORDER BY addeddate DESC LIMIT 5";

@@ -22,7 +22,7 @@ $brands = $gateway->findAll();
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
-    <div class="col-8">
+    <div class="col-md-8 col-sm-12">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzlewishaddc.php" method="post">
             <input type="hidden" tabindex="-1" name="userid" value="<?php echo getUserId() ?>">
             <div class="p-2 mb-2 mx-1">
@@ -76,9 +76,9 @@ $brands = $gateway->findAll();
         </form>
     </div>
 
-    <div class="vr"></div>
+    <div class="vr d-none d-sm-block"></div>
     <!-- Preview Card -->
-    <div class="card" style="width: 100%">
+    <div class="card d-none d-sm-block" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
         <div class="card-body placeholder-glow">
             <h5 class="card-title placeholder col-12" id="cardname"></h5>

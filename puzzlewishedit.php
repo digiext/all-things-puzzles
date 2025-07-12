@@ -28,7 +28,7 @@ $puzzlewish = $gateway->findById($id)
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
-    <div class="col-8">
+    <div class="col-md-8 col-sm-12">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzlewisheditc.php" method="post">
             <input type="hidden" tabindex="-1" name="id" value="<?php echo $id ?>">
 
@@ -83,9 +83,9 @@ $puzzlewish = $gateway->findById($id)
         </form>
     </div>
 
-    <div class="vr"></div>
+    <div class="vr d-none d-sm-block"></div>
     <!-- Preview Card -->
-    <div class="card" style="width: 100%">
+    <div class="card d-none d-sm-block" style="width: 100%">
         <div class="card-header"><strong>Puzzle Listing Preview</strong></div>
         <div class="card-img-top position-relative">
         </div>

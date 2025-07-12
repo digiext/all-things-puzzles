@@ -15,6 +15,7 @@ class OwnershipGateway
         $this->db = $db;
     }
 
+    // Create new record in ownership table
     public function create(string $desc): Ownership|false
     {
         $sql = "INSERT INTO ownership (ownershipdesc) VALUES (:desc)";
@@ -31,6 +32,7 @@ class OwnershipGateway
         }
     }
 
+    // Count total records in ownership table
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM ownership";
@@ -45,6 +47,7 @@ class OwnershipGateway
         }
     }
 
+    // Find all records in the ownership table
     public function findAll(): array
     {
         $sql = "SELECT * FROM ownership";
@@ -64,6 +67,7 @@ class OwnershipGateway
         }
     }
 
+    // Find specific record in ownership table by ownershipid
     public function findById(int $id): ?Ownership
     {
         $sql = "SELECT * FROM ownership WHERE ownershipid = :id";
@@ -82,6 +86,7 @@ class OwnershipGateway
         }
     }
 
+    // Update description in ownership table based on ownershipid
     public function updateDesc(Ownership|int $ownership, string $desc): Ownership|false
     {
         $sql = "UPDATE ownership SET ownershipdesc = :desc WHERE ownershipid = :id";
@@ -104,6 +109,7 @@ class OwnershipGateway
         }
     }
 
+    // Delete record in ownership table based on ownershipid
     public function delete(Ownership|int $ownership): bool
     {
         $sql = "DELETE FROM ownership WHERE ownershipid = :id";

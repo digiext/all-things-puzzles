@@ -15,6 +15,7 @@ class StatusGateway
         $this->db = $db;
     }
 
+    // Create new record in status table
     public function create(string $desc): Status|false
     {
         $sql = "INSERT INTO status (statusdesc) VALUES (:desc)";
@@ -31,9 +32,10 @@ class StatusGateway
         }
     }
 
+    // Count total number of records in status table
     public function count(): int
     {
-        $sql = "SELECT COUNT(*) FROM brand";
+        $sql = "SELECT COUNT(*) FROM status";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -45,6 +47,7 @@ class StatusGateway
         }
     }
 
+    // Find all records in status table
     public function findAll(): array
     {
         $sql = "SELECT * FROM status";
@@ -64,6 +67,7 @@ class StatusGateway
         }
     }
 
+    // Find specific record from status table based on statusid
     public function findById(int $id): ?Status
     {
         $sql = "SELECT * FROM status WHERE statusid = :id";
@@ -82,6 +86,7 @@ class StatusGateway
         }
     }
 
+    // Update description in status table based on statusid
     public function updateDesc(Status|int $status, string $desc): Status|false
     {
         $sql = "UPDATE status SET statusdesc = :desc WHERE statusid = :id";
@@ -104,6 +109,7 @@ class StatusGateway
         }
     }
 
+    // Delete specific record in status table based on statusid
     public function delete(Status|int $status): bool
     {
         $sql = "DELETE FROM status WHERE statusid = :id";

@@ -15,6 +15,7 @@ class SourceGateway
         $this->db = $db;
     }
 
+    // Create new record in source table
     public function create(string $desc): Source|false
     {
         $sql = "INSERT INTO source (sourcedesc) VALUES (:desc)";
@@ -31,6 +32,7 @@ class SourceGateway
         }
     }
 
+    // Count total records in source table
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM source";
@@ -45,6 +47,7 @@ class SourceGateway
         }
     }
 
+    // Find all records in source table
     public function findAll(): array
     {
         $sql = "SELECT * FROM source";
@@ -64,6 +67,7 @@ class SourceGateway
         }
     }
 
+    // Find specific record from source table based on sourceid
     public function findById(int $id): ?Source
     {
         $sql = "SELECT * FROM source WHERE sourceid = :id";
@@ -82,6 +86,7 @@ class SourceGateway
         }
     }
 
+    // Update description in source table based on sourceid
     public function updateDesc(Source|int $source, string $name): bool
     {
         $sql = "UPDATE source SET sourcedesc = :name WHERE sourceid = :id";
@@ -97,6 +102,7 @@ class SourceGateway
         }
     }
 
+    // Delete specific record in source table based on sourceid
     public function delete(Source|int $source): bool
     {
         $sql = "DELETE FROM source WHERE sourceid = :id";

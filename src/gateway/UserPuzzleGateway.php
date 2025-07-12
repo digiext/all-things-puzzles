@@ -21,6 +21,7 @@ class UserPuzzleGateway
         $this->db = $db;
     }
 
+    // Create new record in userinv table
     public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, float $overallrating, Ownership|int $ownership, string $loanedoutto): UserPuzzle|false
     {
         $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, overallrating, ownershipid, loanedoutto) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :overallrating, :ownershipid, :loanedoutto)";
@@ -70,6 +71,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Count total records from userinv table based on filters passed
     public function count($options = [
         FILTERS => []
     ]): int
@@ -87,6 +89,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Find all records from userinv table based on options passed
     public function findAll(mixed $options = [
         PAGE => 0,
         MAX_PER_PAGE => 10,
@@ -124,6 +127,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Determine filter to apply to userinv table
     private function determineFilters(mixed $filters = []): string
     {
         $res = "";
@@ -197,6 +201,7 @@ class UserPuzzleGateway
         return $res;
     }
 
+    // Find specific record from userinv table based on userinvid
     public function findById(int $id, mixed $options = []): ?UserPuzzle
     {
         $sql = "SELECT * FROM userinv WHERE userinvid = :id";
@@ -255,6 +260,7 @@ class UserPuzzleGateway
     //     }
     // }
 
+    // Update record in userinv based on userinvid
     public function update(UserPuzzle|int $userinvid, array $values): bool
     {
         if (empty($userinvid)) return false;
@@ -293,6 +299,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Delete record from userinv based on userinvid
     public function delete(UserPuzzle|int $id): bool
     {
         $sql = "DELETE FROM userinv WHERE userinvid = :userinvid";
@@ -307,6 +314,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Return top 5 recently completed puzzles
     public function completed(): array
     {
         $sql = "SELECT * FROM userinv WHERE enddate != '1970-01-01' ORDER BY enddate DESC LIMIT 5";
@@ -326,6 +334,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Find specific records from userinv based on userid
     public function findByUserId(int $id): ?array
     {
         $sql = "SELECT * FROM userinv WHERE userid = :id";
@@ -349,6 +358,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Return top 5 highest rated puzzle based on overallrating
     public function highestrated(): array
     {
         // $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv WHERE (difficultyrating+qualityrating)/2 !=0 ORDER BY (rating) DESC LIMIT 5";

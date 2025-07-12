@@ -16,6 +16,7 @@ class LocationGateway
         $this->db = $db;
     }
 
+    // Create record in location table
     public function create(string $desc): Location|false
     {
         $sql = "INSERT INTO location (locationdesc) VALUES (:desc)";
@@ -32,6 +33,7 @@ class LocationGateway
         }
     }
 
+    // Count total number of records in location table
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM location";
@@ -46,6 +48,7 @@ class LocationGateway
         }
     }
 
+    // Find all records in location table
     public function findAll(): array
     {
         $sql = "SELECT * FROM location";
@@ -65,6 +68,7 @@ class LocationGateway
         }
     }
 
+    // Find specific record in location table based on locationid
     public function findById(int $id): ?Location
     {
         $sql = "SELECT * FROM location WHERE locationid = :id";
@@ -83,6 +87,7 @@ class LocationGateway
         }
     }
 
+    // Update description in location table based on locationid
     public function updateDesc(Location|int $location, string $name): bool
     {
         $sql = "UPDATE location SET locationdesc = :name WHERE locationid = :id";
@@ -98,6 +103,7 @@ class LocationGateway
         }
     }
 
+    // Delete record from location table based on locationid
     public function delete(Location|int $location): bool
     {
         $sql = "DELETE FROM location WHERE locationid = :id";

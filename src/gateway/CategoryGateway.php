@@ -16,6 +16,7 @@ class CategoryGateway
         $this->db = $db;
     }
 
+    // Create new category in categories table
     public function create(string $desc): Category|false
     {
         $sql = "INSERT INTO categories (categorydesc) VALUES (:desc)";
@@ -32,6 +33,7 @@ class CategoryGateway
         }
     }
 
+    // Create a new record that ties category and puzzle together in puzcat table
     public function createPuzzle(string $puzzleid, $categoryid): bool
     {
         $sql = "INSERT INTO puzcat (puzzleid,categoryid) VALUES (:puzzleid,:categoryid)";
@@ -46,6 +48,7 @@ class CategoryGateway
         }
     }
 
+    // Delete record from puzcat table based on puzzle id and category id
     public function deletePuzzle(string $puzzleid, $categoryid): bool
     {
         $sql = "DELETE FROM puzcat WHERE puzzleid = :puzzleid AND categoryid = :categoryid";
@@ -60,6 +63,7 @@ class CategoryGateway
         }
     }
 
+    // Count total number of records in categories table
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM categories";
@@ -74,6 +78,7 @@ class CategoryGateway
         }
     }
 
+    // Return all records from the categories table
     public function findAll(): array
     {
         $sql = "SELECT * FROM categories ORDER BY categorydesc";
@@ -93,6 +98,7 @@ class CategoryGateway
         }
     }
 
+    // Return record from categories table based on category id
     public function findById(int $id): ?Category
     {
         $sql = "SELECT * FROM categories WHERE categoryid = :id";
@@ -111,6 +117,7 @@ class CategoryGateway
         }
     }
 
+    // Update category description in categories table based on category id
     public function updateDesc(Category|int $category, string $name): bool
     {
         $sql = "UPDATE categories SET categorydesc = :name WHERE categoryid = :id";
@@ -126,6 +133,7 @@ class CategoryGateway
         }
     }
 
+    // Delete categories record based on category id
     public function delete(Category|int $category): bool
     {
         $sql = "DELETE FROM categories WHERE categoryid = :id";

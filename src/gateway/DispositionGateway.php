@@ -15,6 +15,7 @@ class DispositionGateway
         $this->db = $db;
     }
 
+    // Create new disposition record in disposition table
     public function create(string $desc): Disposition|false
     {
         $sql = "INSERT INTO disposition (dispositiondesc) VALUES (:desc)";
@@ -31,6 +32,7 @@ class DispositionGateway
         }
     }
 
+    // Count total records in disposition table
     public function count(): int
     {
         $sql = "SELECT COUNT(*) FROM disposition";
@@ -45,6 +47,7 @@ class DispositionGateway
         }
     }
 
+    // Find all records in disposition table
     public function findAll(): array
     {
         $sql = "SELECT * FROM disposition";
@@ -64,6 +67,7 @@ class DispositionGateway
         }
     }
 
+    // Find record in disposition table based on dispositionid
     public function findById(int $id): ?Disposition
     {
         $sql = "SELECT * FROM disposition WHERE dispositionid = :id";
@@ -82,6 +86,7 @@ class DispositionGateway
         }
     }
 
+    // Update description in disposition table based on dispositionid
     public function updateDesc(Disposition|int $disposition, string $desc): Disposition|false
     {
         $sql = "UPDATE disposition SET dispositiondesc = :desc WHERE dispositionid = :id";
@@ -104,6 +109,7 @@ class DispositionGateway
         }
     }
 
+    // Delete record from disposition table based on dispositionid
     public function delete(Disposition|int $disposition): bool
     {
         $sql = "DELETE FROM disposition WHERE dispositionid = :id";

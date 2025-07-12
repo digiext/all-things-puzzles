@@ -15,6 +15,7 @@ class BrandGateway
         $this->db = $db;
     }
 
+    // Create new brand in brand table
     public function create(string $name): Brand|false
     {
         $sql = "INSERT INTO brand (brandname) VALUES (:name)";
@@ -31,7 +32,9 @@ class BrandGateway
         }
     }
 
-    public function count(): int {
+    // Count total records in brand table
+    public function count(): int
+    {
         $sql = "SELECT COUNT(*) FROM brand";
 
         try {
@@ -44,6 +47,7 @@ class BrandGateway
         }
     }
 
+    // Find all records in brand table
     public function findAll(): array
     {
         $sql = "SELECT * FROM brand";
@@ -63,6 +67,7 @@ class BrandGateway
         }
     }
 
+    // Find record by brand id
     public function findById(int $id): ?Brand
     {
         $sql = "SELECT * FROM brand WHERE brandid = :id";
@@ -81,6 +86,7 @@ class BrandGateway
         }
     }
 
+    // Update brand name in brand table based on brand id
     public function updateName(Brand|int $brand, string $name): bool
     {
         $sql = "UPDATE brand SET brandname = :name WHERE brandid = :id";
@@ -96,6 +102,7 @@ class BrandGateway
         }
     }
 
+    // Delete brand in brand table based on brand id
     public function delete(Brand|int $brand): bool
     {
         $sql = "DELETE FROM brand WHERE brandid = :id";
