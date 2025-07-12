@@ -1,8 +1,51 @@
 <?php
+global $db;
 include 'util/function.php';
+include 'util/db.php';
+
+
+$sql = "SELECT installed FROM setup";
+
+$setup = $db->query($sql)->fetchColumn();
+
+if ($setup == 1) {
+    header("Location: index.php");
+}
 
 $title = 'All Things Puzzles';
 include 'header.php';
+?>
+
+<?php
+if (isset($_SESSION['success'])) {
+    echo
+    "<div class='alert alert-success alert-dismissible fade show' role='alert' id='successAlert'>
+        <strong>" . $_SESSION['success'] . "</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+
+    unset($_SESSION['success']);
+}
+
+if (isset($_SESSION['warning'])) {
+    echo
+    "<div class='alert alert-warning alert-dismissible fade show' role='alert' id='warnAlert'>
+        <strong>" . $_SESSION['warning'] . "</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+
+    unset($_SESSION['warning']);
+}
+
+if (isset($_SESSION['fail'])) {
+    echo
+    "<div class='alert alert-danger alert-dismissible fade show' role='alert' id='failAlert'>
+        <strong>" . $_SESSION['fail'] . "</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+
+    unset($_SESSION['fail']);
+}
 ?>
 
 <div class="container">

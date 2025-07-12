@@ -1,5 +1,17 @@
 <?php
+global $db;
 include 'util/function.php';
+include 'util/db.php';
+
+
+$sql = "SELECT installed FROM setup";
+
+$setup = $db->query($sql)->fetchColumn();
+
+if ($setup == 0) {
+    header("Location: installation.php");
+}
+
 
 //If Not Logged In Reroute to index.php
 if (isLoggedIn()) {

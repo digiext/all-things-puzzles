@@ -24,22 +24,27 @@ if (isset($_POST['submit'])) {
     $gateway = new UserGateway($db);
     $code = $gateway->create($username, $fullname, $email, $password, false, ADMIN_GROUP_ID);
 
+
+    $sql = "UPDATE setup SET installed = 1";
+
+
     session_start();
     if ($code instanceof PDOException) {
-        failAlert("Database Error: " . $code->getMessage());
+        failAlertNoRedir("Database Error: " . $code->getMessage());
     } elseif ($code === INVALID_USERNAME) {
-        failAlert("Invalid username!");
+        failAlertNoRedir("Invalid username!");
     } elseif ($code === INVALID_EMAIL) {
-        failAlert("Invalid email!");
+        failAlertNoRedir("Invalid email!");
     } elseif ($code === USERNAME_IN_USE) {
-        failAlert("Username in use!");
+        failAlertNoRedir("Username in use!");
     } elseif ($code === EMAIL_IN_USE) {
-        failAlert("Email in use!");
+        failAlertNoRedir("Email in use!");
     } elseif ($code === USERNAME_DB_ERROR || $code === EMAIL_DB_ERROR) {
-        failAlert("Database error! Check your PHP Console for details!");
+        failAlertNoRedir("Database error! Check your PHP Console for details!");
     } else {
+        $db->query($sql);
         successAlert("User has been created");
     }
 
-    header("Location: index.php");
+    header("Location: installation.php");
 }

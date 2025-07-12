@@ -117,5 +117,3 @@ $highestrated = $gateway->highestrated();
         </div>
     </div>
 </div>
-
-<?php include 'footer.php'; ?>

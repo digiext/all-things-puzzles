@@ -2,12 +2,13 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?php
-            $goto = isLoggedIn() ? "/home.php" : "/index.php";
-            if (str_contains($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
-            else echo BASE_URL . $goto;
-        ?>">
+                                        $goto = isLoggedIn() ? "/home.php" : "/index.php";
+                                        if (str_contains($_SERVER['REQUEST_URI'], "/" . $goto)) echo "#";
+                                        else echo BASE_URL . $goto;
+                                        ?>">
             <img src="<?php echo BASE_URL ?>/images/atp.png" alt="Logo" width="32" height="32">
             All Things Puzzles</a>
+        <span class='m-1 navbar-text'>v<?php echo VERSION ?></span>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -131,7 +132,7 @@ if (isset($_SESSION['success'])) {
 
 if (isset($_SESSION['warning'])) {
     echo
-        "<div class='alert alert-warning alert-dismissible fade show' role='alert' id='warnAlert'>
+    "<div class='alert alert-warning alert-dismissible fade show' role='alert' id='warnAlert'>
         <strong>" . $_SESSION['warning'] . "</strong>
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>";
@@ -141,7 +142,7 @@ if (isset($_SESSION['warning'])) {
 
 if (isset($_SESSION['fail'])) {
     echo
-        "<div class='alert alert-danger alert-dismissible fade show' role='alert' id='failAlert'>
+    "<div class='alert alert-danger alert-dismissible fade show' role='alert' id='failAlert'>
         <strong>" . $_SESSION['fail'] . "</strong>
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>";
