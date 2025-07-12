@@ -30,8 +30,8 @@ $highestrated = $gateway->highestrated();
 ?>
 
 <br>
-<h3 class="text-center">Puzzle Stats</h3>
-<div class="container text-center">
+<h3 class="text-center d-none d-sm-none">Puzzle Stats</h3>
+<div class="container d-none d-sm-none text-center">
     <div class="row g-2">
         <div class="col">
             <div class="card">
@@ -80,7 +80,7 @@ $highestrated = $gateway->highestrated();
 <br>
 <div class="container text-center">
     <div class="row g-5 justify-content-center">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
             <h3 class="text-center">Puzzle Management</h3>
             <div class="card my-2">
                 <a class="btn btn-secondary btn-lg" href="puzzleadd.php" type="button">Add Puzzle</a>
@@ -89,7 +89,7 @@ $highestrated = $gateway->highestrated();
                 <a class="btn btn-secondary btn-lg" href="puzzleinv.php" type="button">Puzzle Inventory</a>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-4 col-sm-12">
             <h3 class="text-center">User Puzzle Management</h3>
             <div class="card my-2">
                 <a class="btn btn-secondary btn-lg" href="userinvadd.php" type="button">Add/Remove Puzzles</a>
@@ -98,7 +98,7 @@ $highestrated = $gateway->highestrated();
                 <a class="btn btn-secondary btn-lg" href="userinv.php" type="button">User Inventory</a>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-4 col-sm-12">
             <h3 class="text-center">Administration</h3>
             <div class="card my-2">
                 <a class="btn btn-info btn-lg" href="admin.php" type="button">Admin Area</a>
@@ -109,7 +109,7 @@ $highestrated = $gateway->highestrated();
 <br>
 <div class="container text-center">
     <div class="row g-5 justify-content-center">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
             <h3 class="text-center">Puzzle Wishlist</h3>
             <div class="card my-2">
                 <a class="btn btn-secondary btn-lg" href="puzzlewish.php" type="button">Wishlist</a>
