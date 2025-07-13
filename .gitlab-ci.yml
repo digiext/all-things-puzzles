@@ -32,7 +32,7 @@ build_image:
   before_script:
     #- mkdir -p $HOME/.docker
     #- echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-    echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
+    echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER
   script:
     - docker build -t registry.digitalunderworlds.com/developers/all-things-puzzles .
     - docker push registry.digitalunderworlds.com/developers/all-things-puzzles
