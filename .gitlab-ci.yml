@@ -26,6 +26,15 @@ build-stage:
     - composer update --lock
     - composer install
 
+build_image:
+  stage: build
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - docker build -t registry.digitalunderworlds.com/developers/all-things-puzzle .
+    - docker push registry.digitalunderworlds.com/developers/all-things-puzzle
+
 deploy-stage:
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
