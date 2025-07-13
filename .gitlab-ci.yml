@@ -39,7 +39,7 @@ build_image:
 deploy-stage:
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
-    - rsync -avuz $CI_PROJECT_DIR/ /var/www/html/puzzle
+    - rsync -avuz $CI_PROJECT_DIR/app/ /var/www/html/puzzle
     - touch /var/www/html/.env
     - echo "DB_HOST=\"$DB_HOST\"" > /var/www/html/puzzle/.env
     - echo "DB_NAME=\"$DB_NAME\"" >> /var/www/html/puzzle/.env
