@@ -6,7 +6,7 @@ services:
         build:
             dockerfile: php-dockerfile
         volumes:
-            - './php-files:/var/www/html'
+            - './app:/var/www/html'
         depends_on:
             - mariadb
 
@@ -18,7 +18,7 @@ services:
         links:
             - 'php'
         volumes:
-            - './php-files:/var/www/html'
+            - './app:/var/www/html'
             - './nginx-conf:/etc/nginx/conf.d'
         depends_on:
             - php
