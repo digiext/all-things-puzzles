@@ -71,7 +71,16 @@ if (isAdmin()) {
                     </div>
                 </div>
             </div>
-        </div>";
+        </div>
+        <div class='container text-center'>
+    <div class='row justify-content-center'>
+        <div class='col-4 my-3'>
+                    <div class='card'>
+                        <a class='btn btn-secondary' href='admin/users.php' role='button'>Users</a>
+                    </div>
+                </div>
+    </div>
+</div>";
 }
 
 ?>
