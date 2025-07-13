@@ -20,6 +20,22 @@ $page = $_GET['page'] ?? 1;
 $maxperpage = $_GET['maxperpage'] ?? 8;
 $sort = $_GET['sort'] ?? PUZ_ID;
 $sortDirection = $_GET['sort_direction'] ?? SQL_SORT_ASC;
+$filters = $_GET['filters'] ?? [];
+
+$filtersFinal = [];
+
+foreach($filters as $v) {
+    $exploded = explode(':', $v);
+    if (count($exploded) == 2) {
+        $filtersFinal = array_merge($filtersFinal, [
+            $exploded[0] => $exploded[1]
+        ]);
+    } else if (count($exploded) == 3) {
+        $filtersFinal = array_merge($filtersFinal, [
+            $exploded[0] => [$exploded[1], $exploded[2]]
+        ]);
+    }
+}
 
 $query = [];
 parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
@@ -34,7 +50,8 @@ $options = [
     PAGE => $page - 1,
     MAX_PER_PAGE => $maxperpage,
     SORT => $sort,
-    SORT_DIRECTION => $sortDirection
+    SORT_DIRECTION => $sortDirection,
+    FILTERS => $filtersFinal,
 ];
 
 $gateway = new PuzzleGateway($db);
@@ -47,10 +64,13 @@ $prevLink = $page <= 1 ? "#" : 'puzzleinv.php?' . queryForPage($page - 1);
 $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page + 1);
 ?>
 
+<link rel="stylesheet" type="text/css" href="css/bootstrap-slider.min.css">
 <script src="scripts/puzzles.js"></script>
+<script src="scripts/bootstrap-slider.min.js"></script>
 
 <div class="container mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
     <h3 class="text-center align-text-bottom me-auto">Puzzle Inventory</h3>
+    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filters">Filters</button>
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Sort</button>
         <ul class="dropdown-menu">
@@ -146,6 +166,46 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
     </ul>
 </nav>
 
+<!-- Filter Modal -->
+<div class="modal fade" id="filters" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="filterLabel">Filters</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="column" action="puzzleinv.php" method="get">
+                <div class="modal-body">
+                    <div class="col-12">
+                        <label for="filtname">Name</label>
+                        <input type="text" class="form-control" id="filtname">
+                    </div>
+
+                    <label for="filtpieces">Pieces</label>
+                    <div class="hstack g-3 align-items-center justify-content-between">
+                        <div class="col-2">
+                            <input type="number" class="form-control" id="filtpiecemin" value="0" aria-label="Minimum pieces">
+                        </div>
+                        <input type="text"
+                               data-slider-id="piecesSlider"
+                               data-slider-min="0"
+                               data-slider-max="50000"
+                               data-slider-step="100"
+                               data-slider-value="[0,50000]"
+                               data-slider-tooltip="hide"
+                               id="filtpieces"
+                               value="0,50000">
+                        <div class="col-2">
+                            <input type="number" class="form-control col-2" id="filtpiecemax" value="50000" aria-label="Maximum pieces">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -178,6 +238,19 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+        let piecesSlider = $('#piecesSlider');
+        let sliderInst = $('#filtpieces').slider();
+
+        piecesSlider.addClass('col-8 px-3');
+        sliderInst.on('change', function(e) {
+            console.table(e);
+            //alert(JSON.stringify(oldVal) + " | " + JSON.stringify(newVal.toString()));
+        })
+    })
+</script>
 
 <!--            --><?php //foreach ($puzzles as $puzzle) {
                     //                if (!($puzzle instanceof Puzzle)) continue;

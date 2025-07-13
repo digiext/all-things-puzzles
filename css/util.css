@@ -2,3 +2,8 @@
     background-color: var(--bs-secondary-bg);
     opacity: 1;
 }
+
+.col-8-important {
+    flex: 0 0 auto;
+    width: 66.666% !important;
+}

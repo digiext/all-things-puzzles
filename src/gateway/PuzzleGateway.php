@@ -103,7 +103,7 @@ class PuzzleGateway
         $offset = $page * $maxPerPage;
         $filters = $this->determineFilters($filters);
 
-        $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv $filters INNER JOIN brand ON puzzleinv.brandid = brand.brandid ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
+        $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv INNER JOIN brand ON puzzleinv.brandid = brand.brandid $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
