@@ -23,6 +23,7 @@ stages:          # List of stages for jobs, and their order of execution
 build-stage:
   stage: build
   script:
+    - COMPOSER=app\composer.json &&  COMPOSER_VENDOR_DIR=app\vendor
     - composer update --lock
     - composer install
 
