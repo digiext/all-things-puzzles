@@ -20,7 +20,7 @@ include '../nav.php';
 
 <div class="container">
     <h3>Fill in form below for adding a user</h3>
-    <form class="column needs-validation" action="<?php echo BASE_URL ?>../signup.php" method="post" id="signupForm" name="signup">
+    <form class="column needs-validation" action="<?php echo BASE_URL ?>/../signup.php" method="post" id="signupForm" name="signup">
 
         <div class="col-auto">
             <label for="usernameSignup" class="col-form-label">Username</label>
