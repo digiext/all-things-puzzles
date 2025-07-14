@@ -1,0 +1,5 @@
+DB_HOST="<hostname>"
+DB_NAME="<db name>"
+DB_USER="<db user>"
+DB_PASS="<db password"
+BASE_URL="<path that your files live at. Ex: http://www.example.com>"
