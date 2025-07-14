@@ -16,7 +16,7 @@ session_start();
 if (!$code) {
     failAlert("Error while deleting user '$user'!");
 } else {
-    successAlert("Status '$user' (ID $id) has been deleted");
+    successAlert("User '$user' (ID $id) has been deleted");
 }
 
-header("Location: status.php");
+header("Location: users.php");
