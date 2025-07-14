@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Jun 24, 2025 at 12:24 AM
+-- Generation Time: Jul 14, 2025 at 01:55 PM
 -- Server version: 10.9.8-MariaDB-1:10.9.8+maria~ubu2204
 -- PHP Version: 8.2.27
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `puzzlethings`
+-- Database: `puzzlethingstemp`
 --
 
 -- --------------------------------------------------------
@@ -27,14 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `auth`
 --
 
-CREATE TABLE auth
-(
-    authid BIGINT(20) UNSIGNED NOT NULL,
-    selector VARCHAR(255) NOT NULL,
-    hashed_validator VARCHAR(255) NOT NULL,
-    userid BIGINT(20) UNSIGNED NOT NULL,
-    expiry DATETIME NOT NULL
+CREATE TABLE `auth` (
+  `authid` bigint(20) UNSIGNED NOT NULL,
+  `selector` varchar(255) NOT NULL,
+  `hashed_validator` varchar(255) NOT NULL,
+  `userid` bigint(20) UNSIGNED NOT NULL,
+  `expiry` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `brand`
@@ -124,7 +125,23 @@ INSERT INTO `brand` (`brandid`, `brandname`) VALUES
 (72, 'Schmidt'),
 (73, 'Trefl'),
 (74, 'Wasgij'),
-(75, 'Wentworth');
+(75, 'Wentworth'),
+(76, 'JaCaRou'),
+(77, 'Ridley\'s'),
+(78, 'All Jigsaw Puzzles'),
+(79, 'Lazy One'),
+(80, 'RMS International');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `categoryid` bigint(20) UNSIGNED NOT NULL,
+  `categorydesc` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -145,8 +162,7 @@ INSERT INTO `disposition` (`dispositionid`, `dispositiondesc`) VALUES
 (1, 'Keep'),
 (2, 'Donate'),
 (3, 'Sell'),
-(4, 'Trade'),
-(5, 'Give Away');
+(4, 'Give Away');
 
 -- --------------------------------------------------------
 
@@ -158,6 +174,13 @@ CREATE TABLE `location` (
   `locationid` bigint(20) UNSIGNED NOT NULL,
   `locationdesc` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `location`
+--
+
+INSERT INTO `location` (`locationid`, `locationdesc`) VALUES
+(1, 'Unknown');
 
 -- --------------------------------------------------------
 
@@ -180,7 +203,21 @@ INSERT INTO `ownership` (`ownershipid`, `ownershipdesc`) VALUES
 (3, 'Given Away'),
 (4, 'Sold'),
 (5, 'Traded'),
-(6, 'Wanted');
+(6, 'Wanted'),
+(7, 'Loaned Out'),
+(8, 'Borrowed');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `puzcat`
+--
+
+CREATE TABLE `puzcat` (
+  `puzcatid` bigint(20) UNSIGNED NOT NULL,
+  `puzzleid` bigint(20) UNSIGNED NOT NULL,
+  `categoryid` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -193,15 +230,50 @@ CREATE TABLE `puzzleinv` (
   `puzname` text NOT NULL,
   `pieces` smallint(6) UNSIGNED NOT NULL,
   `brandid` bigint(20) UNSIGNED NOT NULL,
-  `cost` decimal(10,0) NOT NULL,
-  `dateacquired` datetime NOT NULL,
+  `cost` decimal(8,2) NOT NULL,
+  `dateacquired` date NOT NULL,
   `sourceid` bigint(20) UNSIGNED NOT NULL,
-  `ownershipid` bigint(20) UNSIGNED NOT NULL,
   `locationid` bigint(20) UNSIGNED NOT NULL,
   `dispositionid` bigint(20) UNSIGNED NOT NULL,
-  `pictureurl` text NOT NULL,
-  `upc` varchar(13) NOT NULL
+  `pictureurl` text DEFAULT NULL,
+  `upc` varchar(13) NOT NULL,
+  `addeddate` datetime NOT NULL DEFAULT current_timestamp(),
+  `moddate` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `puzzlewish`
+--
+
+CREATE TABLE `puzzlewish` (
+  `wishid` bigint(20) UNSIGNED NOT NULL,
+  `userid` bigint(20) UNSIGNED NOT NULL,
+  `puzname` text NOT NULL,
+  `pieces` smallint(6) UNSIGNED NOT NULL,
+  `brandid` bigint(20) UNSIGNED NOT NULL,
+  `upc` varchar(13) NOT NULL,
+  `addeddate` datetime NOT NULL DEFAULT current_timestamp(),
+  `moddate` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setup`
+--
+
+CREATE TABLE `setup` (
+  `installed` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `setup`
+--
+
+INSERT INTO `setup` (`installed`) VALUES
+(0);
 
 -- --------------------------------------------------------
 
@@ -213,6 +285,15 @@ CREATE TABLE `source` (
   `sourceid` bigint(20) UNSIGNED NOT NULL,
   `sourcedesc` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `source`
+--
+
+INSERT INTO `source` (`sourceid`, `sourcedesc`) VALUES
+(1, 'New Purchase'),
+(2, 'Thrifted'),
+(3, 'Gift');
 
 -- --------------------------------------------------------
 
@@ -297,6 +378,7 @@ INSERT INTO `usergroup` (`usergroupid`, `groupname`) VALUES
 --
 
 CREATE TABLE `userinv` (
+  `userinvid` bigint(20) UNSIGNED NOT NULL,
   `userid` bigint(20) UNSIGNED NOT NULL,
   `puzzleid` bigint(20) UNSIGNED NOT NULL,
   `statusid` bigint(20) UNSIGNED NOT NULL,
@@ -305,7 +387,10 @@ CREATE TABLE `userinv` (
   `enddate` date NOT NULL,
   `totaldays` smallint(6) NOT NULL,
   `difficultyrating` float UNSIGNED NOT NULL,
-  `qualityrating` float UNSIGNED NOT NULL
+  `qualityrating` float UNSIGNED NOT NULL,
+  `overallrating` float UNSIGNED NOT NULL,
+  `ownershipid` bigint(20) UNSIGNED NOT NULL,
+  `loanedoutto` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -313,11 +398,25 @@ CREATE TABLE `userinv` (
 --
 
 --
+-- Indexes for table `auth`
+--
+ALTER TABLE `auth`
+  ADD UNIQUE KEY `authid` (`authid`),
+  ADD KEY `fkauthuserid` (`userid`);
+
+--
 -- Indexes for table `brand`
 --
 ALTER TABLE `brand`
   ADD PRIMARY KEY (`brandid`),
   ADD UNIQUE KEY `brandid` (`brandid`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`categoryid`),
+  ADD UNIQUE KEY `catid` (`categoryid`);
 
 --
 -- Indexes for table `disposition`
@@ -341,15 +440,38 @@ ALTER TABLE `ownership`
   ADD UNIQUE KEY `ownershipid` (`ownershipid`);
 
 --
+-- Indexes for table `puzcat`
+--
+ALTER TABLE `puzcat`
+  ADD PRIMARY KEY (`puzcatid`),
+  ADD UNIQUE KEY `puzcatid` (`puzcatid`),
+  ADD KEY `fkpuzzleid2` (`puzzleid`),
+  ADD KEY `fkcategoryid` (`categoryid`);
+
+--
 -- Indexes for table `puzzleinv`
 --
 ALTER TABLE `puzzleinv`
   ADD UNIQUE KEY `puzzleid` (`puzzleid`),
   ADD KEY `fkbrandid` (`brandid`),
   ADD KEY `fksourceid` (`sourceid`),
-  ADD KEY `fkownershipid` (`ownershipid`),
   ADD KEY `fklocationid` (`locationid`),
   ADD KEY `fkdispositionid` (`dispositionid`);
+
+--
+-- Indexes for table `puzzlewish`
+--
+ALTER TABLE `puzzlewish`
+  ADD PRIMARY KEY (`wishid`),
+  ADD UNIQUE KEY `puzzleid` (`wishid`),
+  ADD KEY `fkbrand` (`brandid`),
+  ADD KEY `fkuser` (`userid`);
+
+--
+-- Indexes for table `setup`
+--
+ALTER TABLE `setup`
+  ADD PRIMARY KEY (`installed`);
 
 --
 -- Indexes for table `source`
@@ -392,37 +514,58 @@ ALTER TABLE `usergroup`
 -- Indexes for table `userinv`
 --
 ALTER TABLE `userinv`
-  ADD KEY `fkuserid` (`userid`),
+  ADD PRIMARY KEY (`userinvid`),
+  ADD UNIQUE KEY `userinvid` (`userinvid`),
+  ADD KEY `fkstatusid` (`statusid`),
+  ADD KEY `fkownershipid` (`ownershipid`),
   ADD KEY `fkpuzzleid` (`puzzleid`),
-  ADD KEY `fkstatusid` (`statusid`);
+  ADD KEY `fkuserid` (`userid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
+-- AUTO_INCREMENT for table `auth`
+--
+ALTER TABLE `auth`
+  MODIFY `authid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `brand`
 --
 ALTER TABLE `brand`
-  MODIFY `brandid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `brandid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `categoryid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `disposition`
 --
 ALTER TABLE `disposition`
-  MODIFY `dispositionid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `dispositionid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `locationid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `locationid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ownership`
 --
 ALTER TABLE `ownership`
-  MODIFY `ownershipid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ownershipid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `puzcat`
+--
+ALTER TABLE `puzcat`
+  MODIFY `puzcatid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `puzzleinv`
@@ -431,10 +574,16 @@ ALTER TABLE `puzzleinv`
   MODIFY `puzzleid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `puzzlewish`
+--
+ALTER TABLE `puzzlewish`
+  MODIFY `wishid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `source`
 --
 ALTER TABLE `source`
-  MODIFY `sourceid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `sourceid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `status`
@@ -461,6 +610,12 @@ ALTER TABLE `usergroup`
   MODIFY `usergroupid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `userinv`
+--
+ALTER TABLE `userinv`
+  MODIFY `userinvid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -468,7 +623,14 @@ ALTER TABLE `usergroup`
 -- Constraints for table `auth`
 --
 ALTER TABLE `auth`
-    ADD CONSTRAINT `fkauthuserid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`);
+  ADD CONSTRAINT `fkauthuserid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `puzcat`
+--
+ALTER TABLE `puzcat`
+  ADD CONSTRAINT `fkcategoryid` FOREIGN KEY (`categoryid`) REFERENCES `categories` (`categoryid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fkpuzzleid2` FOREIGN KEY (`puzzleid`) REFERENCES `puzzleinv` (`puzzleid`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `puzzleinv`
@@ -477,8 +639,14 @@ ALTER TABLE `puzzleinv`
   ADD CONSTRAINT `fkbrandid` FOREIGN KEY (`brandid`) REFERENCES `brand` (`brandid`),
   ADD CONSTRAINT `fkdispositionid` FOREIGN KEY (`dispositionid`) REFERENCES `disposition` (`dispositionid`),
   ADD CONSTRAINT `fklocationid` FOREIGN KEY (`locationid`) REFERENCES `location` (`locationid`),
-  ADD CONSTRAINT `fkownershipid` FOREIGN KEY (`ownershipid`) REFERENCES `ownership` (`ownershipid`),
   ADD CONSTRAINT `fksourceid` FOREIGN KEY (`sourceid`) REFERENCES `source` (`sourceid`);
+
+--
+-- Constraints for table `puzzlewish`
+--
+ALTER TABLE `puzzlewish`
+  ADD CONSTRAINT `fkbrand` FOREIGN KEY (`brandid`) REFERENCES `brand` (`brandid`),
+  ADD CONSTRAINT `fkuser` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`);
 
 --
 -- Constraints for table `user`
@@ -491,17 +659,12 @@ ALTER TABLE `user`
 -- Constraints for table `userinv`
 --
 ALTER TABLE `userinv`
-  ADD CONSTRAINT `fkpuzzleid` FOREIGN KEY (`puzzleid`) REFERENCES `puzzleinv` (`puzzleid`),
+  ADD CONSTRAINT `fkownershipid` FOREIGN KEY (`ownershipid`) REFERENCES `ownership` (`ownershipid`),
+  ADD CONSTRAINT `fkpuzzleid` FOREIGN KEY (`puzzleid`) REFERENCES `puzzleinv` (`puzzleid`) ON DELETE CASCADE,
   ADD CONSTRAINT `fkstatusid` FOREIGN KEY (`statusid`) REFERENCES `status` (`statusid`),
-  ADD CONSTRAINT `fkuserid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`);
+  ADD CONSTRAINT `fkuserid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `auth`
-    ADD UNIQUE KEY `authid` (`authid`),
-    ADD KEY `fkauthuserid` (`userid`);
-ALTER TABLE `auth`
-    MODIFY `authid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;

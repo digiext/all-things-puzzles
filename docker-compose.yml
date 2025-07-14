@@ -28,7 +28,11 @@ services:
         image: mariadb:lts
         environment:
             MYSQL_ROOT_PASSWORD: your_password
+            MYSQL_USER: puzzle
+            MYSQL_PASSWORD: puzzle_account_password
+            MYSQL_DATABASE: puzzlethings
         volumes:
+            - "./puzzlethings.sql:/docker-entrypoint-initdb.d/1.sql"
             - mysqldata:/var/lib/mysql
 
     # phpMyAdmin Service
