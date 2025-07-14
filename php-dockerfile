@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM ghcr.io/devgine/composer-php:latest
 
 # Installing dependencies for the PHP modules
 RUN apt-get update && \
@@ -6,3 +6,4 @@ RUN apt-get update && \
 
 # Installing additional PHP modules
 RUN docker-php-ext-install mysqli pdo pdo_mysql gd zip
+
