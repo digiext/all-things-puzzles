@@ -38,7 +38,7 @@ if ($code) {
     $code = $gateway->delete($id);
 }
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while moving puzzle!");
 } else {

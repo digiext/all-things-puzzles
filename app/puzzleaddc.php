@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
         $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
     }
 
-    session_start();
+    // session_start();
     if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
     } else {

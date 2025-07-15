@@ -32,6 +32,11 @@ cp env-example app/.env
 nano app/.env file
 ```
 
+Change permissions to upload folder
+```bash
+chmod 777 app/images/uploads/thumbnails
+```
+
 Edit docker-compose.yml file and set passwords
 ```bash
 nano docker-compose.yml
@@ -48,4 +53,4 @@ docker exec -it all-things-puzzles-php-1 composer update
 
 # Access application
 
-Go to your default webpage.  Ex: http://<ip address of machine>/ or http://<hostname>/
+Go to your default webpage.  Ex: http://"ip address of machine"/ or http://"hostname"/

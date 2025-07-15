@@ -71,7 +71,7 @@ $brands = $gateway->findAll();
 
             <div class="p-2 mb-2 mx-1">
                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-                <a class="btn btn-danger" name="cancel" href="home.php">Cancel</a>
+                <a class="btn btn-danger" name="cancel" href="puzzlewish.php">Cancel</a>
             </div>
         </form>
     </div>

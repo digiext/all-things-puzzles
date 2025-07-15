@@ -25,7 +25,7 @@ $loanoutto = '';
 $gateway = new UserPuzzleGateway($db);
 $code = $gateway->create($userid, $puzzleid, $status, $missingpieces, $start, $end, $totaldays, $difficultyrating, $qualityrating, $overallrating, $ownership, $loanoutto);
 
-session_start();
+// session_start();
 if ($code === false) {
     failAlert("Puzzle Not Selected!");
 } else {

@@ -12,8 +12,8 @@ $userinvid = $_GET['id'];
 $gateway = new UserPuzzleGateway($db);
 $code = $gateway->delete($userinvid);
 
-session_start();
-if ($puzzle === false) {
+// session_start();
+if ($code === false) {
     failAlert("Puzzle Not Removed!");
 } else {
     successAlert("Puzzle removed from user inventory");

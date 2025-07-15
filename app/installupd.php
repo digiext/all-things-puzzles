@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
     $sql = "UPDATE setup SET installed = 1";
 
 
-    session_start();
+    // session_start();
     if ($code instanceof PDOException) {
         failAlertNoRedir("Database Error: " . $code->getMessage());
     } elseif ($code === INVALID_USERNAME) {

@@ -48,7 +48,7 @@ $gateway = new UserPuzzleGateway($db);
 $code = $gateway->update($userinvid, $values);
 
 
-session_start();
+// session_start();
 if ($puzzle === false) {
     failAlert("User Record Not Selected!");
 } else {

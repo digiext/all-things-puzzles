@@ -73,7 +73,7 @@ if ($code && $ucode) {
     $code = $gateway->delete($id);
 }
 
-session_start();
+// session_start();
 if (!$code && !$ucode) {
     failAlert("Error while moving puzzle!");
 } else {
