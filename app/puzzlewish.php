@@ -55,21 +55,23 @@ $puzzlewishes = $gateway->findByUserId($userid);
             </tr>
         </thead>
 
-        <tbody class="table-group-divider">
-            <?php foreach ($puzzlewishes as $puzzlewish) {
-                if (!($puzzlewish instanceof PuzzleWish)) continue;
-                echo
-                "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''>" . ($puzzlewish->getName()) . "</th>
-                        <td class='align-middle name'>" . $puzzlewish->getPieces() . "</td>
-                        <td class='align-middle'>" . $puzzlewish->getBrand()->getName() . "</td>
-                        <td class='align-middle'>" . $puzzlewish->getUpc() . "</td>
-                        <td class='text-center'><a class='btn btn-secondary' href='puzzlewishedit.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-pencil'></a></td>
-                        <td class='text-center'><button class='btn btn-secondary' type='submit' data-bs-toggle='modal' data-bs-target='#destination'><i class='bi bi-arrow-bar-right'></a></td>
-                        <td class='text-center'><a class='btn btn-secondary' href='puzzlewishdelete.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-trash'></a></td>
-                    </tr>";
+        <if class="table-group-divider">
+            <?php if (!empty($puzzlewishes)) {
+                foreach ($puzzlewishes as $puzzlewish) {
+                    if (!($puzzlewish instanceof PuzzleWish)) continue;
+                    echo
+                    "<tr class='user-puzzle-row'>
+                            <th scope='row' class='text-center align-middle''>" . ($puzzlewish->getName()) . "</th>
+                            <td class='align-middle name'>" . $puzzlewish->getPieces() . "</td>
+                            <td class='align-middle'>" . $puzzlewish->getBrand()->getName() . "</td>
+                            <td class='align-middle'>" . $puzzlewish->getUpc() . "</td>
+                            <td class='text-center'><a class='btn btn-secondary' href='puzzlewishedit.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-pencil'></a></td>
+                            <td class='text-center'><button class='btn btn-secondary' type='submit' data-bs-toggle='modal' data-bs-target='#destination'><i class='bi bi-arrow-bar-right'></a></td>
+                            <td class='text-center'><a class='btn btn-secondary' href='puzzlewishdelete.php?id=" . $puzzlewish->getId() . "'><i class='bi bi-trash'></a></td>
+                        </tr>";
+                }
             } ?>
-        </tbody>
+            </tbody>
     </table>
 </div>
 
