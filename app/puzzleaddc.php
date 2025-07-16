@@ -33,7 +33,9 @@ if (isset($_POST['submit'])) {
     $upc = $_POST['upc'];
     $disposition = $_POST['disposition'];
     $location = $_POST['location'];
-    $categories = $_POST['category'];
+    if (isset($_POST['category'])) {
+        $categories = $_POST['category'];
+    }
 
     if (!empty($brandname)) {
         $gateway = new BrandGateway($db);
@@ -55,30 +57,36 @@ if (isset($_POST['submit'])) {
         $code = $gateway->create($locationdesc);
         $location = $code;
     }
-    if (!empty($categorydesc)) {
-        $gateway = new CategoryGateway($db);
-        $code = $gateway->create($categorydesc);
-        $category = $code;
-    }
 
+    // Create Puzzle
     $gateway = new PuzzleGateway($db);
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
-    $cgateway = new CategoryGateway($db);
-    foreach ($categories as $category) {
-        $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
-    }
 
-    $newCategories = explode(",", $_POST['categoryDesc'] ?? "");
-    foreach ($newCategories as $newcategory) {
-        if ($newcategory === '') continue;
-        $cat = $cgateway->create(trim($newcategory));
+    if (!empty($categorydesc)) {
+        $newCategories = explode(",", $_POST['categoryDesc'] ?? "");
+        foreach ($newCategories as $newcategory) {
+            if ($newcategory === '') continue;
+            $cgateway = new CategoryGateway($db);
+            $cat = $cgateway->create(trim($newcategory));
+            $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
+        }
+    } elseif (!empty($categories)) {
+        $cgateway = new CategoryGateway($db);
+        $cat = $cgateway->create($categories);
         $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
     }
+
+    // $cgateway = new CategoryGateway($db);
+    // foreach ($categories as $category) {
+    //     $puzcat = $cgateway->createPuzzle($puzzle->getId(), $category);
+    // }
 
     // session_start();
     if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
+    } elseif (!empty($addfailed)) {
+        failAlert("Categories for puzzle were not created!");
     } else {
         if ($hasfile) {
             if (!is_dir(UPLOAD_DIR_ABSOLUTE)) {
