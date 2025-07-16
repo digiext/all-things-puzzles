@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
     $gateway = new PuzzleWishGateway($db);
     $puzzle = $gateway->create($userid, $puzname, $pieces, $brand, $upc);
 
-    session_start();
+    // session_start();
     if ($puzzle === false) {
         failAlert("Puzzle Not Created!");
     } else {
