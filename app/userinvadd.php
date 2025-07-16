@@ -22,20 +22,27 @@ $options = [
     MAX_PER_PAGE => 1000
 ];
 
+// Return all puzzles from master list
 $gateway = new PuzzleGateway($db);
 $allpuzzles = $gateway->findAll($options);
 
+// Return all puzzles for user
 $userid = getUserID();
 
 $gateway = new UserPuzzleGateway($db);
 $userpuzzles = $gateway->findByUserId($userid);
 
-$userPuzIDs = [];
-foreach ($userpuzzles as $upuz) {
-    array_push($userPuzIDs, $upuz->getPuzzle()->getId());
-}
+// If user puzzles have records subtract them from master list
+if (!empty($userpuzzles)) {
+    $userPuzIDs = [];
+    foreach ($userpuzzles as $upuz) {
+        array_push($userPuzIDs, $upuz->getPuzzle()->getId());
+    }
 
-$puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $userPuzIDs));
+    $puzzles = array_filter($allpuzzles,  fn($puz) => !in_array($puz->getId(), $userPuzIDs));
+} else {
+    $puzzles = $allpuzzles;
+}
 ?>
 
 <script src="scripts/puzzles.js"></script>
