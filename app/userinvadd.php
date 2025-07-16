@@ -112,15 +112,17 @@ if (!empty($userpuzzles)) {
             </thead>
 
             <tbody class="table-group-divider">
-                <?php foreach ($userpuzzles as $userpuzzle) {
-                    if (!($userpuzzle instanceof UserPuzzle)) continue;
-                    echo
-                    "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''><img src='" . getThumbnail($userpuzzle->getPuzzle()->getPicture()) . "' class='img-fluid' alt='Puzzle image'></th>
-                        <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
-                        <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
-                        <td class='text-center'><a class='btn btn-secondary ' href='userinvremove.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-dash'></a></td>
-                    </tr>";
+                <?php if (!empty($userpuzzles)) {
+                    foreach ($userpuzzles as $userpuzzle) {
+                        if (!($userpuzzle instanceof UserPuzzle)) continue;
+                        echo
+                        "<tr class='user-puzzle-row'>
+                            <th scope='row' class='text-center align-middle''><img src='" . getThumbnail($userpuzzle->getPuzzle()->getPicture()) . "' class='img-fluid' alt='Puzzle image'></th>
+                            <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
+                            <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
+                            <td class='text-center'><a class='btn btn-secondary ' href='userinvremove.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-dash'></a></td>
+                        </tr>";
+                    }
                 } ?>
             </tbody>
         </table>
