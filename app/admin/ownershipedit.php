@@ -12,7 +12,7 @@ $ownership = $_POST['ownership'];
 $gateway = new OwnershipGateway($db);
 $code = $gateway->updateDesc($id, $ownership);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while updating ownership '$ownership'!");
 } else {

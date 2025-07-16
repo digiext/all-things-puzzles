@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new OwnershipGateway($db);
     $code = $gateway->create($ownership);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Ownership Not Created!");
     } else {

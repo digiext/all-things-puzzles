@@ -12,7 +12,7 @@ $brand = $_POST['brand'];
 $gateway = new BrandGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting brand '$brand'!");
 } else {

@@ -12,7 +12,7 @@ $category = $_POST['category'];
 $gateway = new CategoryGateway($db);
 $code = $gateway->updateDesc($id, $category);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while updating category '$category'!");
 } else {

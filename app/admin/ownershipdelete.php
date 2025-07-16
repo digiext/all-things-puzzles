@@ -12,7 +12,7 @@ $ownership = $_POST['ownership'];
 $gateway = new OwnershipGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting ownership '$ownership'!");
 } else {

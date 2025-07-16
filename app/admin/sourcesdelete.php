@@ -12,7 +12,7 @@ $source = $_POST['source'];
 $gateway = new SourceGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting source '$source'!");
 } else {

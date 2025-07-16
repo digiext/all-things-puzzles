@@ -12,7 +12,7 @@ $user = $_POST['user'];
 $gateway = new UserGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting user '$user'!");
 } else {

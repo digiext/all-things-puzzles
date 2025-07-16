@@ -12,7 +12,7 @@ $status = $_POST['status'];
 $gateway = new StatusGateway($db);
 $code = $gateway->updateDesc($id, $status);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while updating status '$status'!");
 } else {

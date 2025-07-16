@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new DispositionGateway($db);
     $code = $gateway->create($disposition);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Disposition Not Created!");
     } else {

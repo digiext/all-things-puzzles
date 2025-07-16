@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new StatusGateway($db);
     $code = $gateway->create($status);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Status Not Created!");
     } else {

@@ -21,7 +21,12 @@ $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
 $categorydesc = $_POST['categoryDesc'];
-$hasfile = isset($_FILES['picture']);
+$addfailed = null;
+if (($_FILES["picture"]["error"]) > 0) {
+    $hasfile = false;
+} else {
+    $hasfile = true;
+}
 
 if (isset($_POST['submit'])) {
     $puzname = $_POST['puzname'];
@@ -63,6 +68,7 @@ if (isset($_POST['submit'])) {
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
 
 
+    // Create categories and tie them to puzzle in puzcat table
     if (!empty($categorydesc)) {
         $newCategories = explode(",", $_POST['categoryDesc'] ?? "");
         foreach ($newCategories as $newcategory) {
@@ -72,9 +78,10 @@ if (isset($_POST['submit'])) {
             $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
         }
     } elseif (!empty($categories)) {
-        $cgateway = new CategoryGateway($db);
-        $cat = $cgateway->create($categories);
-        $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $cat->getId());
+        foreach ($categories as $category) {
+            $cgateway = new CategoryGateway($db);
+            $addfailed |= !$cgateway->createPuzzle($puzzle->getId(), $category);
+        }
     }
 
     // $cgateway = new CategoryGateway($db);
@@ -128,7 +135,8 @@ if (isset($_POST['submit'])) {
                 successAlert("Puzzle has been created!");
             }
 
-            warningAlert("Puzzle successfully created, however, thumbnail failed to save!");
+            // warningAlert("Puzzle successfully created, however, thumbnail failed to save!");
+            successAlert("Puzzle has been created");
         } else successAlert("Puzzle has been created");
     }
 

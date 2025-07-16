@@ -12,7 +12,7 @@ $location = $_POST['location'];
 $gateway = new LocationGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting location '$location'!");
 } else {

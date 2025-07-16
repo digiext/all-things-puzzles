@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new LocationGateway($db);
     $code = $gateway->create($location);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Location Not Created!");
     } else {

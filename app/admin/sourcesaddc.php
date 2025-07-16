@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new SourceGateway($db);
     $code = $gateway->create($source);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Source Not Created!");
     } else {

@@ -12,7 +12,7 @@ $source = $_POST['source'];
 $gateway = new SourceGateway($db);
 $code = $gateway->updateDesc($id, $source);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while updating source '$source'!");
 } else {

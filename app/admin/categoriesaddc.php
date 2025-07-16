@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $gateway = new CategoryGateway($db);
     $code = $gateway->create($category);
 
-    session_start();
+    // session_start();
     if ($code == false) {
         failAlert("Category Not Created!");
     } else {

@@ -12,7 +12,7 @@ $disposition = $_POST['disposition'];
 $gateway = new DispositionGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting disposition '$disposition'!");
 } else {

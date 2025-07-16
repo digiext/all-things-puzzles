@@ -12,7 +12,7 @@ $status = $_POST['status'];
 $gateway = new StatusGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting status '$status'!");
 } else {

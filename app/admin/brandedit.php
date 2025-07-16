@@ -12,7 +12,7 @@ $brand = $_POST['brand'];
 $gateway = new BrandGateway($db);
 $code = $gateway->updateName($id, $brand);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while updating brand '$brand'!");
 } else {

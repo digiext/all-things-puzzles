@@ -12,7 +12,7 @@ $category = $_POST['category'];
 $gateway = new CategoryGateway($db);
 $code = $gateway->delete($id);
 
-session_start();
+// session_start();
 if (!$code) {
     failAlert("Error while deleting category '$category'!");
 } else {
