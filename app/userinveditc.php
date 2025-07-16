@@ -42,14 +42,12 @@ $values = [
     USR_INV_LOANED => $loanedoutto
 ];
 
-echo var_dump($values);
-
 $gateway = new UserPuzzleGateway($db);
 $code = $gateway->update($userinvid, $values);
 
 
 // session_start();
-if ($puzzle === false) {
+if ($code === false) {
     failAlert("User Record Not Selected!");
 } else {
     successAlert("User puzzle record updated");
