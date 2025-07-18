@@ -27,8 +27,15 @@ build-stage:
     - composer update --lock
     - composer install
 
-#build_image:
-#  stage: build
+build_zip:
+  stage: build
+  script:
+    - zip -r apponly.zip app
+    - 'curl 
+        --header "JOB-TOKEN: $CI_JOB_TOKEN"
+        --upload-file apponly.zip
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/Content/1.0.0/apponly.zip"'
+
 #  before_script:
     #- mkdir -p $HOME/.docker
     #- echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
