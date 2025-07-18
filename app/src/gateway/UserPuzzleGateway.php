@@ -363,7 +363,7 @@ class UserPuzzleGateway
     {
         // $sql = "SELECT *, (difficultyrating+qualityrating)/2 as rating FROM userinv WHERE (difficultyrating+qualityrating)/2 !=0 ORDER BY (rating) DESC LIMIT 5";
 
-        $sql = "SELECT * FROM userinv WHERE overallrating !=0 ORDER BY overallrating DESC LIMIT 5";
+        $sql = "SELECT *, SUM(overallrating)/count(puzzleid) As SumOverall FROM userinv WHERE overallrating !=0 GROUP BY puzzleid ORDER BY SumOverall DESC LIMIT 5";
 
         try {
             $stmt = $this->db->query($sql);

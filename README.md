@@ -10,9 +10,11 @@ All Things Puzzles is an inventory management system of your personal puzzle col
 * Multi-user capable
 * Wishlist
 
+# Docker Install
+
 ## Requirements
 
-* Machine with docker installed
+* Machine with docker and git installed
 
 ## Installation
 
@@ -51,6 +53,24 @@ Once dockers are running, use the following command to update composer requireme
 docker exec -it all-things-puzzles-php-1 composer update
 ```
 
+# Webserver Install
+
+## Requirements
+
+* Machine running a webserver (nginx or apache), php8.4, mariadb, and has php composer
+
+## Installation
+
+* Download apponly.zip from the latest release on the Releases page
+
+* Unzip apponly.zip file to the root of your webserver
+
+* Create database using sql file available in the repo
+
+* Create .env file in root web directory based off the env-example file in the repo
+
+* Navigate to web root directory and run php composer update to generate vendor files
+
 # Access application
 
-Go to your default webpage.  Ex: http://"ip address of machine"/ or http://"hostname"/
+Go to your default webpage.  Ex: <http://ip address of machine/> or <http://hostname/>
