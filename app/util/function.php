@@ -80,7 +80,7 @@ function deleteCookie(string $cookie): void
 function getUserID(): int|false
 {
     if (!isLoggedIn()) return false;
-    return $_SESSION[USER_ID];
+    return decrypt($_SESSION[USER_ID]);
 }
 
 function getUserName(): string|false

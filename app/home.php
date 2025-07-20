@@ -70,7 +70,7 @@ $highestrated = $gateway->highestrated();
                     <?php foreach ($highestrated as $puzzle) {
                         if (!($puzzle instanceof UserPuzzle)) continue;
                         echo
-                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . "</li>";
+                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . ' - ' . number_format($puzzle->getOverall(), 2) . "</li>";
                     } ?>
                 </ul>
             </div>

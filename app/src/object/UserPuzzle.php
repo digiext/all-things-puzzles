@@ -44,7 +44,7 @@ class UserPuzzle implements \JsonSerializable
         $status = (new StatusGateway($db))->findById($res['statusid']);
         $ownership = (new OwnershipGateway($db))->findById($res['ownershipid']);
 
-        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['startdate'], $res['enddate'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $res['overallrating'], $ownership, $res['loanedoutto']);
+        return new UserPuzzle($res['userinvid'], $user, $puzzle, $status, $res['missingpieces'], $res['startdate'], $res['enddate'], $res['totaldays'], $res['difficultyrating'], $res['qualityrating'], $res['SumOverall'] ?? $res['overallrating'], $ownership, $res['loanedoutto']);
     }
 
     public function getId(): int

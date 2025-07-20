@@ -9,6 +9,7 @@ use puzzlethings\src\object\Puzzle;
 use puzzlethings\src\gateway\UserPuzzleGateway;
 use puzzlethings\src\object\UserPuzzle;
 
+
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
     header("Location: index.php");
