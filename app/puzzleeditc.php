@@ -11,10 +11,10 @@ use puzzlethings\src\object\Disposition;
 use puzzlethings\src\object\Location;
 use puzzlethings\src\object\Source;
 
-global $db;
-require_once 'util/function.php';
-require_once 'util/db.php';
-require_once 'util/files.php';
+// global $db;
+// require_once 'util/function.php';
+// require_once 'util/db.php';
+// require_once 'util/files.php';
 
 const UPLOAD_DIR = '/images/uploads/thumbnails';
 const UPLOAD_DIR_ABSOLUTE = __DIR__ . UPLOAD_DIR;
