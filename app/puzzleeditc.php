@@ -1,32 +1,33 @@
 <?php
+die("what")
 
-use puzzlethings\src\gateway\CategoryGateway;
-use puzzlethings\src\gateway\PuzzleGateway;
-use puzzlethings\src\gateway\BrandGateway;
-use puzzlethings\src\gateway\SourceGateway;
-use puzzlethings\src\gateway\DispositionGateway;
-use puzzlethings\src\gateway\LocationGateway;
-use puzzlethings\src\object\Brand;
-use puzzlethings\src\object\Disposition;
-use puzzlethings\src\object\Location;
-use puzzlethings\src\object\Source;
+// use puzzlethings\src\gateway\CategoryGateway;
+// use puzzlethings\src\gateway\PuzzleGateway;
+// use puzzlethings\src\gateway\BrandGateway;
+// use puzzlethings\src\gateway\SourceGateway;
+// use puzzlethings\src\gateway\DispositionGateway;
+// use puzzlethings\src\gateway\LocationGateway;
+// use puzzlethings\src\object\Brand;
+// use puzzlethings\src\object\Disposition;
+// use puzzlethings\src\object\Location;
+// use puzzlethings\src\object\Source;
 
 // global $db;
 // require_once 'util/function.php';
 // require_once 'util/db.php';
 // require_once 'util/files.php';
 
-const UPLOAD_DIR = '/images/uploads/thumbnails';
-const UPLOAD_DIR_ABSOLUTE = __DIR__ . UPLOAD_DIR;
+// const UPLOAD_DIR = '/images/uploads/thumbnails';
+// const UPLOAD_DIR_ABSOLUTE = __DIR__ . UPLOAD_DIR;
 
-$brandname = $_POST['brandName'];
-$sourcedesc = $_POST['sourceDesc'];
-$dispositiondesc = $_POST['dispositionDesc'];
-$locationdesc = $_POST['locationDesc'];
-$hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
+// $brandname = $_POST['brandName'];
+// $sourcedesc = $_POST['sourceDesc'];
+// $dispositiondesc = $_POST['dispositionDesc'];
+// $locationdesc = $_POST['locationDesc'];
+// $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
 // echo $_FILES['picture']['error'];
 
-var_dump($hasfile);
+// var_dump($hasfile);
 
 // if (isset($_POST['submit'])) {
 //     $id = $_POST['id'];
