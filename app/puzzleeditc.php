@@ -66,7 +66,7 @@ if (isset($_POST['submit'])) {
     $picture = $deleteoldpic ? null : $currpicture;
 
     if ($hasfile) {
-        if (!is_dir(UPLOAD_DIR)) {
+        if (!file_exists(UPLOAD_DIR_ABSOLUTE)) {
             mkdir('images');
             mkdir('images/uploads');
             mkdir('images/uploads/thumbnails');

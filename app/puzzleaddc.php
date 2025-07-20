@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
         failAlert("Categories for puzzle were not created!");
     } else {
         if ($hasfile) {
-            if (!is_dir(UPLOAD_DIR_ABSOLUTE)) {
+            if (!file_exists(UPLOAD_DIR_ABSOLUTE)) {
                 mkdir('images');
                 mkdir('images/uploads');
                 mkdir('images/uploads/thumbnails');
