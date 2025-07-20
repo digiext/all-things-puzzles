@@ -174,5 +174,5 @@ if (isset($_POST['submit'])) {
         successAlert("Puzzle Updated!");
     }
 
-    header("Location: puzzleinv.php");
+    // header("Location: puzzleinv.php");
 }
