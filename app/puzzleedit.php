@@ -238,7 +238,7 @@ $puzcatnames = $gateway->findCatNames($id) ?? [];
             <div class="p-2 mb-2 mx-1">
                 <label for="picture" class="form-label"><strong>Picture</strong></label>
                 <div class="input-group">
-                    <input type="file" accept="image/png, image/jpeg" class="form-control" name="picture" id="picture" max="1" value="<?php echo $puzzle->getPicture(); ?>">
+                    <input type="file" accept="image/png, image/jpeg" class="form-control" name="picture" id="picture" max="1">
                     <button type="button" class="btn btn-outline-danger" id="pictureclear"><i class="bi bi-trash"></i> Clear</button>
                 </div>
             </div>

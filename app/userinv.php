@@ -19,7 +19,7 @@ include 'nav.php';
 $userid = getUserID();
 
 $gateway = new UserPuzzleGateway($db);
-$userpuzzles = $gateway->findByUserId($userid);
+$userpuzzles = $gateway->findByUserId($userid) ?? [];
 ?>
 
 <div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">

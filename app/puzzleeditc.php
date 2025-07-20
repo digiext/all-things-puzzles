@@ -24,6 +24,7 @@ $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
 $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
+echo $_FILES['picture']['error'];
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
@@ -77,9 +78,10 @@ if (isset($_POST['submit'])) {
 
         if ($status !== UPLOAD_ERR_OK && $status !== UPLOAD_ERR_NO_FILE) {
             warningAlert(FILE_MESSAGES[$status], "puzzleedit.php?id=" . $id);
+            return;
         }
 
-        if ($status !== UPLOAD_ERR_NO_FILE) {
+        if ($status === UPLOAD_ERR_OK) {
             $filesize = filesize($tmp);
             if ($filesize > MAX_FILE_SIZE) {
                 warningAlert("File too large! Must be under 5MB!", "puzzleedit.php?id=" . $id);
