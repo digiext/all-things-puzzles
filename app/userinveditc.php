@@ -23,10 +23,11 @@ if ((($_POST['startdate']) != '1970-01-01') && (($_POST['enddate']) != '1970-01-
     $totaldays = 0;
 }
 
-$difficultyrating = $_POST['difficulty'];
-$qualityrating = $_POST['quality'];
-$overallrating = $_POST['overall'];
+$difficultyrating = min(max($_POST['difficulty'], 0.0), 5.0);
+$qualityrating = min(max($_POST['quality'], 0.0), 5.0);
+$overallrating = min(max($_POST['overall'], 0.0), 5.0);
 $ownership = $_POST['ownership'];
+
 $loanedoutto = $_POST['loanedoutto'];
 
 $values = [
