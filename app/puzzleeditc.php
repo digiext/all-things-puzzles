@@ -98,6 +98,7 @@ if (isset($_POST['submit'])) {
 
             var_dump($filepath);
             $success = move_uploaded_file($tmp, $filepath);
+            echo $success;
             if ($success) {
                 $picture = $uploadedFile;
             }
