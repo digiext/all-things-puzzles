@@ -95,6 +95,7 @@ if (isset($_POST['submit'])) {
             $uploadedFile = str_replace([" ", "%"], "_", urlencode($puzzle->getName())) . "_" . $puzzle->getId() . '.' . ALLOWED_IMAGE_TYPES[$mimetype];
             $filepath = UPLOAD_DIR_ABSOLUTE . '/' . $uploadedFile;
 
+            var_dump($filepath);
             $success = move_uploaded_file($tmp, $filepath);
             if ($success) {
                 $picture = $uploadedFile;
