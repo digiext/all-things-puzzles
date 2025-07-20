@@ -163,18 +163,18 @@ if (isset($_POST['submit'])) {
     }
 
     if ($code === false) {
-        //failAlert("Puzzle Not Updated!");
+        failAlert("Puzzle Not Updated!");
 
         if ($hasfile && ($picurl ?? '') != '') {
             $success = unlink(UPLOAD_DIR . '/' . $picture);
             if (!$success) {
                 error_log("Failed deleting file $picture");
-                //warningAlertNoRedir("Failed removing picture from server");
+                warningAlertNoRedir("Failed removing picture from server");
             }
         }
     } else {
-        // successAlert("Puzzle Updated!");
+        successAlert("Puzzle Updated!");
     }
 
-    // header("Location: puzzleinv.php");
+    header("Location: puzzleinv.php");
 }
