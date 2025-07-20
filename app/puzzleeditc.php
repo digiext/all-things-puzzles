@@ -171,7 +171,7 @@ if (isset($_POST['submit'])) {
             }
         }
     } else {
-        successAlert("Puzzle Updated!");
+        // successAlert("Puzzle Updated!");
     }
 
     // header("Location: puzzleinv.php");
