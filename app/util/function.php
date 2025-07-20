@@ -20,6 +20,7 @@ try {
 
 if (!isset($_ENV['BASE_URL'])) die("Base URL not set in .env!");
 define("BASE_URL", rtrim($_ENV['BASE_URL'], '/'));
+var_dump($_SESSION);
 
 function isDev(): bool
 {
@@ -92,7 +93,7 @@ function getUserName(): string|false
         $user = getLoggedInUser();
         if (!$user) return false;
 
-        $uname = getLoggedInUser()->getUsername();
+        $uname = $user->getUsername();
         $_SESSION[USER_NAME] = encrypt($uname);
         return $uname;
     }
