@@ -103,7 +103,7 @@ function getLoggedInUser(): User|false
     require_once __DIR__ . '/db.php';
 
     $gateway = new UserGateway($db);
-    return $gateway->findById(getUserID());
+    return $gateway->findById(getUserID()) ?? false;
 }
 
 function isLoggedIn(): bool
