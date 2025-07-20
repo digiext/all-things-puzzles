@@ -272,7 +272,7 @@ $puzcatnames = $gateway->findCatNames($id) ?? [];
             ?>
             <img src='<?php echo $thumbnail ?>' class='object-fit-cover w-100' alt='Puzzle image' id="cardpicture" height="200">
             <?php
-            if (str_starts_with($thumbnail, $_ENV['IMAGE_MIRROR'])) {
+            if (key_exists('IMAGE_MIRROR', $_ENV) && str_starts_with($thumbnail, $_ENV['IMAGE_MIRROR'])) {
                 echo "
                 <div class='alert alert-warning mb-0 p-1 rounded-top-0 text-center' role='alert'>
                     Uploaded images will be saved locally <strong>ONLY</strong>!<br>They <strong>WILL NOT</strong> be saved to your image mirror!
@@ -288,7 +288,8 @@ $puzcatnames = $gateway->findCatNames($id) ?? [];
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-puzzle"></i><span id="cardpieces"><?php echo $puzzle->getPieces() ?></span></li>
-            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="col-10"><?php $cattxt = join(", ", $puzcatnames); echo $cattxt === '' ? "<i class='text-body-secondary'>None</i>" : $cattxt ?></span></li>
+            <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-folder"></i><span id="cardcategory" class="col-10"><?php $cattxt = join(", ", $puzcatnames);
+                                                                                                                                                echo $cattxt === '' ? "<i class='text-body-secondary'>None</i>" : $cattxt ?></span></li>
             <li class="list-group-item hstack gap-2"><span class="input-group-text py-1">$</span><span id="cardcost"><?php echo $puzzle->getCost() ?></span><span id="cardcurrency">USD</span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-stars"></i><span id="cardsource"><?php echo $puzzle->getSource()->getDescription() ?></span></li>
             <li class="list-group-item hstack gap-2"><i class="input-group-text p-2 bi bi-qr-code"></i><span id="cardupc"><?php echo $puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc() ?></span></li>
