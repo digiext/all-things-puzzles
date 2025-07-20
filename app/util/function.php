@@ -59,7 +59,7 @@ function decrypt(string $ciphertext): string|false
 {
     $cipher = "aes-256-cbc";
 
-    list($encrypted_data, $iv, $key) = explode('::', base64_decode($ciphertext));
+    [$encrypted_data, $iv, $key] = explode('::', base64_decode($ciphertext));
     return openssl_decrypt($encrypted_data, $cipher, $key, 0, $iv);
 }
 
