@@ -89,6 +89,9 @@ function getUserName(): string|false
     if (isset($_SESSION[USER_NAME])) {
         return decrypt($_SESSION[USER_NAME]);
     } else {
+        $user = getLoggedInUser();
+        if (!$user) return false;
+
         $uname = getLoggedInUser()->getUsername();
         $_SESSION[USER_NAME] = encrypt($uname);
         return $uname;
