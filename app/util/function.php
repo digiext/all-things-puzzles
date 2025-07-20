@@ -21,23 +21,28 @@ try {
 if (!isset($_ENV['BASE_URL'])) die("Base URL not set in .env!");
 define("BASE_URL", rtrim($_ENV['BASE_URL'], '/'));
 
-function isDev(): bool {
+function isDev(): bool
+{
     return $GLOBALS['DEV'] ?? false;
 }
 
-function returnToHome(): void {
+function returnToHome(): void
+{
     returnTo('home.php');
 }
 
-function returnToIndex(): void{
+function returnToIndex(): void
+{
     returnTo('index.php');
 }
 
-function returnTo($string) {
+function returnTo($string)
+{
     header('Location: ' . $string);
 }
 
-function encrypt(string $value): string {
+function encrypt(string $value): string
+{
     $key = md5(openssl_random_pseudo_bytes(4));
 
     $cipher = "aes-256-cbc";
@@ -50,29 +55,36 @@ function encrypt(string $value): string {
 }
 
 // Decrypt cookie
-function decrypt(string $ciphertext): string|false {
+function decrypt(string $ciphertext): string|false
+{
     $cipher = "aes-256-cbc";
 
     list($encrypted_data, $iv, $key) = explode('::', base64_decode($ciphertext));
     return openssl_decrypt($encrypted_data, $cipher, $key, 0, $iv);
 }
 
-function cookieSet(string $cookie): bool {
+function cookieSet(string $cookie): bool
+{
     return isset($_COOKIE[$cookie]);
 }
 
-function deleteCookie(string $cookie): void {
+function deleteCookie(string $cookie): void
+{
     if (cookieSet($cookie)) {
-        setcookie($cookie, null, -1, '/');
+        setcookie($cookie, "", [
+            'expires' => -1,
+        ]);
     }
 }
 
-function getUserID(): int|false {
+function getUserID(): int|false
+{
     if (!isLoggedIn()) return false;
     return decrypt($_SESSION[USER_ID]);
 }
 
-function getUserName(): string|false {
+function getUserName(): string|false
+{
     if (!isLoggedIn()) return false;
     if (isset($_SESSION[USER_NAME])) {
         return decrypt($_SESSION[USER_NAME]);
@@ -83,7 +95,8 @@ function getUserName(): string|false {
     }
 }
 
-function getLoggedInUser(): User|false {
+function getLoggedInUser(): User|false
+{
     if (!isLoggedIn()) return false;
 
     global $db;
@@ -93,7 +106,8 @@ function getLoggedInUser(): User|false {
     return $gateway->findById(getUserID());
 }
 
-function isLoggedIn(): bool {
+function isLoggedIn(): bool
+{
     if (isset($_SESSION[USER_ID])) return true;
 
     // else check for rememberme
@@ -119,38 +133,46 @@ function isLoggedIn(): bool {
     return false;
 }
 
-function isAdmin(): bool {
+function isAdmin(): bool
+{
     return (isLoggedIn() && isset($_SESSION[USER_GROUP]) && decrypt($_SESSION[USER_GROUP]) == "" . ADMIN_GROUP_ID);
 }
 
-function successAlertNoRedir($value): void {
+function successAlertNoRedir($value): void
+{
     $_SESSION['success'] = $value;
 }
 
-function successAlert($value, $redir = "index.php"): void {
+function successAlert($value, $redir = "index.php"): void
+{
     $_SESSION['success'] = $value;
     header("Location: " . $redir);
 }
 
-function warningAlertNoRedir($value): void {
+function warningAlertNoRedir($value): void
+{
     $_SESSION['warning'] = $value;
 }
 
-function warningAlert($value, $redir = "index.php"): void {
+function warningAlert($value, $redir = "index.php"): void
+{
     $_SESSION['warning'] = $value;
     header("Location: " . $redir);
 }
 
-function failAlertNoRedir($value): void {
+function failAlertNoRedir($value): void
+{
     $_SESSION['fail'] = $value;
 }
 
-function failAlert($value, $redir = "index.php"): void {
+function failAlert($value, $redir = "index.php"): void
+{
     $_SESSION['fail'] = $value;
     header("Location:" . $redir);
 }
 
-function hyphenate($str, array $noStrip = []): string {
+function hyphenate($str, array $noStrip = []): string
+{
     // non-alpha and non-numeric characters become spaces
     $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
     $str = trim($str);
@@ -160,7 +182,8 @@ function hyphenate($str, array $noStrip = []): string {
     return $str;
 }
 
-function rrmdir($dir): void {
+function rrmdir($dir): void
+{
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
@@ -175,19 +198,21 @@ function rrmdir($dir): void {
     }
 }
 
-function getThumbnail($path) {
+function getThumbnail($path)
+{
     if (($path ?? '') === '') {
         return 'images/no-image-dark.svg';
     } else if (file_exists('images/uploads/thumbnails/' . $path)) {
         return 'images/uploads/thumbnails/' . $path;
-    } else if (isset($_ENV['IMAGE_MIRROR']) && fopen($_ENV['IMAGE_MIRROR'] . 'thumbnails/' . $path, "r")) {
+    } else if (key_exists('IMAGE_MIRROR', $_ENV) && $_ENV['IMAGE_MIRROR'] != "" && fopen($_ENV['IMAGE_MIRROR'] . 'thumbnails/' . $path, "r")) {
         return $_ENV['IMAGE_MIRROR'] . 'thumbnails/' . $path;
     } else {
         return 'images/fail-load-image-dark.svg';
     }
 }
 
-function getNiceDateRepresentation($date): string {
+function getNiceDateRepresentation($date): string
+{
     $timestamp = strtotime($date);
     if ((int) date("j", $timestamp) % 10 == 1 && (int) date("j", $timestamp) != 11) {
         // 1st, 21st, 31st
