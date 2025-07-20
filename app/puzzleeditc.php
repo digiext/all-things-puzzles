@@ -1,5 +1,5 @@
 <?php
-die("what")
+echo "what";
 
 // use puzzlethings\src\gateway\CategoryGateway;
 // use puzzlethings\src\gateway\PuzzleGateway;
