@@ -24,7 +24,9 @@ $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
 $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
-echo $_FILES['picture']['error'];
+// echo $_FILES['picture']['error'];
+
+var_dump($hasfile);
 
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
