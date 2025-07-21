@@ -85,8 +85,23 @@ class UserGateway
         }
     }
 
-    public function count(): int {
+    public function count(): int
+    {
         $sql = "SELECT COUNT(*) FROM user";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting users: " . $e->getMessage());
+            return -1;
+        }
+    }
+
+    public function countAdmin(): int
+    {
+        $sql = "SELECT COUNT(*) FROM user WHERE usergroupid = 1";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -135,7 +150,8 @@ class UserGateway
         }
     }
 
-    public function findByName(string $name): array {
+    public function findByName(string $name): array
+    {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
@@ -288,7 +304,8 @@ class UserGateway
         }
     }
 
-    public function usernameInUse(string $username): bool {
+    public function usernameInUse(string $username): bool
+    {
         $sql = "SELECT COUNT(*) FROM user where user_name = :username";
 
         try {
@@ -303,7 +320,8 @@ class UserGateway
         }
     }
 
-    public function emailInUse(string $email): bool {
+    public function emailInUse(string $email): bool
+    {
         $sql = "SELECT COUNT(*) FROM user where email = :email";
 
         try {
@@ -319,7 +337,8 @@ class UserGateway
     }
 
 
-    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false {
+    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false
+    {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {

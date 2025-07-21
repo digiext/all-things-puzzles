@@ -9,8 +9,19 @@ require_once '../util/db.php';
 $id = $_POST['id'];
 $user = $_POST['user'];
 
+// Start new user gateway
 $gateway = new UserGateway($db);
-$code = $gateway->delete($id);
+
+// Count admin records
+$records = $gateway->countAdmin();
+
+// Only allow delete if this is not the last admin
+if ($records > 1) {
+
+    $code = $gateway->delete($id);
+} else {
+    failAlert('You can not delete the last admin');
+}
 
 // session_start();
 if (!$code) {
