@@ -20,7 +20,7 @@ if ($records > 1) {
 
     $code = $gateway->delete($id);
 } else {
-    failAlert('You can not delete the last admin');
+    failAlert('You can not delete the last admin', 'users.php');
 }
 
 // session_start();
