@@ -27,7 +27,7 @@ Change to cloned directory
 cd all-things-puzzles
 ```
 
-Copy example env file to app directory and edit
+Copy example env file to app directory and edit.  Make sure to set the password for the database and that it matches what is in the docker-compose.yml file.
 ```bash
 cp env-example app/.env
 
@@ -73,4 +73,4 @@ docker exec -it all-things-puzzles-php-1 composer update
 
 # Access application
 
-Go to your default webpage.  Ex: <http://ip address of machine/> or <http://hostname/>
+Go to your default webpage.  Ex: <http://ip_address_of_machine/> or <http://hostname/>
