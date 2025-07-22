@@ -77,8 +77,10 @@ class UserPuzzleGateway
     ]): int
     {
         $filters = $this->determineFilters($options[FILTERS] ?? []);
+        var_dump($filters);
         $sql = "SELECT COUNT(*) FROM userinv $filters";
 
+        var_dump($sql);
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
@@ -132,66 +134,49 @@ class UserPuzzleGateway
     {
         $res = "";
 
-        // foreach ($filters as $filter => $val) {
-        //     switch ($filter) {
-        //         case PUZ_FILTER_NAME: {
-        //                 $res .= "AND puzname LIKE %" . $val . "% ";
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_PIECES: {
-        //                 if (is_array($val)) {
-        //                     $res .= "AND pieces BETWEEN $val[0] AND $val[1]";
-        //                 } else {
-        //                     $res .= "AND pieces = $val";
-        //                 }
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_BRAND: {
-        //                 if ($val instanceof Brand) {
-        //                     $id = $val->getId();
-        //                     $res .= "AND brandid = $id";
-        //                 } else {
-        //                     $res .= "AND brandid = $val";
-        //                 }
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_COST: {
-        //                 if (is_array($val)) {
-        //                     $res .= "AND cost BETWEEN $val[0] AND $val[1]";
-        //                 } else {
-        //                     $res .= "AND cost = $val";
-        //                 }
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_SOURCE: {
-        //                 if ($val instanceof Source) {
-        //                     $id = $val->getId();
-        //                     $res .= "AND sourceid = $id";
-        //                 } else {
-        //                     $res .= "AND sourceid = $val";
-        //                 }
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_LOCATION: {
-        //                 if ($val instanceof Location) {
-        //                     $id = $val->getId();
-        //                     $res .= "AND locationid = $id";
-        //                 } else {
-        //                     $res .= "AND locationid = $val";
-        //                 }
-        //                 break;
-        //             }
-        //         case PUZ_FILTER_DISPOSITION: {
-        //                 if ($val instanceof Disposition) {
-        //                     $id = $val->getId();
-        //                     $res .= "AND dispositionid = $id";
-        //                 } else {
-        //                     $res .= "AND dispositionid = $val";
-        //                 }
-        //                 break;
-        //             }
-        //     }
-        // }
+        foreach ($filters as $filter => $val) {
+            switch ($filter) {
+                case USR_FILTER_USER: {
+                        $id = $val->getId();
+                        $res .= "AND userid = $id";
+                        break;
+                    }
+                case USR_FILTER_STATUS: {
+                        if ($val instanceof Status) {
+                            $id = $val->getId();
+                            $res .= "AND statusid = $id";
+                        } else {
+                            $res .= "AND statusid = $val";
+                        }
+                        break;
+                    }
+                case USR_FILTER_MISSING: {
+                        $res .= "AND missingpieces > 0";
+                        break;
+                    }
+                case USR_FILTER_DIFFICULTY: {
+                        $res .= "AND difficultyrating > 0";
+                        break;
+                    }
+                case USR_FILTER_QUALITY: {
+                        $res .= "AND qualityrating > 0";
+                        break;
+                    }
+                case USR_FILTER_OVERALL: {
+                        $res .= "AND overallrating > 0";
+                        break;
+                    }
+                case USR_FILTER_OWNERSHIP: {
+                        if ($val instanceof Ownership) {
+                            $id = $val->getId();
+                            $res .= "AND ownershipid = $id";
+                        } else {
+                            $res .= "AND ownershipid = $val";
+                        }
+                        break;
+                    }
+            }
+        }
 
         $pos = strpos($res, "AND");
         if ($pos !== false) {

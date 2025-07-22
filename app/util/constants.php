@@ -57,3 +57,11 @@ const USR_INV_QUALITY = "qualityrating";
 const USR_INV_OVERALL = "overallrating";
 const USR_INV_OWNERSHIP = "ownershipid";
 const USR_INV_LOANED = "loanedoutto";
+
+const USR_FILTER_USER = "userid";
+const USR_FILTER_STATUS = "status";
+const USR_FILTER_MISSING = "missingpieces";
+const USR_FILTER_DIFFICULTY = "difficultyrating";
+const USR_FILTER_QUALITY = "qualityrating";
+const USR_FILTER_OVERALL = "overallrating";
+const USR_FILTER_OWNERSHIP = "ownership";

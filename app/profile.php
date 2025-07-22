@@ -1,6 +1,7 @@
 <?php
 
 use puzzlethings\src\gateway\UserGateway;
+use puzzlethings\src\gateway\UserPuzzleGateway;
 
 global $db;
 include 'util/function.php';
@@ -16,7 +17,12 @@ include 'header.php';
 include 'nav.php';
 
 $gateway = new UserGateway($db);
+$ugateway = new UserPuzzleGateway($db);
 $user = getLoggedInUser();
+$userid = getUserID();
+$totaloptions = [USR_FILTER_USER => $userid];
+
+var_dump($totaloptions);
 
 ?>
 
@@ -26,7 +32,7 @@ $user = getLoggedInUser();
     <h4>Hello, <?php echo $user->getFullname() ?? $user->getUsername() ?></h4>
     <hr>
     <div class="hstack gap-2">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
             <form class="p-2 mb-2 mx-1 align-items-center" action="useredit.php?ctx=uname" method="post">
                 <div class="col-6">
                     <label for="updateUsername"><strong>Username</strong></label>
@@ -69,9 +75,12 @@ $user = getLoggedInUser();
                 </div>
             </form>
         </div>
-        <div class="vr"></div>
-        <div class="">
-            <!-- PLACEHOLDER -->
+        <div class="vr d-none d-sm-block"></div>
+
+        <div class="col d-none d-sm-block">
+            <label for="totalPuzzles"><strong>Total Puzzles Owned:</strong></label>
+            <div id="totalPuzzles"><?php echo $ugateway->count($totaloptions) ?></div>
         </div>
+
     </div>
 </div>
