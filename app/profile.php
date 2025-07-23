@@ -1,7 +1,10 @@
 <?php
 
+use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\gateway\UserGateway;
 use puzzlethings\src\gateway\UserPuzzleGateway;
+use puzzlethings\src\object\UserPuzzle;
+
 
 global $db;
 include 'util/function.php';
@@ -18,11 +21,29 @@ include 'nav.php';
 
 $gateway = new UserGateway($db);
 $ugateway = new UserPuzzleGateway($db);
+$pgateway = new PuzzleGateway($db);
 $user = getLoggedInUser();
 $userid = getUserID();
-$totaloptions = [USR_FILTER_USER => $userid];
+$totaloptions = [
+    FILTERS => [
+        USR_FILTER_USER => $userid
+    ]
+];
 
-var_dump($totaloptions);
+$lastcomplete = $ugateway->userLastCompleted($userid);
+if (!empty($lastcomplete)) {
+    $lastpuzname = $pgateway->findById($lastcomplete)->getName();
+} else {
+    $lastpuzname = 'Nothing';
+}
+
+$totalpieces = 0;
+$puzcomplete = $ugateway->userCompleted($userid);
+
+foreach ($puzcomplete as $puzzle) {
+    if (!($puzzle instanceof UserPuzzle)) continue;
+    $totalpieces = $totalpieces + $puzzle->getPuzzle()->getPieces();
+}
 
 ?>
 
@@ -78,9 +99,14 @@ var_dump($totaloptions);
         <div class="vr d-none d-sm-block"></div>
 
         <div class="col d-none d-sm-block">
-            <label for="totalPuzzles"><strong>Total Puzzles Owned:</strong></label>
-            <div id="totalPuzzles"><?php echo $ugateway->count($totaloptions) ?></div>
+            <div><strong>Total Puzzles Owned:</strong> <?php echo $ugateway->count($totaloptions) ?></div>
+            <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
+            <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
+            <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
+            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo $totalpieces / $ugateway->userCountCompleted($userid) ?></div>
         </div>
+
+
 
     </div>
 </div>

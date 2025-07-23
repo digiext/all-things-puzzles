@@ -77,10 +77,8 @@ class UserPuzzleGateway
     ]): int
     {
         $filters = $this->determineFilters($options[FILTERS] ?? []);
-        var_dump($filters);
         $sql = "SELECT COUNT(*) FROM userinv $filters";
 
-        var_dump($sql);
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
@@ -137,8 +135,10 @@ class UserPuzzleGateway
         foreach ($filters as $filter => $val) {
             switch ($filter) {
                 case USR_FILTER_USER: {
-                        $id = $val->getId();
-                        $res .= "AND userid = $id";
+                        if ($val instanceof User) {
+                            $id = $val->getId();
+                        } else $id = $val;
+                        $res .= "AND userid = $id ";
                         break;
                     }
                 case USR_FILTER_STATUS: {
@@ -316,6 +316,59 @@ class UserPuzzleGateway
             return $completed;
         } catch (PDOException $e) {
             exit($e->getMessage());
+        }
+    }
+
+    public function userCompleted(int $id): array
+    {
+        $sql = "SELECT * FROM userinv WHERE enddate != '1970-01-01' AND userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $usercompleted = array();
+
+            foreach ($result as $res) {
+                $usercompleted[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $usercompleted;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // Return count of user completed puzzles
+    public function userCountCompleted(int $id): int
+    {
+        $sql = "SELECT count(*) FROM userinv WHERE userid = :id AND enddate != '1970-01-01'";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while counting puzzles: " . $e->getMessage());
+            return -1;
+        }
+    }
+
+    // Return last user completed puzzle
+    public function userLastCompleted(int $id): ?int
+    {
+        $sql = "SELECT puzzleid FROM userinv WHERE userid = :id AND enddate != '1970-01-01' ORDER BY enddate DESC LIMIT 1";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Database error while retrieveing last completed puzzle: " . $e->getMessage());
+            return null;
         }
     }
 
