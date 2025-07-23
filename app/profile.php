@@ -45,6 +45,12 @@ foreach ($puzcomplete as $puzzle) {
     $totalpieces = $totalpieces + $puzzle->getPuzzle()->getPieces();
 }
 
+if ($totalpieces != 0) {
+    $avgpieces = $totalpieces / $ugateway->userCountCompleted($userid);
+} else {
+    $avgpieces = 0;
+}
+
 ?>
 
 <script src="scripts/profile_validator.js"></script>
@@ -103,7 +109,7 @@ foreach ($puzcomplete as $puzzle) {
             <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
             <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
             <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
-            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo $totalpieces / $ugateway->userCountCompleted($userid) ?></div>
+            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo $avgpieces ?></div>
         </div>
 
 
