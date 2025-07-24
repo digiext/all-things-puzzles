@@ -6,11 +6,28 @@ require_once 'util/db.php';
 
 use puzzlethings\src\gateway\PuzzleGateway;
 use puzzlethings\src\object\Puzzle;
+use puzzlethings\src\gateway\BrandGateway;
+use puzzlethings\src\object\Brand;
+use puzzlethings\src\gateway\SourceGateway;
+use puzzlethings\src\object\Source;
+use puzzlethings\src\gateway\LocationGateway;
+use puzzlethings\src\object\Location;
+use puzzlethings\src\gateway\DispositionGateway;
+use puzzlethings\src\object\Disposition;
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
     header("Location: index.php");
 }
+
+$gateway = new BrandGateway($db);
+$brands = $gateway->findAll();
+$gateway = new SourceGateway($db);
+$sources = $gateway->findAll();
+$gateway = new LocationGateway($db);
+$locations = $gateway->findAll();
+$gateway = new DispositionGateway($db);
+$dispositions = $gateway->findAll();
 
 $title = 'Puzzle Inventory';
 include 'header.php';
@@ -24,7 +41,7 @@ $filters = $_GET['filters'] ?? [];
 
 $filtersFinal = [];
 
-foreach($filters as $v) {
+foreach ($filters as $v) {
     $exploded = explode(':', $v);
     if (count($exploded) == 2) {
         $filtersFinal = array_merge($filtersFinal, [
@@ -176,28 +193,108 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             </div>
             <form class="column" action="puzzleinv.php" method="get">
                 <div class="modal-body">
-                    <div class="col-12">
+                    <div class="col-12 m-2">
                         <label for="filtname">Name</label>
                         <input type="text" class="form-control" id="filtname">
                     </div>
 
-                    <label for="filtpieces">Pieces</label>
-                    <div class="hstack g-3 align-items-center justify-content-between">
-                        <div class="col-2">
-                            <input type="number" class="form-control" id="filtpiecemin" value="0" aria-label="Minimum pieces">
+                    <label class="ms-2" for="filtpieces">Pieces</label>
+                    <div class="hstack m-2 g-3 align-items-center justify-content-between">
+
+                        <div class="col-3">
+                            <input type="number" class="form-control" id="filtpiecemin" value="1000" aria-label="Minimum pieces">
                         </div>
-                        <input type="text"
-                               data-slider-id="piecesSlider"
-                               data-slider-min="0"
-                               data-slider-max="50000"
-                               data-slider-step="100"
-                               data-slider-value="[0,50000]"
-                               data-slider-tooltip="hide"
-                               id="filtpieces"
-                               value="0,50000">
-                        <div class="col-2">
-                            <input type="number" class="form-control col-2" id="filtpiecemax" value="50000" aria-label="Maximum pieces">
+                        <input id="piecesSlider"
+                            type="text"
+                            data-slider-id="piecesSlider"
+                            data-slider-min="0"
+                            data-slider-max="5000"
+                            data-slider-step="100"
+                            data-slider-value="[1000,3000]"
+                            data-slider-tooltip="show"
+                            value="0,5000">
+                        <div class="col-3">
+                            <input type="number" class="form-control col" id="filtpiecemax" value="3000" aria-label="Maximum pieces">
                         </div>
+                    </div>
+                    <div class="col-12 m-2">
+                        <label for="brand" class="form-label"><strong>Brand</strong></label>
+                        <div class="">
+                            <select class="form-control" name="filtbrand" id="filtbrand">
+                                <?php
+                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                foreach ($brands as $brand) {
+                                    if (!($brand instanceof Brand)) continue;
+                                    echo
+                                    "<option value='" . $brand->getId() . "'>" . $brand->getName() . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <label class="ms-2" for="filtpieces">Cost</label>
+                    <div class="hstack m-2 g-3 align-items-center justify-content-between">
+
+                        <div class="col-3">
+                            <input type="number" class="form-control" id="filtcostmin" value="25" aria-label="Minimum Cost">
+                        </div>
+                        <input id="costSlider"
+                            type="text"
+                            data-slider-id="costSlider"
+                            data-slider-min="1"
+                            data-slider-max="100"
+                            data-slider-step="1"
+                            data-slider-value="[25,50]"
+                            data-slider-tooltip="show"
+                            value="1,100">
+                        <div class="col-3">
+                            <input type="number" class="form-control col" id="filtcostmax" value="50" aria-label="Maximum Cost">
+                        </div>
+                    </div>
+                    <div class="col-12 m-2">
+                        <label for="source" class="form-label"><strong>Source</strong></label>
+                        <div class="">
+                            <select class="form-control" name="filtsource" id="filtsource">
+                                <?php
+                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                foreach ($sources as $source) {
+                                    if (!($source instanceof Source)) continue;
+                                    echo
+                                    "<option value='" . $source->getId() . "'>" . $source->getDescription() . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 m-2">
+                        <label for="disposition" class="form-label"><strong>Disposition</strong></label>
+                        <div class="">
+                            <select class="form-control" name="filtdisp" id="filtdisp">
+                                <?php
+                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                foreach ($dispositions as $disposition) {
+                                    if (!($disposition instanceof Disposition)) continue;
+                                    echo
+                                    "<option value='" . $disposition->getId() . "'>" . $disposition->getDescription() . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 m-2">
+                        <label for="location" class="form-label"><strong>Location</strong></label>
+                        <div class="">
+                            <select class="form-control" name="filtlocation" id="filtlocation">
+                                <?php
+                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                foreach ($locations as $location) {
+                                    if (!($location instanceof Location)) continue;
+                                    echo
+                                    "<option value='" . $location->getId() . "'>" . $location->getDescription() . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success" name="submit">Submit</button>
                     </div>
                 </div>
             </form>
@@ -240,16 +337,16 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
 </div>
 
 <script>
-    $(function() {
-        let piecesSlider = $('#piecesSlider');
-        let sliderInst = $('#filtpieces').slider();
-
-        piecesSlider.addClass('col-8 px-3');
-        sliderInst.on('change', function(e) {
-            console.table(e);
-            //alert(JSON.stringify(oldVal) + " | " + JSON.stringify(newVal.toString()));
-        })
-    })
+    var slider = new Slider("#piecesSlider");
+    slider.on("slide", function(sliderValue) {
+        document.getElementById("filtpiecemin").value = sliderValue[0];
+        document.getElementById("filtpiecemax").value = sliderValue[1];
+    });
+    var slider = new Slider("#costSlider");
+    slider.on("slide", function(sliderValue) {
+        document.getElementById("filtcostmin").value = sliderValue[0];
+        document.getElementById("filtcostmax").value = sliderValue[1];
+    });
 </script>
 
 <!--            --><?php //foreach ($puzzles as $puzzle) {
