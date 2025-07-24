@@ -60,8 +60,10 @@ $(function() {
     })
 
     pictureDelete.on('click', function() {
+        var location = window.location.href;
+        var directoryPath = location.substring(0,location.lastIndexOf("/")+1);
         picture.val(null);
-        cardPicture.attr('src', '/images/no-image-dark.svg');
+        cardPicture.attr('src', directoryPath + '/images/no-image-dark.svg');
         deleteoldpic.val("true");
     })
 
