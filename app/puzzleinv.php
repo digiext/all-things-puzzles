@@ -198,7 +198,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
             <form class="column" action="puzzleinv.php" method="get">
                 <div class="modal-body">
                     <div class="col-12 m-2">
-                        <label for="filtname">Name</label>
+                        <label for="filtname"><strong>Name</strong></label>
                         <input type="text" class="form-control" id="filtname">
                     </div>
 
@@ -206,7 +206,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
                         <div class="col-3">
-                            <input type="number" class="form-control" id="filtpiecemin" value="1000" aria-label="Minimum pieces">
+                            <input type="number" class="form-control" id="filtpiecemin" value="0" aria-label="Minimum pieces">
                         </div>
                         <input
                             id="piecesSliderBase"
@@ -217,11 +217,11 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                             data-slider-min="0"
                             data-slider-max="5000"
                             data-slider-step="100"
-                            data-slider-value="[1000,3000]"
+                            data-slider-value="[0,5000]"
                             data-slider-tooltip="hide"
                             value="0,5000">
                         <div class="col-3">
-                            <input type="number" class="form-control col" id="filtpiecemax" value="3000" aria-label="Maximum pieces">
+                            <input type="number" class="form-control col" id="filtpiecemax" value="5000" aria-label="Maximum pieces">
                         </div>
                     </div>
                     <div class="col-12 m-2">
@@ -242,7 +242,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
                         <div class="col-3">
-                            <input type="number" class="form-control" id="filtcostmin" value="25" aria-label="Minimum Cost">
+                            <input type="number" class="form-control" id="filtcostmin" value="0" aria-label="Minimum Cost">
                         </div>
                         <input
                             id="costSlider"
@@ -250,14 +250,14 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                             type="text"
                             data-provide="slider"
                             data-slider-id="costSlider"
-                            data-slider-min="1"
+                            data-slider-min="0"
                             data-slider-max="100"
                             data-slider-step="1"
-                            data-slider-value="[25,50]"
+                            data-slider-value="[0,100]"
                             data-slider-tooltip="hide"
-                            value="1,100">
+                            value="0,100">
                         <div class="col-3">
-                            <input type="number" class="form-control col" id="filtcostmax" value="50" aria-label="Maximum Cost">
+                            <input type="number" class="form-control col" id="filtcostmax" value="100" aria-label="Maximum Cost">
                         </div>
                     </div>
                     <div class="col-12 m-2">
