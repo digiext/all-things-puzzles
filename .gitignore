@@ -1,5 +1,5 @@
 vendor/
 .idea/
-.env
+app/.env
 images/uploads/
 !images/uploads/thumbnails/.gitkeep

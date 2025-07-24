@@ -104,6 +104,7 @@ class PuzzleGateway
         $filters = $this->determineFilters($filters);
 
         $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv INNER JOIN brand ON puzzleinv.brandid = brand.brandid $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
+        error_log($sql);
 
         try {
             $stmt = $this->db->query($sql);
@@ -134,53 +135,53 @@ class PuzzleGateway
                     }
                 case PUZ_FILTER_PIECES: {
                         if (is_array($val)) {
-                            $res .= "AND pieces BETWEEN $val[0] AND $val[1]";
+                            $res .= "AND pieces BETWEEN $val[0] AND $val[1] ";
                         } else {
-                            $res .= "AND pieces = $val";
+                            $res .= "AND pieces = $val ";
                         }
                         break;
                     }
                 case PUZ_FILTER_BRAND: {
                         if ($val instanceof Brand) {
                             $id = $val->getId();
-                            $res .= "AND brandid = $id";
+                            $res .= "AND puzzleinv.brandid = $id ";
                         } else {
-                            $res .= "AND brandid = $val";
+                            $res .= "AND puzzleinv.brandid = $val ";
                         }
                         break;
                     }
                 case PUZ_FILTER_COST: {
                         if (is_array($val)) {
-                            $res .= "AND cost BETWEEN $val[0] AND $val[1]";
+                            $res .= "AND cost BETWEEN $val[0] AND $val[1] ";
                         } else {
-                            $res .= "AND cost = $val";
+                            $res .= "AND cost = $val ";
                         }
                         break;
                     }
                 case PUZ_FILTER_SOURCE: {
                         if ($val instanceof Source) {
                             $id = $val->getId();
-                            $res .= "AND sourceid = $id";
+                            $res .= "AND sourceid = $id ";
                         } else {
-                            $res .= "AND sourceid = $val";
+                            $res .= "AND sourceid = $val ";
                         }
                         break;
                     }
                 case PUZ_FILTER_LOCATION: {
                         if ($val instanceof Location) {
                             $id = $val->getId();
-                            $res .= "AND locationid = $id";
+                            $res .= "AND locationid = $id ";
                         } else {
-                            $res .= "AND locationid = $val";
+                            $res .= "AND locationid = $val ";
                         }
                         break;
                     }
                 case PUZ_FILTER_DISPOSITION: {
                         if ($val instanceof Disposition) {
                             $id = $val->getId();
-                            $res .= "AND dispositionid = $id";
+                            $res .= "AND dispositionid = $id ";
                         } else {
-                            $res .= "AND dispositionid = $val";
+                            $res .= "AND dispositionid = $val ";
                         }
                         break;
                     }

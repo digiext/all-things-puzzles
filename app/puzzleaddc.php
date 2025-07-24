@@ -15,18 +15,13 @@ require_once 'util/files.php';
 const UPLOAD_DIR = '/images/uploads/thumbnails';
 const UPLOAD_DIR_ABSOLUTE = __DIR__ . UPLOAD_DIR;
 
-
 $brandname = $_POST['brandName'];
 $sourcedesc = $_POST['sourceDesc'];
 $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
 $categorydesc = $_POST['categoryDesc'];
 $addfailed = null;
-if (($_FILES["picture"]["error"]) > 0) {
-    $hasfile = false;
-} else {
-    $hasfile = true;
-}
+$hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
 
 if (isset($_POST['submit'])) {
     $puzname = $_POST['puzname'];

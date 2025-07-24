@@ -41,21 +41,25 @@ $filters = $_GET['filters'] ?? [];
 
 $filtersFinal = [];
 
-foreach ($filters as $v) {
-    $exploded = explode(':', $v);
-    if (count($exploded) == 2) {
+$query = [];
+parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
+
+foreach ($query as $k => $v) {
+    if (!in_array($k, PUZ_FILTERS)) continue;
+
+    $explodedv = explode(',', $v);
+    if (count($explodedv) == 1) {
         $filtersFinal = array_merge($filtersFinal, [
-            $exploded[0] => $exploded[1]
+            $k => $explodedv[0]
         ]);
-    } else if (count($exploded) == 3) {
+    } else if (count($explodedv) == 2) {
         $filtersFinal = array_merge($filtersFinal, [
-            $exploded[0] => [$exploded[1], $exploded[2]]
+            $k => [$explodedv[0], $explodedv[1]]
         ]);
     }
 }
 
-$query = [];
-parse_str($_SERVER['QUERY_STRING'] ?? "", $query);
+//var_dump($filtersFinal);
 
 function queryForPage(int $page, array $extras = []): string
 {
@@ -198,20 +202,23 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <input type="text" class="form-control" id="filtname">
                     </div>
 
-                    <label class="ms-2" for="filtpieces">Pieces</label>
+                    <label class="ms-2" for="filtpieces"><strong>Pieces</strong></label>
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
                         <div class="col-3">
                             <input type="number" class="form-control" id="filtpiecemin" value="1000" aria-label="Minimum pieces">
                         </div>
-                        <input id="piecesSlider"
+                        <input
+                            id="piecesSliderBase"
+                            name="<?php echo PUZ_FILTER_PIECES ?>"
                             type="text"
+                            data-provider="slider"
                             data-slider-id="piecesSlider"
                             data-slider-min="0"
                             data-slider-max="5000"
                             data-slider-step="100"
                             data-slider-value="[1000,3000]"
-                            data-slider-tooltip="show"
+                            data-slider-tooltip="hide"
                             value="0,5000">
                         <div class="col-3">
                             <input type="number" class="form-control col" id="filtpiecemax" value="3000" aria-label="Maximum pieces">
@@ -220,7 +227,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="col-12 m-2">
                         <label for="brand" class="form-label"><strong>Brand</strong></label>
                         <div class="">
-                            <select class="form-control" name="filtbrand" id="filtbrand">
+                            <select class="form-control" name="<?php echo PUZ_FILTER_BRAND ?>" id="filtbrand">
                                 <?php
                                 echo "<option hidden disabled selected value> -- select an option -- </option>";
                                 foreach ($brands as $brand) {
@@ -231,20 +238,22 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                             </select>
                         </div>
                     </div>
-                    <label class="ms-2" for="filtpieces">Cost</label>
+                    <label class="ms-2" for="filtpieces"><strong>Cost</strong></label>
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
                         <div class="col-3">
                             <input type="number" class="form-control" id="filtcostmin" value="25" aria-label="Minimum Cost">
                         </div>
-                        <input id="costSlider"
+                        <input
+                            id="costSlider"
+                            name="<?php echo PUZ_FILTER_COST ?>"
                             type="text"
                             data-slider-id="costSlider"
                             data-slider-min="1"
                             data-slider-max="100"
                             data-slider-step="1"
                             data-slider-value="[25,50]"
-                            data-slider-tooltip="show"
+                            data-slider-tooltip="hide"
                             value="1,100">
                         <div class="col-3">
                             <input type="number" class="form-control col" id="filtcostmax" value="50" aria-label="Maximum Cost">
@@ -253,7 +262,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="col-12 m-2">
                         <label for="source" class="form-label"><strong>Source</strong></label>
                         <div class="">
-                            <select class="form-control" name="filtsource" id="filtsource">
+                            <select class="form-control" name="<?php echo PUZ_FILTER_SOURCE ?>" id="filtsource">
                                 <?php
                                 echo "<option hidden disabled selected value> -- select an option -- </option>";
                                 foreach ($sources as $source) {
@@ -267,7 +276,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="col-12 m-2">
                         <label for="disposition" class="form-label"><strong>Disposition</strong></label>
                         <div class="">
-                            <select class="form-control" name="filtdisp" id="filtdisp">
+                            <select class="form-control" name="<?php echo PUZ_FILTER_DISPOSITION ?>" id="filtdisp">
                                 <?php
                                 echo "<option hidden disabled selected value> -- select an option -- </option>";
                                 foreach ($dispositions as $disposition) {
@@ -281,7 +290,7 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <div class="col-12 m-2">
                         <label for="location" class="form-label"><strong>Location</strong></label>
                         <div class="">
-                            <select class="form-control" name="filtlocation" id="filtlocation">
+                            <select class="form-control" name="<?php echo PUZ_FILTER_LOCATION ?>" id="filtlocation">
                                 <?php
                                 echo "<option hidden disabled selected value> -- select an option -- </option>";
                                 foreach ($locations as $location) {
@@ -318,13 +327,13 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <label for="deleteId" class="col-form-label">ID</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control id" id="deleteId" name="id" value="<?php echo $puzzles[0]->getId(); ?>" readonly>
+                        <input type="text" class="form-control id" id="deleteId" name="id" value="<?php echo $puzzles[0]->getId() ?? 0; ?>" readonly>
                     </div>
                     <div class="col-auto">
                         <label for="deletePuzzle" class="col-form-label">Puzzle</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deletePuzzle" name="puzzle" value="<?php echo $puzzles[0]->getName(); ?>" readonly>
+                        <input type="text" class="form-control" id="deletePuzzle" name="puzzle" value="<?php echo $puzzles[0]->getName() ?? 'null'; ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -337,13 +346,14 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
 </div>
 
 <script>
-    var slider = new Slider("#piecesSlider");
-    slider.on("slide", function(sliderValue) {
-        document.getElementById("filtpiecemin").value = sliderValue[0];
-        document.getElementById("filtpiecemax").value = sliderValue[1];
+    let piecesSlider = new Slider("#piecesSlider");
+    piecesSlider.on("slide", function(sliderValue) {
+        $("#filtpiecemin").value = sliderValue[0];
+        $("#filtpiecemax").value = sliderValue[1];
     });
-    var slider = new Slider("#costSlider");
-    slider.on("slide", function(sliderValue) {
+
+    let costSlider = new Slider("#costSlider");
+    costSlider.on("slide", function(sliderValue) {
         document.getElementById("filtcostmin").value = sliderValue[0];
         document.getElementById("filtcostmax").value = sliderValue[1];
     });

@@ -37,6 +37,7 @@ const PUZ_UPC = "upc";
 
 const PUZ_SORT_BRAND_NAME = "brand.brandname";
 
+
 const PUZ_FILTER_NAME = "name";
 const PUZ_FILTER_PIECES = "pieces";
 const PUZ_FILTER_BRAND = "brand";
@@ -44,6 +45,16 @@ const PUZ_FILTER_COST = "cost";
 const PUZ_FILTER_SOURCE = "source";
 const PUZ_FILTER_LOCATION = "location";
 const PUZ_FILTER_DISPOSITION = "disposition";
+
+const PUZ_FILTERS = [
+    PUZ_FILTER_NAME,
+    PUZ_FILTER_PIECES,
+    PUZ_FILTER_BRAND,
+    PUZ_FILTER_COST,
+    PUZ_FILTER_SOURCE,
+    PUZ_FILTER_LOCATION,
+    PUZ_FILTER_DISPOSITION,
+];
 
 // USER INVENTORY GATEWAY
 const USR_INV_ID = "userinvid";
