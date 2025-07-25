@@ -5,14 +5,14 @@
 We are currently supporting the below versions with security updates.  Any other versions will not be supported.
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
 | 1.0.X   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
 1. On GitHub, navigate to the main page of the repository.
 
-2. Under the repository name, click  Security. If you cannot see the "Security" tab, select the  dropdown menu, and then click Security.
+2. Under the repository name, click Security. If you cannot see the "Security" tab, select the dropdown menu, and then click Security.
 
 3. Click Report a vulnerability to open the advisory form.
 

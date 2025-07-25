@@ -21,9 +21,11 @@ $brands = $gateway->findAll();
 
 ?>
 
+<script src="scripts/puzzle_validator.js"></script>
+
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-md-8 col-sm-12">
-        <form enctype="multipart/form-data" class="align-items-center" action="puzzlewishaddc.php" method="post">
+        <form enctype="multipart/form-data" class="align-items-center" action="puzzlewishaddc.php" method="post" id="form">
             <input type="hidden" tabindex="-1" name="userid" value="<?php echo getUserId() ?>">
             <div class="p-2 mb-2 mx-1">
                 <label for="puzname" class="form-label"><strong>Puzzle Name</strong></label>
@@ -65,12 +67,12 @@ $brands = $gateway->findAll();
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="upc" class="form-label"><strong>UPC</strong></label>
+                <label for="upc" class="form-label"><strong>UPC / ISBN</strong></label>
                 <input type="number" class="form-control" name="upc" id="upc" maxlength="12" minlength="12">
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="puzzlewish.php">Cancel</a>
             </div>
         </form>

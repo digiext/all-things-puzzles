@@ -27,6 +27,8 @@ $puzzlewish = $gateway->findById($id)
 
 ?>
 
+<script src="scripts/puzzle_validator.js"></script>
+
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col-md-8 col-sm-12">
         <form enctype="multipart/form-data" class="align-items-center" action="puzzlewisheditc.php" method="post">
@@ -40,6 +42,7 @@ $puzzlewish = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="pieces" class="form-label"><strong>Piece Count</strong></label>
                 <input type="number" class="form-control" name="pieces" id="pieces" min="1" value="<?php echo $puzzlewish->getPieces(); ?>">
+                <div id="piecesFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
@@ -72,7 +75,7 @@ $puzzlewish = $gateway->findById($id)
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="upc" class="form-label"><strong>UPC</strong></label>
+                <label for="upc" class="form-label"><strong>UPC / ISBN</strong></label>
                 <input type="number" class="form-control" name="upc" id="upc" maxlength="12" minlength="12" value="<?php echo $puzzlewish->getUpc(); ?>">
             </div>
 

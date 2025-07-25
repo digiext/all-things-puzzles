@@ -48,14 +48,14 @@ $puzzlewishes = $gateway->findByUserId($userid);
                 <th scope="col" class="align-middle" data-sortable="true" data-field="name">Name</th>
                 <th scope="col" class="text-center" data-sortable="true" data-field="pieces">Pieces</th>
                 <th scope="col" class="text-center">Brand</th>
-                <th scope="col" class="text-center">UPC</th>
+                <th scope="col" class="text-center">UPC / ISBN</th>
                 <th scope="col" class="text-center">Edit</th>
                 <th scope="col" class="text-center">Move to Owned</th>
                 <th scope="col" class="text-center">Delete</th>
             </tr>
         </thead>
 
-        <if class="table-group-divider">
+        <tbody class="table-group-divider">
             <?php if (!empty($puzzlewishes)) {
                 foreach ($puzzlewishes as $puzzlewish) {
                     if (!($puzzlewish instanceof PuzzleWish)) continue;
@@ -71,7 +71,7 @@ $puzzlewishes = $gateway->findByUserId($userid);
                         </tr>";
                 }
             } ?>
-            </tbody>
+        </tbody>
     </table>
 </div>
 

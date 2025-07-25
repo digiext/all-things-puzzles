@@ -1,8 +1,4 @@
-# Name
-
-All Things Puzzles
-
-# Description
+# All Things Puzzles
 
 All Things Puzzles is an inventory management system of your personal puzzle collection. It has the following features:
 
@@ -10,7 +6,7 @@ All Things Puzzles is an inventory management system of your personal puzzle col
 * Multi-user capable
 * Wishlist
 
-# Screenshots
+## Screenshots
 **Main Page**
 ![Main Page](/images/main-page.png?raw=true "Main Page") 
 
@@ -26,13 +22,13 @@ All Things Puzzles is an inventory management system of your personal puzzle col
 **User Wishlist Page**
 ![User Wishlist](/images/user-wishlist.png?raw=true "User Wishlist")
 
-# Docker Install
+## Docker Install
 
-## Requirements
+### Requirements
 
 * Machine with docker and git installed
 
-## Installation
+### Installation
 
 Clone Repo
 ```bash
@@ -69,9 +65,9 @@ Once dockers are running, use the following command to update composer requireme
 docker exec -it all-things-puzzles-php-1 composer update
 ```
 
-# Webserver Install
+## Webserver Install
 
-## Requirements
+### Requirements
 
 * Machine running a webserver (nginx or apache), php8.4, mariadb, and has php composer
 
@@ -87,6 +83,6 @@ docker exec -it all-things-puzzles-php-1 composer update
 
 * Navigate to web root directory and run php composer update to generate vendor files
 
-# Access application
+## Access application
 
 Go to your default webpage.  Ex: <http://ip_address_of_machine/> or <http://hostname/>
