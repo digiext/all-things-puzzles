@@ -11,18 +11,18 @@ require_once 'util/files.php';
 
 $userinvid = $_POST['id'];
 $status = $_POST['status'];
-$missingpieces = $_POST['missingpieces'];
-$startdate = $_POST['startdate'];
-$enddate = $_POST['enddate'];
-if ((($_POST['startdate']) != '1970-01-01') && (($_POST['enddate']) != '1970-01-01')) {
-    $earlier = new DateTime($_POST['startdate']);
-    $later = new DateTime($_POST['enddate']);
+$startdate = $_POST['startDate'];
+$enddate = $_POST['endDate'];
+if ((($_POST['startDate']) != '1970-01-01') && (($_POST['endDate']) != '1970-01-01')) {
+    $earlier = new DateTime($_POST['startDate']);
+    $later = new DateTime($_POST['endDate']);
 
     $totaldays = $later->diff($earlier)->format("%a");
 } else {
     $totaldays = 0;
 }
 
+$missingpieces = max($_POST['missingPieces'], 0.0);
 $difficultyrating = min(max($_POST['difficulty'], 0.0), 5.0);
 $qualityrating = min(max($_POST['quality'], 0.0), 5.0);
 $overallrating = min(max($_POST['overall'], 0.0), 5.0);

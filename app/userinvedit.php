@@ -26,6 +26,7 @@ $id = $_GET['id'];
 $gateway = new StatusGateway($db);
 $statuses = $gateway->findAll();
 $complete = $gateway->findByName("Completed");
+$inProgress = $gateway->findByName("In Progress");
 $gateway = new OwnershipGateway($db);
 $ownerships = $gateway->findAll();
 $gateway = new PuzzleGateway($db);
@@ -35,6 +36,8 @@ $gateway = new UserPuzzleGateway($db);
 $userpuzzle = $gateway->findById($id)
 
 ?>
+
+<script src="scripts/userpuzzle.js"></script>
 
 <div class="container mb-2 mt-4 hstack gap-3">
     <div class="col">
@@ -54,7 +57,7 @@ $userpuzzle = $gateway->findById($id)
             <div class="p-2 mb-2 mx-1">
                 <label for="status" class="form-label"><strong>Status</strong></label>
                 <div class="">
-                    <select class="form-control" name="status" id="status">
+                    <select class="form-select" name="status" id="status">
                         <?php
                         foreach ($statuses as $status) {
                             if (!($status instanceof Status)) continue;
@@ -66,44 +69,49 @@ $userpuzzle = $gateway->findById($id)
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="missingpieces" class="form-label"><strong>Missing Pieces</strong></label>
+                <label for="missingPieces" class="form-label"><strong>Missing Pieces</strong></label>
                 <div class="input-group">
-                    <input type="number" class="form-control" name="missingpieces" id="missingpieces" min="0" step="1" value="<?php echo $userpuzzle->getMissingPieces(); ?>">
+                    <input type="number" class="form-control rounded-end" name="missingPieces" id="missingPieces" min="0" step="1" value="<?php echo $userpuzzle->getMissingPieces(); ?>">
+                    <div id="missingPiecesFeedback"></div>
                 </div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="start" class="form-label"><strong>Start Date</strong></label>
-                <input type="date" class="form-control" name="startdate" id="startdate" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getStart())); ?>">
-
+                <label for="startDate" class="form-label"><strong>Start Date</strong></label>
+                <input type="date" class="form-control" name="startDate" id="startDate" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getStart())); ?>">
+                <div id="startDateFeedback"></div>
                 <a class="btn btn-secondary my-2" onclick="startDate();">Start Puzzle</a>
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="end" class="form-label"><strong>End Date</strong></label>
-                <input type="date" class="form-control" name="enddate" id="enddate" onchange="statusComplete();" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>">
+                <label for="endDate" class="form-label"><strong>End Date</strong></label>
+                <input type="date" class="form-control" name="endDate" id="endDate" onchange="statusComplete();" value="<?php echo date('Y-m-d', strtotime($userpuzzle->getEnd())); ?>">
+                <div id="endDateFeedback"></div>
                 <a class="btn btn-secondary mt-2" onclick="endDate();">Complete Puzzle</a>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="difficulty" class="form-label"><strong>Difficulty Rating</strong></label>
                 <input type="number" class="form-control" name="difficulty" id="difficulty" min="0" max="5" step="1" value="<?php echo $userpuzzle->getDifficulty(); ?>">
+                <div id="difficultyFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="quality" class="form-label"><strong>Quality Rating</strong></label>
                 <input type="number" class="form-control" name="quality" id="quality" min="0" max="5" step="1" value="<?php echo $userpuzzle->getQuality(); ?>">
+                <div id="qualityFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="overall" class="form-label"><strong>Overall Rating</strong></label>
                 <input type="number" class="form-control" name="overall" id="overall" min="0" max="5" step="0.5" value="<?php echo $userpuzzle->getOverall(); ?>">
+                <div id="overallFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
                 <label for="ownership" class="form-label"><strong>Ownership Status</strong></label>
                 <div class="">
-                    <select class="form-control" name="ownership" id="ownership">
+                    <select class="form-select" name="ownership" id="ownership">
                         <?php
                         foreach ($ownerships as $ownership) {
                             if (!($ownership instanceof Ownership)) continue;
@@ -133,7 +141,7 @@ $userpuzzle = $gateway->findById($id)
             <!--            </div>-->
 
             <div class="p-2 mb-2 mx-1">
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="userinv.php">Cancel</a>
             </div>
         </form>
@@ -146,6 +154,7 @@ $userpuzzle = $gateway->findById($id)
     function startDate() {
         document.getElementById("startdate").valueAsDate = new Date()
         document.getElementById("startdate").style.backgroundColor = "#58151c";
+        document.getElementById("status").value = "<?php echo $inProgress; ?>"
     }
 
     // Set end date input field to today's date and a red color
