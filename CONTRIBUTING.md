@@ -2,7 +2,7 @@
 
 #### **Did you find a bug?**
 
-* **Do not open up a GitHub issue if the bug is a security vulnerability**, and instead to refer to our [security policy](https://rubyonrails.org/security).
+* **Do not open up a GitHub issue if the bug is a security vulnerability**, and instead to refer to our [security policy](https://github.com/digiext/all-things-puzzles/security/policy).
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/digiext/all-things-puzzles/issues).
 
@@ -10,7 +10,7 @@
 
 #### **Do you want feature X/Y/Z?**
 
-* Submit an issue on our github site and tag it with the **Feature Request** tag.
+* Submit an issue using the feature request template on our github site and make sure it is tagged with the **Feature Request** tag.
 
 #### **Do you want to contribute?**
 
