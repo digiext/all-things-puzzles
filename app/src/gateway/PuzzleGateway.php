@@ -125,12 +125,16 @@ class PuzzleGateway
     // Determine what filter to apply to puzzleinv table based on what options are passed
     private function determineFilters(mixed $filters = []): string
     {
+        if (empty($filters)) {
+            return "";
+        }
+
         $res = "";
 
         foreach ($filters as $filter => $val) {
             switch ($filter) {
                 case PUZ_FILTER_NAME: {
-                        $res .= "AND puzname LIKE %" . $val . "% ";
+                        $res .= "AND puzname LIKE '%" . $val . "%' ";
                         break;
                     }
                 case PUZ_FILTER_PIECES: {
@@ -191,6 +195,7 @@ class PuzzleGateway
         $pos = strpos($res, "AND");
         if ($pos !== false) {
             $res = substr_replace($res, "WHERE", $pos, 3);
+            $res = rtrim($res);
         }
 
         return $res;

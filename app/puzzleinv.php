@@ -199,29 +199,28 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                 <div class="modal-body">
                     <div class="col-12 m-2">
                         <label for="filtname"><strong>Name</strong></label>
-                        <input type="text" class="form-control" id="filtname">
+                        <input type="text" class="form-control" name="<?php echo PUZ_FILTER_NAME ?>" id="filtname" value="<?php echo $filtersFinal[PUZ_FILTER_NAME] ?? "" ?>">
                     </div>
 
                     <label class="ms-2" for="filtpieces"><strong>Pieces</strong></label>
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
-                        <div class="col-3">
-                            <input type="number" class="form-control" id="filtpiecemin" value="0" aria-label="Minimum pieces">
+                        <div class="col-3 pe-1">
+                            <input type="number" class="form-control" id="filtpiecemin" value="<?php echo $filtersFinal[PUZ_FILTER_PIECES][0] ?? 0 ?>" aria-label="Minimum pieces">
                         </div>
                         <input
                             id="piecesSliderBase"
                             name="<?php echo PUZ_FILTER_PIECES ?>"
                             type="text"
-                            data-provide="slider"
                             data-slider-id="piecesSlider"
                             data-slider-min="0"
                             data-slider-max="5000"
                             data-slider-step="100"
-                            data-slider-value="[0,5000]"
+                            data-slider-value="[<?php echo ($filtersFinal[PUZ_FILTER_PIECES][0] ?? 0) . "," . ($filtersFinal[PUZ_FILTER_PIECES][1] ?? 5000) ?>]"
                             data-slider-tooltip="hide"
-                            value="0,5000">
-                        <div class="col-3">
-                            <input type="number" class="form-control col" id="filtpiecemax" value="5000" aria-label="Maximum pieces">
+                            value="<?php echo ($filtersFinal[PUZ_FILTER_PIECES][0] ?? 0) . "," . ($filtersFinal[PUZ_FILTER_PIECES][1] ?? 5000) ?>">
+                        <div class="col-3 ps-1">
+                            <input type="number" class="form-control col" id="filtpiecemax" value="<?php echo $filtersFinal[PUZ_FILTER_PIECES][1] ?? 5000 ?>" aria-label="Maximum pieces">
                         </div>
                     </div>
                     <div class="col-12 m-2">
@@ -229,11 +228,12 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <div class="">
                             <select class="form-control" name="<?php echo PUZ_FILTER_BRAND ?>" id="filtbrand">
                                 <?php
-                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                echo "<option hidden disabled " . (!key_exists(PUZ_FILTER_BRAND, $filtersFinal) ? "selected" : "") . " value> -- select an option -- </option>";
                                 foreach ($brands as $brand) {
                                     if (!($brand instanceof Brand)) continue;
-                                    echo
-                                    "<option value='" . $brand->getId() . "'>" . $brand->getName() . "</option>";
+                                    $selected = key_exists(PUZ_FILTER_BRAND, $filtersFinal) && $filtersFinal[PUZ_FILTER_BRAND] == $brand->getId();
+
+                                    echo "<option value='" . $brand->getId() . "' " . ($selected ? "selected" : "") . ">" . $brand->getName() . "</option>";
                                 } ?>
                             </select>
                         </div>
@@ -241,23 +241,22 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <label class="ms-2" for="filtpieces"><strong>Cost</strong></label>
                     <div class="hstack m-2 g-3 align-items-center justify-content-between">
 
-                        <div class="col-3">
-                            <input type="number" class="form-control" id="filtcostmin" value="0" aria-label="Minimum Cost">
+                        <div class="col-3 pe-1">
+                            <input type="number" class="form-control" id="filtcostmin" value="<?php echo $filtersFinal[PUZ_FILTER_COST][0] ?? 0 ?>" aria-label="Minimum Cost">
                         </div>
                         <input
-                            id="costSlider"
+                            id="costSliderBase"
                             name="<?php echo PUZ_FILTER_COST ?>"
                             type="text"
-                            data-provide="slider"
                             data-slider-id="costSlider"
                             data-slider-min="0"
                             data-slider-max="100"
                             data-slider-step="1"
-                            data-slider-value="[0,100]"
+                            data-slider-value="[<?php echo ($filtersFinal[PUZ_FILTER_COST][0] ?? 0) . "," . ($filtersFinal[PUZ_FILTER_COST][1] ?? 100) ?>]"
                             data-slider-tooltip="hide"
-                            value="0,100">
-                        <div class="col-3">
-                            <input type="number" class="form-control col" id="filtcostmax" value="100" aria-label="Maximum Cost">
+                            value="<?php echo ($filtersFinal[PUZ_FILTER_COST][0] ?? 0) . "," . ($filtersFinal[PUZ_FILTER_COST][1] ?? 100) ?>">
+                        <div class="col-3 ps-1">
+                            <input type="number" class="form-control col" id="filtcostmax" value="<?php echo $filtersFinal[PUZ_FILTER_COST][1] ?? 100 ?>" aria-label="Maximum Cost">
                         </div>
                     </div>
                     <div class="col-12 m-2">
@@ -265,11 +264,12 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <div class="">
                             <select class="form-control" name="<?php echo PUZ_FILTER_SOURCE ?>" id="filtsource">
                                 <?php
-                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                echo "<option hidden disabled " . (!key_exists(PUZ_FILTER_SOURCE, $filtersFinal) ? "selected" : "") . " value> -- select an option -- </option>";
                                 foreach ($sources as $source) {
                                     if (!($source instanceof Source)) continue;
-                                    echo
-                                    "<option value='" . $source->getId() . "'>" . $source->getDescription() . "</option>";
+                                    $selected = key_exists(PUZ_FILTER_BRAND, $filtersFinal) && $filtersFinal[PUZ_FILTER_BRAND] == $source->getId();
+
+                                    echo "<option value='" . $source->getId() . "' " . ($selected ? "selected" : "") . ">" . $source->getDescription() . "</option>";
                                 } ?>
                             </select>
                         </div>
@@ -279,11 +279,12 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <div class="">
                             <select class="form-control" name="<?php echo PUZ_FILTER_DISPOSITION ?>" id="filtdisp">
                                 <?php
-                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                echo "<option hidden disabled " . (!key_exists(PUZ_FILTER_DISPOSITION, $filtersFinal) ? "selected" : "") . " value> -- select an option -- </option>";
                                 foreach ($dispositions as $disposition) {
                                     if (!($disposition instanceof Disposition)) continue;
-                                    echo
-                                    "<option value='" . $disposition->getId() . "'>" . $disposition->getDescription() . "</option>";
+                                    $selected = key_exists(PUZ_FILTER_BRAND, $filtersFinal) && $filtersFinal[PUZ_FILTER_BRAND] == $disposition->getId();
+
+                                    echo "<option value='" . $disposition->getId() . "' " . ($selected ? "selected" : "") . ">" . $disposition->getDescription() . "</option>";
                                 } ?>
                             </select>
                         </div>
@@ -293,11 +294,12 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <div class="">
                             <select class="form-control" name="<?php echo PUZ_FILTER_LOCATION ?>" id="filtlocation">
                                 <?php
-                                echo "<option hidden disabled selected value> -- select an option -- </option>";
+                                echo "<option hidden disabled " . (!key_exists(PUZ_FILTER_LOCATION, $filtersFinal) ? "selected" : "") . " value> -- select an option -- </option>";
                                 foreach ($locations as $location) {
                                     if (!($location instanceof Location)) continue;
-                                    echo
-                                    "<option value='" . $location->getId() . "'>" . $location->getDescription() . "</option>";
+                                    $selected = key_exists(PUZ_FILTER_BRAND, $filtersFinal) && $filtersFinal[PUZ_FILTER_BRAND] == $location->getId();
+
+                                    echo "<option value='" . $location->getId() . "' " . ($selected ? "selected" : "") . ">" . $location->getDescription() . "</option>";
                                 } ?>
                             </select>
                         </div>
@@ -328,13 +330,13 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                         <label for="deleteId" class="col-form-label">ID</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control id" id="deleteId" name="id" value="<?php echo $puzzles[0]->getId() ?? 0; ?>" readonly>
+                        <input type="text" class="form-control id" id="deleteId" name="id" value="<?php echo empty($puzzles) ? 0 : $puzzles[0]->getId() ?? 0; ?>" readonly>
                     </div>
                     <div class="col-auto">
                         <label for="deletePuzzle" class="col-form-label">Puzzle</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" class="form-control" id="deletePuzzle" name="puzzle" value="<?php echo $puzzles[0]->getName() ?? 'null'; ?>" readonly>
+                        <input type="text" class="form-control" id="deletePuzzle" name="puzzle" value="<?php echo empty($puzzles) ? 0 : $puzzles[0]->getName() ?? 'null'; ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -347,16 +349,16 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
 </div>
 
 <script>
-    let piecesSlider = new Slider("#piecesSlider");
+    let piecesSlider = new Slider("#piecesSliderBase");
     piecesSlider.on("slide", function(sliderValue) {
-        $("#filtpiecemin").value = sliderValue[0];
-        $("#filtpiecemax").value = sliderValue[1];
+        $("#filtpiecemin").val(sliderValue[0]);
+        $("#filtpiecemax").val(sliderValue[1]);
     });
 
-    let costSlider = new Slider("#costSlider");
+    let costSlider = new Slider("#costSliderBase");
     costSlider.on("slide", function(sliderValue) {
-        document.getElementById("filtcostmin").value = sliderValue[0];
-        document.getElementById("filtcostmax").value = sliderValue[1];
+        $("#filtcostmin").val(sliderValue[0]);
+        $("#filtcostmax").val(sliderValue[1]);
     });
 </script>
 
