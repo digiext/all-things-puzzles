@@ -396,6 +396,29 @@ class UserPuzzleGateway
         }
     }
 
+    public function findByPuzzleId(int $id): ?array
+    {
+        $sql = "SELECT * FROM userinv WHERE puzzleid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() == 0) return null;
+
+            $upuzzles = array();
+            foreach ($result as $res) {
+                $upuzzles[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $upuzzles;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
     // Return top 5 highest rated puzzle based on overallrating
     public function highestrated(): array
     {
