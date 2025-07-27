@@ -373,9 +373,39 @@ class UserPuzzleGateway
     }
 
     // Find specific records from userinv based on userid
-    public function findByUserId(int $id): ?array
+    public function findByUserId(int $id, mixed $options = [
+        SORT => null,
+        SORT_DIRECTION => SQL_SORT_ASC,
+    ]): ?array
     {
-        $sql = "SELECT * FROM userinv WHERE userid = :id";
+        require_once __DIR__ . '/../../util/constants.php';
+
+        $sort = $options[SORT] ?? USR_INV_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+
+        $sql = "SELECT * FROM userinv WHERE userid = :id ORDER BY $sort $sortDirection";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() == 0) return null;
+
+            $upuzzles = array();
+            foreach ($result as $res) {
+                $upuzzles[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $upuzzles;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    public function findByPuzzleId(int $id): ?array
+    {
+        $sql = "SELECT * FROM userinv WHERE puzzleid = :id";
 
         try {
             $stmt = $this->db->prepare($sql);

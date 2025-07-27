@@ -109,7 +109,7 @@ if ($totalpieces != 0) {
             <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
             <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
             <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
-            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo $avgpieces ?></div>
+            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
         </div>
 
 

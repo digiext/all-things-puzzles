@@ -69,8 +69,9 @@ $highestrated = $gateway->highestrated();
                 <ul class="list-group list-group-flush">
                     <?php foreach ($highestrated as $puzzle) {
                         if (!($puzzle instanceof UserPuzzle)) continue;
+                        $highestcount = count($gateway->findByPuzzleId($puzzle->getPuzzle()->getId()));
                         echo
-                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . ' - ' . number_format($puzzle->getOverall(), 2) . "</li>";
+                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . ' - ' . number_format($puzzle->getOverall(), 2) . " (" . $highestcount . ")</li>";
                     } ?>
                 </ul>
             </div>
