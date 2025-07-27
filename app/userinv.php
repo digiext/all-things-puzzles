@@ -18,8 +18,12 @@ include 'nav.php';
 
 $userid = getUserID();
 
+$options = [
+    SORT => USR_INV_ID,
+    SORT_DIRECTION => SQL_SORT_DESC,
+];
 $gateway = new UserPuzzleGateway($db);
-$userpuzzles = $gateway->findByUserId($userid) ?? [];
+$userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
 ?>
 
 <div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
