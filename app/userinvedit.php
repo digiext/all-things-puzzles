@@ -33,7 +33,7 @@ $gateway = new PuzzleGateway($db);
 $puzzles = $gateway->findAll();
 
 $gateway = new UserPuzzleGateway($db);
-$userpuzzle = $gateway->findById($id)
+$userpuzzle = $gateway->findById($id);
 
 ?>
 
@@ -91,19 +91,19 @@ $userpuzzle = $gateway->findById($id)
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="difficulty" class="form-label"><strong>Difficulty Rating</strong></label>
+                <label for="difficulty" class="form-label"><strong>Difficulty Rating</strong> - Must be 1 through 5</label>
                 <input type="number" class="form-control" name="difficulty" id="difficulty" min="0" max="5" step="1" value="<?php echo $userpuzzle->getDifficulty(); ?>">
                 <div id="difficultyFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="quality" class="form-label"><strong>Quality Rating</strong></label>
+                <label for="quality" class="form-label"><strong>Quality Rating</strong> - Must be 1 through 5</label>
                 <input type="number" class="form-control" name="quality" id="quality" min="0" max="5" step="1" value="<?php echo $userpuzzle->getQuality(); ?>">
                 <div id="qualityFeedback"></div>
             </div>
 
             <div class="p-2 mb-2 mx-1">
-                <label for="overall" class="form-label"><strong>Overall Rating</strong></label>
+                <label for="overall" class="form-label"><strong>Overall Rating</strong> - Must be 1 through 5 and can be in .5 increments</label>
                 <input type="number" class="form-control" name="overall" id="overall" min="0" max="5" step="0.5" value="<?php echo $userpuzzle->getOverall(); ?>">
                 <div id="overallFeedback"></div>
             </div>
@@ -152,15 +152,15 @@ $userpuzzle = $gateway->findById($id)
 <script type="text/javascript">
     // Set start date input field to today's date and a red color
     function startDate() {
-        document.getElementById("startdate").valueAsDate = new Date()
-        document.getElementById("startdate").style.backgroundColor = "#58151c";
+        document.getElementById("startDate").valueAsDate = new Date()
+        document.getElementById("startDate").style.backgroundColor = "#58151c";
         document.getElementById("status").value = "<?php echo $inProgress; ?>"
     }
 
     // Set end date input field to today's date and a red color
     function endDate() {
-        document.getElementById("enddate").valueAsDate = new Date();
-        document.getElementById("enddate").style.backgroundColor = "#58151c";
+        document.getElementById("endDate").valueAsDate = new Date();
+        document.getElementById("endDate").style.backgroundColor = "#58151c";
         document.getElementById("status").value = "<?php echo $complete; ?>"
     }
 

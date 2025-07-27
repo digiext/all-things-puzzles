@@ -1,6 +1,6 @@
 <?php
 // VERSION NUMBER
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 // GROUP IDS
 const ADMIN_GROUP_ID = 1;
