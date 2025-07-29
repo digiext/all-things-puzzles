@@ -7,6 +7,7 @@ use puzzlethings\src\object\UserPuzzle;
 
 
 global $db;
+include 'util/api_constants.php';
 include 'util/function.php';
 include 'util/db.php';
 
@@ -111,9 +112,7 @@ if ($totalpieces != 0) {
             <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
             <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
             <div><strong>Random API Token: </strong> <?php echo substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 48) ?></div>
+            <div><strong>Test Permissions: </strong> <?php echo PERM_WRITE ?></div>
         </div>
-
-
-
     </div>
 </div>

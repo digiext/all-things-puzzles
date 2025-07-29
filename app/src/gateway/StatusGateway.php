@@ -51,7 +51,7 @@ class StatusGateway implements IGatewayWithID
     // Find all records in status table
     public function findAll(array $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sort = $options[SORT] ?? USER_ID;
+        $sort = $options[SORT] ?? STATUS_ID;
         $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
         $page = $options[PAGE] ?? 0;
         $maxPerPage = $options[MAX_PER_PAGE] ?? 10;

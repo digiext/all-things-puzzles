@@ -192,3 +192,8 @@ function is_authed(): bool {
     global $auth;
     return $auth != null;
 }
+
+function has_permissions(int $requiredPermissions): bool {
+    global $auth;
+    return $auth != null && ($auth->getPermissions() & $requiredPermissions) == $requiredPermissions;
+}
