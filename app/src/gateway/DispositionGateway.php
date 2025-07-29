@@ -4,9 +4,10 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Disposition;
 
-class DispositionGateway
+class DispositionGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -33,7 +34,7 @@ class DispositionGateway
     }
 
     // Count total records in disposition table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM disposition";
 
@@ -48,9 +49,16 @@ class DispositionGateway
     }
 
     // Find all records in disposition table
-    public function findAll(): array
+    public function findAll(array $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM disposition";
+        $sort = $options[SORT] ?? USER_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM disposition ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -63,7 +71,8 @@ class DispositionGateway
 
             return $dispositions;
         } catch (PDOException $e) {
-            return [];
+            error_log("Database error while finding dispositions: " . $e->getMessage());
+            return $verbose ? $e : null;
         }
     }
 

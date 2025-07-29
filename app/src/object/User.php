@@ -63,12 +63,12 @@ class User implements \JsonSerializable {
         return [
             "id" => $this->id,
             "username" => $this->username,
-            "fullname" => $this->fullname,
-            "email" => $this->email,
-            "emailconfirmed" => $this->emailconfirmed,
-            "groupid" => $this->groupid,
-            "themeid" => $this->themeid,
-            "lastlogin" => $this->lastlogin
+            "display_name" => $this->fullname,
+//            "email" => $this->email,
+            "email_confirmed" => $this->emailconfirmed,
+            "group" => GROUPS[$this->groupid],
+            "theme_id" => $this->themeid,
+            "last_login" => $this->lastlogin
         ];
     }
 }

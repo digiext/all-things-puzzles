@@ -1,7 +1,7 @@
 <?php
 use puzzlethings\src\gateway\UserGateway as Gateway;
 
-require_once __DIR__ . "/../api_utils.php";
+require_once __DIR__ . "/../../api_utils.php";
 
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == GET) {
@@ -10,9 +10,10 @@ if ($req == GET) {
         $gateway = new Gateway($db);
 
         $searchOptions = search_options(USER_ID, USER_FILTERS);
+        $searchOptions[FILTERS][USER_FILTER_GROUP] = GROUP_ID_MEMBER;
 
         $count = $gateway->count($searchOptions);
-        $res = $gateway->findAll($searchOptions, true);
+        $res = $gateway->findAll($searchOptions);
 
         if ($res instanceof PDOException) database_error();
         else if ($res == null) success([]);

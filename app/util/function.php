@@ -5,7 +5,7 @@ use puzzlethings\src\gateway\AuthGateway;
 use puzzlethings\src\gateway\UserGateway;
 use puzzlethings\src\object\User;
 
-include 'constants.php';
+include_once 'constants.php';
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -80,20 +80,20 @@ function deleteCookie(string $cookie): void
 function getUserID(): int|false
 {
     if (!isLoggedIn()) return false;
-    return decrypt($_SESSION[USER_ID]);
+    return decrypt($_SESSION[SESS_USER_ID]);
 }
 
 function getUserName(): string|false
 {
     if (!isLoggedIn()) return false;
-    if (isset($_SESSION[USER_NAME])) {
-        return decrypt($_SESSION[USER_NAME]);
+    if (isset($_SESSION[SESS_USER_NAME])) {
+        return decrypt($_SESSION[SESS_USER_NAME]);
     } else {
         $user = getLoggedInUser();
         if (!$user) return false;
 
         $uname = $user->getUsername();
-        $_SESSION[USER_NAME] = encrypt($uname);
+        $_SESSION[SESS_USER_NAME] = encrypt($uname);
         return $uname;
     }
 }
@@ -111,10 +111,10 @@ function getLoggedInUser(): User|false
 
 function isLoggedIn(): bool
 {
-    if (isset($_SESSION[USER_ID])) return true;
+    if (isset($_SESSION[SESS_USER_ID])) return true;
 
     // else check for rememberme
-    $token = filter_input(INPUT_COOKIE, REMEMBER_ME, FILTER_SANITIZE_SPECIAL_CHARS);
+    $token = filter_input(INPUT_COOKIE, COOKIE_REMEMBER_ME, FILTER_SANITIZE_SPECIAL_CHARS);
 
     global $db;
     require_once __DIR__ . '/remember.php';
@@ -126,8 +126,8 @@ function isLoggedIn(): bool
         $user = $gateway->findUserByToken($token);
 
         if ($user) {
-            $_SESSION[USER_ID] = $user->getId();
-            $_SESSION[USER_GROUP] = $user->getGroupId();
+            $_SESSION[SESS_USER_ID] = $user->getId();
+            $_SESSION[SESS_USER_GROUP] = $user->getGroupId();
 
             return true;
         }
@@ -138,7 +138,7 @@ function isLoggedIn(): bool
 
 function isAdmin(): bool
 {
-    return (isLoggedIn() && isset($_SESSION[USER_GROUP]) && decrypt($_SESSION[USER_GROUP]) == "" . ADMIN_GROUP_ID);
+    return (isLoggedIn() && isset($_SESSION[SESS_USER_GROUP]) && decrypt($_SESSION[SESS_USER_GROUP]) == "" . GROUP_ID_ADMIN);
 }
 
 function successAlertNoRedir($value): void

@@ -4,9 +4,10 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Brand;
 
-class BrandGateway
+class BrandGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -33,7 +34,7 @@ class BrandGateway
     }
 
     // Count total records in brand table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM brand";
 
@@ -48,9 +49,16 @@ class BrandGateway
     }
 
     // Find all records in brand table
-    public function findAll(): array
+    public function findAll(array $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM brand";
+        $sort = $options[SORT] ?? USER_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM brand ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -62,8 +70,9 @@ class BrandGateway
             }
 
             return $brands;
-        } catch (PDOException) {
-            return [];
+        } catch (PDOException $e) {
+            error_log("Database error while finding brands: " . $e->getMessage());
+            return $verbose ? $e : null;
         }
     }
 

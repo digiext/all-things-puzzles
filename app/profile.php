@@ -26,7 +26,7 @@ $user = getLoggedInUser();
 $userid = getUserID();
 $totaloptions = [
     FILTERS => [
-        USR_FILTER_USER => $userid
+        UINV_FILTER_USER => $userid
     ]
 ];
 

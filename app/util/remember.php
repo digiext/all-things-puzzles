@@ -48,6 +48,6 @@ function remember(AuthGateway $gateway, User|int $user, int $days = 30): void {
             'path' => '/',
             'httponly' => true,
         ];
-        setcookie(REMEMBER_ME, $token, $options);
+        setcookie(COOKIE_REMEMBER_ME, $token, $options);
     }
 }

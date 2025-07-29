@@ -134,14 +134,14 @@ class UserPuzzleGateway
 
         foreach ($filters as $filter => $val) {
             switch ($filter) {
-                case USR_FILTER_USER: {
+                case UINV_FILTER_USER: {
                         if ($val instanceof User) {
                             $id = $val->getId();
                         } else $id = $val;
                         $res .= "AND userid = $id ";
                         break;
                     }
-                case USR_FILTER_STATUS: {
+                case UINV_FILTER_STATUS: {
                         if ($val instanceof Status) {
                             $id = $val->getId();
                             $res .= "AND statusid = $id";
@@ -150,23 +150,23 @@ class UserPuzzleGateway
                         }
                         break;
                     }
-                case USR_FILTER_MISSING: {
+                case UINV_FILTER_MISSING: {
                         $res .= "AND missingpieces > 0";
                         break;
                     }
-                case USR_FILTER_DIFFICULTY: {
+                case UINV_FILTER_DIFFICULTY: {
                         $res .= "AND difficultyrating > 0";
                         break;
                     }
-                case USR_FILTER_QUALITY: {
+                case UINV_FILTER_QUALITY: {
                         $res .= "AND qualityrating > 0";
                         break;
                     }
-                case USR_FILTER_OVERALL: {
+                case UINV_FILTER_OVERALL: {
                         $res .= "AND overallrating > 0";
                         break;
                     }
-                case USR_FILTER_OWNERSHIP: {
+                case UINV_FILTER_OWNERSHIP: {
                         if ($val instanceof Ownership) {
                             $id = $val->getId();
                             $res .= "AND ownershipid = $id";
@@ -380,7 +380,7 @@ class UserPuzzleGateway
     {
         require_once __DIR__ . '/../../util/constants.php';
 
-        $sort = $options[SORT] ?? USR_INV_ID;
+        $sort = $options[SORT] ?? UINV_ID;
         $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
 
         $sql = "SELECT * FROM userinv WHERE userid = :id ORDER BY $sort $sortDirection";

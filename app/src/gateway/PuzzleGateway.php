@@ -11,8 +11,10 @@ use puzzlethings\src\object\{
     Disposition,
     Puzzle
 };
+use puzzlethings\src\gateway\interfaces\IGatewayWithFilters;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 
-class PuzzleGateway
+class PuzzleGateway implements IGatewayWithID, IGatewayWithFilters
 {
     private PDO $db;
 
@@ -70,7 +72,7 @@ class PuzzleGateway
         FILTERS => []
     ]): int
     {
-        $filters = $this->determineFilters($options[FILTERS] ?? []);
+        $filters = $this->filtersToSQL($options[FILTERS] ?? []);
         $sql = "SELECT COUNT(*) FROM puzzleinv $filters";
 
         try {
@@ -87,10 +89,10 @@ class PuzzleGateway
     public function findAll(mixed $options = [
         PAGE => 0,
         MAX_PER_PAGE => 10,
-        SORT => null,
+        SORT => PUZ_ID,
         SORT_DIRECTION => SQL_SORT_ASC,
         FILTERS => []
-    ]): array
+    ], bool $verbose = false): array|null|PDOException
     {
         require_once __DIR__ . '/../../util/constants.php';
 
@@ -101,10 +103,9 @@ class PuzzleGateway
         $filters = $options[FILTERS] ?? [];
 
         $offset = $page * $maxPerPage;
-        $filters = $this->determineFilters($filters);
+        $filters = $this->filtersToSQL($filters);
 
         $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv INNER JOIN brand ON puzzleinv.brandid = brand.brandid $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
-        error_log($sql);
 
         try {
             $stmt = $this->db->query($sql);
@@ -118,12 +119,12 @@ class PuzzleGateway
             return $puzzles;
         } catch (PDOException $e) {
             error_log('Error while fetching puzzles: ' . $e->getMessage());
-            die();
+            return $verbose ? $e : null;
         }
     }
 
     // Determine what filter to apply to puzzleinv table based on what options are passed
-    private function determineFilters(mixed $filters = []): string
+    public function filtersToSQL(mixed $filters = []): string
     {
         if (empty($filters)) {
             return "";
@@ -202,7 +203,7 @@ class PuzzleGateway
     }
 
     // Find record in puzzleinv table based on puzzleid
-    public function findById(int $id, mixed $options = []): ?Puzzle
+    public function findById(int $id): ?Puzzle
     {
         $sql = "SELECT * FROM puzzleinv WHERE puzzleid = :id";
 

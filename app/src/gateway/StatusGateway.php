@@ -4,9 +4,10 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Status;
 
-class StatusGateway
+class StatusGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -33,7 +34,7 @@ class StatusGateway
     }
 
     // Count total number of records in status table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM status";
 
@@ -48,9 +49,16 @@ class StatusGateway
     }
 
     // Find all records in status table
-    public function findAll(): array
+    public function findAll(array $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM status";
+        $sort = $options[SORT] ?? USER_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM status ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -63,7 +71,8 @@ class StatusGateway
 
             return $statuses;
         } catch (PDOException $e) {
-            exit($e->getMessage());
+            error_log("Database error while finding statuses: " . $e->getMessage());
+            return $verbose ? $e : null;
         }
     }
 
@@ -82,6 +91,7 @@ class StatusGateway
 
             return Status::of($result);
         } catch (PDOException $e) {
+            error_log("Database error while finding status with id $id: " . $e->getMessage());
             return null;
         }
     }

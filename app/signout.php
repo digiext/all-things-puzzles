@@ -8,14 +8,14 @@ require_once __DIR__ . "/util/db.php";
 $gateway = new AuthGateway($db);
 $gateway->deleteToken(getUserID());
 
-if (isset($_COOKIE[REMEMBER_ME])) {
-    unset($_COOKIE[REMEMBER_ME]);
-    setcookie(REMEMBER_ME, null, -1);
+if (isset($_COOKIE[COOKIE_REMEMBER_ME])) {
+    unset($_COOKIE[COOKIE_REMEMBER_ME]);
+    setcookie(COOKIE_REMEMBER_ME, null, -1);
 }
 
-unset($_SESSION[USER_ID]);
-unset($_SESSION[USER_GROUP_ID]);
-unset($_SESSION[USER_NAME]);
+unset($_SESSION[SESS_USER_ID]);
+unset($_SESSION[GROUP_ID_MEMBER]);
+unset($_SESSION[SESS_USER_NAME]);
 
 session_destroy();
 

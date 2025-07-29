@@ -31,16 +31,16 @@ $ownership = $_POST['ownership'];
 $loanedoutto = $_POST['loanedoutto'];
 
 $values = [
-    USR_INV_STATUS => $status instanceof Status ? $status->getId() : $status,
-    USR_INV_MISSING => $missingpieces,
-    USR_INV_STARTDATE => $startdate,
-    USR_INV_ENDDATE => $enddate,
-    USR_INV_TOTALDAYS => $totaldays,
-    USR_INV_DIFFICULTY => $difficultyrating,
-    USR_INV_QUALITY => $qualityrating,
-    USR_INV_OVERALL => $overallrating,
-    USR_INV_OWNERSHIP => $ownership instanceof Ownership ? $ownership->getId() : $ownership,
-    USR_INV_LOANED => $loanedoutto
+    UINV_STATUS => $status instanceof Status ? $status->getId() : $status,
+    UINV_MISSING => $missingpieces,
+    UINV_STARTDATE => $startdate,
+    UINV_ENDDATE => $enddate,
+    UINV_TOTALDAYS => $totaldays,
+    UINV_DIFFICULTY => $difficultyrating,
+    UINV_QUALITY => $qualityrating,
+    UINV_OVERALL => $overallrating,
+    UINV_OWNERSHIP => $ownership instanceof Ownership ? $ownership->getId() : $ownership,
+    UINV_LOANED => $loanedoutto
 ];
 
 $gateway = new UserPuzzleGateway($db);

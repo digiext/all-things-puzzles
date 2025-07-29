@@ -1,13 +1,26 @@
 <?php
 use puzzlethings\src\gateway\OwnershipGateway as Gateway;
 
-global $db;
+require_once __DIR__ . "/../api_utils.php";
 
-require __DIR__ . "/../../util/db.php";
-$gateway = new Gateway($db);
+$req = $_SERVER['REQUEST_METHOD'];
+if ($req == GET) {
+    try {
+        global $db;
+        $gateway = new Gateway($db);
 
-$res = $gateway->findAll();
+        $searchOptions = search_options(OWNERSHIP_ID, []);
 
-header("Content-Type: application/json");
-echo json_encode($res);
-die();
+        $count = $gateway->count($searchOptions);
+        $res = $gateway->findAll($searchOptions, true);
+
+        if ($res instanceof PDOException) database_error();
+        else if ($res == null) success([]);
+        else {
+            $res = array_map(fn($itm) => array_merge($itm->jsonSerialize(), [LINK => api_link('/api/ownership/' . $itm->getId() . '/')]), $res);
+            success_with_pagination($res, $count);
+        }
+    } catch (Error $e) {
+        bad_request($e);
+    }
+} else wrong_method([GET]);

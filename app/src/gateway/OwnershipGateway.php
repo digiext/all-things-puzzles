@@ -4,9 +4,10 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Ownership;
 
-class OwnershipGateway
+class OwnershipGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -33,7 +34,7 @@ class OwnershipGateway
     }
 
     // Count total records in ownership table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM ownership";
 
@@ -48,9 +49,16 @@ class OwnershipGateway
     }
 
     // Find all records in the ownership table
-    public function findAll(): array
+    public function findAll(array $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM ownership";
+        $sort = $options[SORT] ?? USER_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM ownership ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -63,7 +71,8 @@ class OwnershipGateway
 
             return $ownerships;
         } catch (PDOException $e) {
-            exit($e->getMessage());
+            error_log("Database error while finding ownerships: " . $e->getMessage());
+            return $verbose ? $e : null;
         }
     }
 

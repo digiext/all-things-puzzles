@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     $gateway = new UserGateway($db);
-    $code = $gateway->create($username, $fullname, $email, $password, false, ADMIN_GROUP_ID);
+    $code = $gateway->create($username, $fullname, $email, $password, false, GROUP_ID_ADMIN);
 
 
     $sql = "UPDATE setup SET installed = 1";

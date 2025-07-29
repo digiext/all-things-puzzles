@@ -1,10 +1,13 @@
 # All Things Puzzles
 
-All Things Puzzles is an inventory management system of your personal puzzle collection. It has the following features:
+All Things Puzzles is an inventory management system of your personal puzzle collection.
 
+Current Features include:
 * Master Puzzle List
 * Multi-user capable
 * Wishlist
+* API
+* And more!
 
 ## Screenshots
 **Main Page**
@@ -13,8 +16,8 @@ All Things Puzzles is an inventory management system of your personal puzzle col
 **Puzzle Inventory**
 ![Puzzle Inventory Page](/images/puzzle-inv-page.png?raw=true "Puzzle Inventory Page") 
 
-**User Add Page**
-![User Add Page](/images/user-add-puzzles.png?raw=true "User Add Page") 
+**User Inventory Add Page**
+![User Inventory Add Page](/images/user-add-puzzles.png?raw=true "User Inventory Add Page") 
 
 **User Inventory Page**
 ![User Inventory Page](/images/user-inv-manage.png?raw=true "User Inventory Page") 

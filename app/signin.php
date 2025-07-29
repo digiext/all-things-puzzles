@@ -12,19 +12,19 @@ require_once 'util/function.php';
 require_once 'util/db.php';
 
 // Check if $_SESSION or $_COOKIE already set
-if (isset($_SESSION[USER_ID])) {
+if (isset($_SESSION[SESS_USER_ID])) {
     header("Location: " . (isset($_POST['from']) ? BASE_URL . "/" . $_POST['from'] : 'index.php'));
     exit;
 } else if (isLoggedIn()) {
     // Decrypt cookie variable value
-    $userid = decrypt($_SESSION[USER_ID]);
+    $userid = decrypt($_SESSION[SESS_USER_ID]);
 
     // Fetch records
     $gateway = new UserGateway($db);
     $user = $gateway->findById($userid);
 
     if (!empty($user)) {
-        $_SESSION[USER_ID] = $userid;
+        $_SESSION[SESS_USER_ID] = $userid;
         header("Location: " . (isset($_POST['from']) ? BASE_URL . "/" .  $_POST['from'] : 'index.php'));
         exit;
     }
@@ -44,8 +44,8 @@ if (isset($_POST['submit'])) {
         $user = $gateway->attemptLogin($username, $password);
 
         if ($user instanceof User) {
-            $_SESSION[USER_ID] = encrypt($user->getId());
-            $_SESSION[USER_GROUP] = encrypt($user->getGroupId());
+            $_SESSION[SESS_USER_ID] = encrypt($user->getId());
+            $_SESSION[SESS_USER_GROUP] = encrypt($user->getGroupId());
 
             if ($rememberme) {
                 require_once __DIR__ . "/util/remember.php";

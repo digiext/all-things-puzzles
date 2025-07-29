@@ -19,7 +19,7 @@ include 'nav.php';
 $userid = getUserID();
 
 $options = [
-    SORT => USR_INV_ID,
+    SORT => UINV_ID,
     SORT_DIRECTION => SQL_SORT_DESC,
 ];
 $gateway = new UserPuzzleGateway($db);
