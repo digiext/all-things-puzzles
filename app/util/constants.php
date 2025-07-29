@@ -46,6 +46,19 @@ const PUZ_LOCATION_ID = "locationid";
 const PUZ_DISPOSITION_ID = "dispositionid";
 const PUZ_PICTURE_URL = "pictureurl";
 const PUZ_UPC = "upc";
+const PUZ_FIELDS = [
+    PUZ_ID,
+    PUZ_NAME,
+    PUZ_PIECES,
+    PUZ_COST,
+    PUZ_DATE_ACQUIRED,
+    PUZ_BRAND_ID,
+    PUZ_SOURCE_ID,
+    PUZ_LOCATION_ID,
+    PUZ_DISPOSITION_ID,
+    PUZ_PICTURE_URL,
+    PUZ_UPC,
+];
 
 const PUZ_SORT_BRAND_NAME = "brand.brandname";
 

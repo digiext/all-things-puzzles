@@ -5,6 +5,7 @@ use puzzlethings\src\gateway\APITokenGateway;
 use puzzlethings\src\object\APIToken;
 
 require_once __DIR__ . "/../util/db.php";
+require_once __DIR__ . "/../util/api_constants.php";
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
