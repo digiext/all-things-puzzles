@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\APIToken;
+use puzzlethings\src\object\User;
 
 class APITokenGateway implements IGatewayWithID
 {
@@ -13,6 +14,28 @@ class APITokenGateway implements IGatewayWithID
     public function __construct(PDO $db)
     {
         $this->db = $db;
+    }
+
+    public function create(User|int $user, string $token, int $permissions): APIToken|false
+    {
+        $userid = $user instanceof User ? $user->getId() : $user;
+        $sql = "INSERT INTO apitokens (apitoken, userid, permissions) VALUES (:apitoken, :userid, :permissions)";
+
+        $apitoken = hash('sha512', $token);
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':apitoken', $apitoken);
+            $stmt->bindParam(':userid', $userid, PDO::PARAM_INT);
+            $stmt->bindParam(':permissions', $permissions, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $id = $this->db->lastInsertId();
+            return new APIToken($id, $user, $permissions);
+        } catch (PDOException $e) {
+            error_log("Database error generating new API Token: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function count(mixed $options = []): int
@@ -78,10 +101,11 @@ class APITokenGateway implements IGatewayWithID
     public function findByToken(string $token): ?APIToken
     {
         $sql = "SELECT * FROM apitokens WHERE apitoken = :token";
+        $hashed = hash('sha512', $token);
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(":token", $token);
+            $stmt->bindParam(":token", $hashed);
             $stmt->execute();
 
             if ($stmt->rowCount() == 0) return null;

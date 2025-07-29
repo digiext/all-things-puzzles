@@ -8,24 +8,17 @@ class APIToken implements \JsonSerializable
 {
     private int $id;
     private User $user;
-    private string $token;
     private int $permissions;
 
-    public function __construct(int $id, User $user, string $token, int $permissions) {
+    public function __construct(int $id, User $user, int $permissions) {
         $this->id = $id;
         $this->user = $user;
-        $this->token = $token;
         $this->permissions = $permissions;
     }
 
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function getToken(): string
-    {
-        return $this->token;
     }
 
     public function getUser(): User
@@ -40,7 +33,7 @@ class APIToken implements \JsonSerializable
 
     public static function of(mixed $res, PDO $db): APIToken {
         $user = new UserGateway($db)->findById($res['userid']);
-        return new APIToken($res['tokenid'], $user, $res['apitoken'], $res['permissions']);
+        return new APIToken($res['tokenid'], $user, $res['permissions']);
     }
 
     public function jsonSerialize(): array

@@ -182,7 +182,7 @@ function get_auth(): ?APIToken
 
         [$user, $apitok] = explode(':', base64_decode($token));
 
-        $apitoken = $atgateway->findByToken(hash('sha512', $apitok));
+        $apitoken = $atgateway->findByToken($apitok);
 
         return ($apitoken != null && $apitoken->getUser()->getUsername() == $user) ? $apitoken : null;
     } else return null;
