@@ -211,22 +211,21 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
         }
     }
 
-    public function findByName(string $name): array
+    public function findByName(string $name): ?User
     {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
-            $stmt = $this->db->query($sql);
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $users = array();
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':username', $name);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            foreach ($result as $res) {
-                $users[] = User::of($res);
-            }
+            if ($stmt->rowCount() == 0) return null;
 
-            return $users;
+            return User::of($result);
         } catch (PDOException) {
-            return [];
+            return null;
         }
     }
 

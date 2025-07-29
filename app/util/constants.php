@@ -14,6 +14,7 @@ const DELETE = 'DELETE';
 // API FIELDS
 const SERVER_VERSION = 'server_version';
 const API = 'api_version';
+const AUTHENTICATED = 'authenticated';
 const ERROR = 'error';
 const HAS_ERROR = 'has_error';
 const DATA = 'data';
@@ -28,6 +29,14 @@ const ID = 'id';
 const ACCEPTED_METHODS = 'accepted_methods';
 
 // API ERRORS
+const API_ERROR_UNAUTHORIZED = [
+    ERROR_CODE => "unauthorized",
+    MESSAGE => "You need correct authorization to interact with this endpoint!",
+];
+const API_ERROR_NO_PERMISSION = [
+    ERROR_CODE => "no_permission",
+    MESSAGE => "You don't have the correct permission to use this endpoint!",
+];
 const API_ERROR_TEAPOT = [
     ERROR_CODE => "teapot",
     MESSAGE => "I'm a teapot, short and stout. Here is my handle, here is my spout. When you hear my whistle, hear me shout: 'Tip me over and pour me out!'",
@@ -43,6 +52,10 @@ const API_ERROR_DATABASE = [
 const API_ERROR_BAD_REQUEST = [
     ERROR_CODE => "bad_request",
     MESSAGE => "Bad request. Check your query parameters.",
+];
+const API_ERROR_INVALID_TOKEN = [
+    ERROR_CODE => "invalid_token",
+    MESSAGE => "Token does not exist or is invalid",
 ];
 const API_ERROR_INVALID_USER = [
     ERROR_CODE => "invalid_user",

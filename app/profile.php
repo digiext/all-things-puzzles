@@ -110,6 +110,7 @@ if ($totalpieces != 0) {
             <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
             <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
             <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
+            <div><strong>Random API Token: </strong> <?php echo substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 48) ?></div>
         </div>
 
 

@@ -4,6 +4,16 @@ info:
   description: OpenAPI Specification for the All Things Puzzles API
   version: 1.0.0
 paths:
+  /auth:
+    post:
+      description: Check Auth
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
   /users:
     get:
       description: Get all Users

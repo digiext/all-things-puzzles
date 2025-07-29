@@ -1,9 +1,16 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+use puzzlethings\src\gateway\APITokenGateway;
+use puzzlethings\src\object\APIToken;
+
 require_once __DIR__ . "/../util/db.php";
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
-function error(array $error, int $statusCode = 404): void
+$auth = get_auth();
+
+#[NoReturn] function error(array $error, int $statusCode = 404): void
 {
     http_response_code($statusCode);
 
@@ -11,25 +18,32 @@ function error(array $error, int $statusCode = 404): void
     else $json = json_encode([
         SERVER_VERSION => VERSION,
         API => API_VERSION,
+        AUTHENTICATED => is_authed(),
         ERROR => $error,
         HAS_ERROR => true,
         DATA => null,
     ]);
 
     echo $json;
+    die();
 }
 
-function bad_request(Error $e): void
+#[NoReturn] function unauthorized(): void
+{
+    error(API_ERROR_UNAUTHORIZED, 401);
+}
+
+#[NoReturn] function bad_request(Error $e): void
 {
     error(array_merge(API_ERROR_BAD_REQUEST, ['error_message' => $e->getMessage()]), 400);
 }
 
-function wrong_method(array $accepted): void
+#[NoReturn] function wrong_method(array $accepted): void
 {
     error(array_merge(API_ERROR_WRONG_METHOD, [ACCEPTED_METHODS => $accepted]), 405);
 }
 
-function database_error(): void
+#[NoReturn] function database_error(): void
 {
     error(API_ERROR_DATABASE, 500);
 }
@@ -42,6 +56,7 @@ function success(mixed $data, int $statusCode = 200): void
     else $json = json_encode([
         SERVER_VERSION => VERSION,
         API => API_VERSION,
+        AUTHENTICATED => is_authed(),
         ERROR => null,
         HAS_ERROR => false,
         DATA => $data,
@@ -61,6 +76,7 @@ function success_with_pagination(mixed $data, int $count, int $statusCode = 200)
     else $json = json_encode([
         SERVER_VERSION => VERSION,
         API => API_VERSION,
+        AUTHENTICATED => is_authed(),
         ERROR => null,
         HAS_ERROR => false,
         DATA => $data,
@@ -137,4 +153,42 @@ function next_page_link(array $data, int $count): ?string {
 
 function api_link(string $path): string {
     return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $path;
+}
+
+function require_auth(): void
+{
+    if (!is_authed()) unauthorized();
+}
+
+function require_permissions(int $requiredPermissions): void {
+    global $auth;
+    if ($auth == null) unauthorized();
+
+    if (($auth->getPermissions() & $requiredPermissions) != $requiredPermissions) {
+        error(API_ERROR_NO_PERMISSION, 403);
+    }
+}
+
+function get_auth(): ?APIToken
+{
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+    if (empty($authHeader)) return null;
+
+    if (preg_match('/Basic\s(.+)/', $authHeader, $matches)) {
+        $token = $matches[1];
+
+        global $db;
+        $atgateway = new APITokenGateway($db);
+
+        [$user, $apitok] = explode(':', base64_decode($token));
+
+        $apitoken = $atgateway->findByToken(hash('sha512', $apitok));
+
+        return ($apitoken != null && $apitoken->getUser()->getUsername() == $user) ? $apitoken : null;
+    } else return null;
+}
+
+function is_authed(): bool {
+    global $auth;
+    return $auth != null;
 }
