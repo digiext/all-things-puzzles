@@ -18,7 +18,7 @@ if (str_starts_with($path, "/api")) {
 
         if ($req == GET) {
             $_GET['id'] = $id;
-        } else if ($req == POST) {
+        } else if ($req == POST || $req == PUT || $req == DELETE) {
             $_POST['id'] = $id;
         }
 

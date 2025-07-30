@@ -350,13 +350,14 @@ class PuzzleGateway implements IGatewayWithID, IGatewayWithFilters
     }
 
     // Delete record from table puzzleinv based on puzzleid
-    public function delete(Puzzle|int $id): bool
+    public function delete(Puzzle|int $puz): bool
     {
+        $id = $puz instanceof Puzzle ? $puz->getId() : $puz;
         $sql = "DELETE FROM puzzleinv WHERE puzzleid = :puzzleid";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':puzzleid', $id);
+            $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("Database error while deleting puzzle: " . $e->getMessage());

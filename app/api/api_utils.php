@@ -25,8 +25,7 @@ $auth = get_auth();
         DATA => null,
     ]);
 
-    echo $json;
-    die();
+    die($json);
 }
 
 #[NoReturn] function unauthorized(): void
@@ -63,7 +62,13 @@ function success(mixed $data, int $statusCode = 200): void
         DATA => $data,
     ]);
 
-    echo $json;
+    die($json);
+}
+
+#[NoReturn] function deleted(): void
+{
+    http_response_code(204);
+    die();
 }
 
 function success_with_pagination(mixed $data, int $count, int $statusCode = 200): void
@@ -156,6 +161,18 @@ function api_link(string $path): string {
     return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $path;
 }
 
+function constrain(string $field, array &$values, Closure $fn): void {
+    if (array_key_exists($field, $values)) {
+        $values[$field] = $fn($values[$field]);
+    }
+}
+
+function remove_id(string $idfield, array &$values): void {
+    if (array_key_exists($idfield, $values)) {
+        unset($values[$idfield]);
+    }
+}
+
 function require_auth(): void
 {
     if (!is_authed()) unauthorized();
@@ -166,8 +183,48 @@ function require_permissions(int $requiredPermissions): void {
     if ($auth == null) unauthorized();
 
     if (($auth->getPermissions() & $requiredPermissions) != $requiredPermissions) {
-        error(API_ERROR_NO_PERMISSION, 403);
+        error(array_merge(API_ERROR_NO_PERMISSION, ['missing' => missing_permissions($requiredPermissions)]), 403);
     }
+}
+
+function missing_permissions(int $requiredPermissions): array
+{
+    $permLookup = [
+        PERM_READ => "read",
+        PERM_WRITE => "write",
+        PERM_READ_PROFILE => "read_profile",
+        PERM_WRITE_PROFILE => "write_profile",
+        PERM_PROFILE => "profile",
+        PERM_READ_PUZZLE => "read_puzzle",
+        PERM_CREATE_PUZZLE => "create_puzzle",
+        PERM_EDIT_PUZZLE => "edit_puzzle",
+        PERM_DELETE_PUZZLE => "delete_puzzle",
+        PERM_WRITE_PUZZLE => "write_puzzle",
+        PERM_PUZZLE => "puzzle",
+        PERM_READ_WISHLIST => "read_wishlist",
+        PERM_CREATE_WISHLIST => "create_wishlist",
+        PERM_EDIT_WISHLIST => "edit_wishlist",
+        PERM_DELETE_WISHLIST => "delete_wishlist",
+        PERM_WRITE_WISHLIST => "write_wishlist",
+        PERM_WISHLIST => "wishlist",
+        PERM_READ_USER_INVENTORY => "read_user_inventory",
+        PERM_CREATE_USER_INVENTORY => "create_user_inventory",
+        PERM_EDIT_USER_INVENTORY => "edit_user_inventory",
+        PERM_DELETE_USER_INVENTORY => "delete_user_inventory",
+        PERM_WRITE_USER_INVENTORY => "write_user_inventory",
+        PERM_USER_INVENTORY => "user_inventory",
+    ];
+
+    global $auth;
+    $missingPermMask = $requiredPermissions ^ ($requiredPermissions & $auth->getPermissions());
+    $missingPerms = [];
+    foreach (range(0, 31) as $bits) {
+        if (($missingPermMask >> $bits) & 1) {
+            $missingPerms[] = $permLookup[1 << $bits];
+        }
+    }
+
+    return $missingPerms;
 }
 
 function get_auth(): ?APIToken

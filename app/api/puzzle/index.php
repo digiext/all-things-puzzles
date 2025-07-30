@@ -14,7 +14,6 @@ if ($req == GET) {
 
         if ($data == null) {
             error(API_ERROR_INVALID_PUZZLE);
-            return;
         } else {
             success($data);
         }
