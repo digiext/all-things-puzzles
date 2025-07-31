@@ -35,7 +35,8 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                 <input type="date" class="form-control" name="expire" id="expire" value="<?php echo $oneMonth; ?>" min="<?php echo $now; ?>" max="<?php echo $oneYear; ?>">
             </div>
 
-            <div class="p-2 mb-2 mx-1">
+            <div class="p-2 mb-2 mx-1" id="permissions">
+                <label for="permissions" class="form-label"><strong>Permissions</strong></label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="profile" name="profile">
                     <label class="form-check-label" for="profile">

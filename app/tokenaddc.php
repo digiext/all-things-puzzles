@@ -19,18 +19,7 @@ if (isset($_SESSION['blockRefresh'])) {
 
 $_SESSION['blockRefresh'] = true;
 
-$permLookupStrict = PERM_LOOKUP;
-unset($permLookupStrict[PERM_PROFILE]);
-unset($permLookupStrict[PERM_WRITE_PUZZLE]);
-unset($permLookupStrict[PERM_PUZZLE]);
-unset($permLookupStrict[PERM_WRITE_WISHLIST]);
-unset($permLookupStrict[PERM_WISHLIST]);
-unset($permLookupStrict[PERM_WRITE_USER_INVENTORY]);
-unset($permLookupStrict[PERM_USER_INVENTORY]);
-unset($permLookupStrict[PERM_WRITE_MISC]);
-unset($permLookupStrict[PERM_MISC]);
-unset($permLookupStrict[PERM_READ]);
-unset($permLookupStrict[PERM_WRITE]);
+$permLookupStrict = array_filter(PERM_LOOKUP, fn ($itm) => !in_array($itm, COMPOUND_PERMS));
 
 $perm = 0;
 foreach ($permLookupStrict as $int => $name) {
