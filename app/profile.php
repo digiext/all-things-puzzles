@@ -163,7 +163,7 @@ function status(string $expiration): string
                 data-id-field="id">
                 <thead>
                     <tr>
-                        <th scope="col" class="col-2 text-center align-middlev visually-hidden" data-field="id">ID</th>
+                        <th scope="col" class="col-2 text-center align-middle visually-hidden" data-field="id">ID</th>
                         <th scope="col" class="col-2 text-center align-middle" data-field="name">Name</th>
                         <th scope="col" class="col-1 text-center align-middle" data-field="status">Status</th>
                         <th scope="col" class="col-6 text-center align-middle" data-field="scopes">Scopes</th>
@@ -176,7 +176,7 @@ function status(string $expiration): string
                         if (!($token instanceof APIToken)) continue;
                         echo
                         "<tr>
-                        <th scope='row' class='text-center align-middle id visually-hidden''>" . $token->getId() . "</th>
+                        <th scope='row' class='text-center align-middle id visually-hidden'>" . $token->getId() . "</th>
                         <td class='text-center align-middle status name'>" . $token->getName() . "</td>
                         <td class='text-center align-middle status'>" . status($token->getExpiration()) . "</td>
                         <td class='text-center align-middle scopes'>" . perm_to_scopes($token->getPermissions()) . "</td>

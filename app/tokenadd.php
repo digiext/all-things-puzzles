@@ -16,6 +16,12 @@ $title = 'Add New API Token';
 include 'header.php';
 include 'nav.php';
 
+$date = new DateTime();
+
+$date->add(new DateInterval('P30D'));
+
+$updatedDate = $date->format('Y-m-d');
+
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
@@ -29,7 +35,7 @@ include 'nav.php';
 
             <div class="p-2 mb-2 mx-1" id="dexpire">
                 <label for="expire" class="form-label"><strong>Expiration Date</strong></label>
-                <input type="date" class="form-control" name="expire" id="expire">
+                <input type="date" class="form-control" name="expire" id="expire" value="<?php echo $updatedDate ?>">
             </div>
 
             <div class="p-2 mb-2 mx-1">
@@ -264,6 +270,9 @@ include 'nav.php';
                     </label>
                 </div>
             </div>
-            <input class="btn btn-success" type="submit" name="submit">
+            <div class="p-2 mb-2 mx-1">
+                <button type="submit" class="btn btn-success me-2" name="submit" id="submit">Submit</button>
+                <a class="btn btn-danger" name="cancel" href="profile.php">Cancel</a>
+            </div>
         </form>
     </div>
