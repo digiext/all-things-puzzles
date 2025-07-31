@@ -200,6 +200,14 @@ function require_auth(): void
     if (!is_authed()) unauthorized();
 }
 
+function require_admin(): void
+{
+    global $auth;
+    if ($auth == null) unauthorized();
+
+    if ($auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) unauthorized();
+}
+
 function require_permissions(int $requiredPermissions): void
 {
     global $auth;
@@ -255,7 +263,7 @@ function has_permissions(int $requiredPermissions): bool
     return $auth != null && ($auth->getPermissions() & $requiredPermissions) == $requiredPermissions;
 }
 
-function parse_multipart_form_data(): void
+function parse_put_data(): void
 {
     global $_PUT;
 

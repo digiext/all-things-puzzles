@@ -17,7 +17,7 @@ if ($req == PUT) {
     $gateway = new Gateway($db);
 
     global $_PUT;
-    parse_multipart_form_data();
+    parse_put_data();
 
     $fields = array_filter($_PUT, fn ($k) => in_array($k, array_merge(PUZ_FIELDS, ['category'])), ARRAY_FILTER_USE_KEY);
 
@@ -45,6 +45,13 @@ if ($req == PUT) {
     if (!is_array($categories)) $categories = [$categories];
 
     $puzzle = $gateway->create($puzname, $pieces, $brand, $cost, $acquired, $source, $location, $disposition, $upc);
+
+    if (!$puzzle) {
+        error([
+            ERROR_CODE => 'failed_to_create_puzzle',
+            MESSAGE => 'Failed to create puzzle!'
+        ]);
+    }
 
     $addfailed = false;
     if (!empty($categories)) {

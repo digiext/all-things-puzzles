@@ -209,7 +209,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="misc">
                         <span>misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants read and write access to brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants read and write access to brands, sources, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check ms-3">
@@ -217,7 +217,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="read_misc">
                         <span>read_misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants full read-only access to brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants full read-only access to brands, sources, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check ms-3">
@@ -225,7 +225,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="write_misc">
                         <span>write_misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants create, edit, and delete access to brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants create, edit, and delete access to brands, sources, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check ms-5">
@@ -233,7 +233,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="create_misc">
                         <span>create_misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants the ability to create brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants the ability to create brands, sources, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check ms-5">
@@ -241,7 +241,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="edit_misc">
                         <span>edit_misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants the ability to edit brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants the ability to edit brands, sources, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check ms-5">
