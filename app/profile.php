@@ -140,7 +140,7 @@ function status(string $expiration): string
                 </div>
             </form>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete User</button>
+                <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete Account</button>
             </div>
 
         </div>
@@ -217,6 +217,13 @@ function status(string $expiration): string
             <form class="column" action="userdelete.php" method="post" name="userdelete">
                 <div class="modal-body">
                     <div class="alert alert-danger" role="alert">Are you <strong>sure</strong> you want to delete your account?</div>
+
+                    <div class="col-auto">
+                        <label for="deleteId" class="col-form-label visually-hidden">ID</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control id visually-hidden" id="userid" name="id" value="<?php echo $userid ?>" readonly>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>

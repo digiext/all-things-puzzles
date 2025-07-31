@@ -1,4 +1,5 @@
 <?php
+
 use puzzlethings\src\gateway\AuthGateway;
 
 global $db;
@@ -10,7 +11,7 @@ $gateway->deleteToken(getUserID());
 
 if (isset($_COOKIE[COOKIE_REMEMBER_ME])) {
     unset($_COOKIE[COOKIE_REMEMBER_ME]);
-    setcookie(COOKIE_REMEMBER_ME, null, -1);
+    setcookie(COOKIE_REMEMBER_ME, '', -1);
 }
 
 unset($_SESSION[SESS_USER_ID]);

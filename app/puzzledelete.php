@@ -6,6 +6,10 @@ global $db;
 require_once 'util/function.php';
 require_once 'util/db.php';
 
+if (!isLoggedIn()) {
+    header("Location: index.php");
+}
+
 $id = $_POST['id'];
 
 $gateway = new PuzzleGateway($db);

@@ -7,10 +7,15 @@ global $db;
 require_once 'util/function.php';
 require_once 'util/db.php';
 
+if (!isLoggedIn()) {
+    header("Location: index.php");
+}
+
 $id = $_POST['id'];
 
 $gateway = new APITokenGateway($db);
-$code = $gateway->delete($id);
+$convertid = $gateway->findById($id);
+$code = $gateway->delete($convertid);
 
 // session_start();
 if (!$code) {
