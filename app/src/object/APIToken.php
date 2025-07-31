@@ -2,6 +2,7 @@
 
 namespace puzzlethings\src\object;
 
+use DateTime;
 use PDO;
 use puzzlethings\src\gateway\UserGateway;
 
@@ -43,6 +44,11 @@ class APIToken implements \JsonSerializable
     public function getExpiration(): string
     {
         return $this->expiration;
+    }
+
+    public function isExpired(): bool
+    {
+        return DateTime::createFromFormat('Y-m-d', $this->expiration) < new DateTime()->setTime(0, 0);
     }
 
     public static function of(mixed $res, PDO $db): APIToken

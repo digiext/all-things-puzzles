@@ -254,7 +254,7 @@ function get_auth(): ?APIToken
 function is_authed(): bool
 {
     global $auth;
-    return $auth != null;
+    return $auth != null && !$auth->isExpired();
 }
 
 function has_permissions(int $requiredPermissions): bool
