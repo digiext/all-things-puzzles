@@ -37,66 +37,6 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
 
             <div class="p-2 mb-2 mx-1">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="read_profile" name="read_profile">
-                    <label class="form-check-label" for="read_profile">
-                        <div>
-                            <span>read_profile</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to your profile, including username, display name, and email</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="read_puzzle" name="read_puzzle">
-                    <label class="form-check-label" for="read_puzzle">
-                        <div>
-                            <span>read_puzzle</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to read puzzle information</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="read_wishlist" name="read_wishlist">
-                    <label class="form-check-label" for="read_wishlist">
-                        <div>
-                            <span>read_wishlist</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to your wishlist</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="read_user_inventory" name="read_user_inventory">
-                    <label class="form-check-label" for="read_user_inventory">
-                        <div>
-                            <span>read_user_inventory</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to your user inventory</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="read" name="read">
-                    <label class="form-check-label" for="read">
-                        <div>
-                            <span>read</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to the API</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="write_profile" name="write_profile">
-                    <label class="form-check-label" for="write_profile">
-                        <div>
-                            <span>write_profile</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants write access to your profile's information</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="profile" name="profile">
                     <label class="form-check-label" for="profile">
                         <div>
@@ -106,43 +46,23 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="create_puzzle" name="create_puzzle">
-                    <label class="form-check-label" for="create_puzzle">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="read_profile" name="read_profile">
+                    <label class="form-check-label" for="read_profile">
                         <div>
-                            <span>create_puzzle</span>
+                            <span>read_profile</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to create a puzzle</span>
+                            <span class="text-body-secondary p-0">Grants read-only access to your profile, including username, display name, and email</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="edit_puzzle" name="edit_puzzle">
-                    <label class="form-check-label" for="edit_puzzle">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="write_profile" name="write_profile">
+                    <label class="form-check-label" for="write_profile">
                         <div>
-                            <span>edit_puzzle</span>
+                            <span>write_profile</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to edit any puzzle</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="delete_puzzle" name="delete_puzzle">
-                    <label class="form-check-label" for="delete_puzzle">
-                        <div>
-                            <span>delete_puzzle</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants the ability to delete any puzzle</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="write_puzzle" name="write_puzzle">
-                    <label class="form-check-label" for="write_puzzle">
-                        <div>
-                            <span>write_puzzle</span>
-                            <br>
-                            <span class="text-body-secondary p-0">Grants create, edit, and delete access to any puzzle</span>
+                            <span class="text-body-secondary p-0">Grants write access to your profile's information</span>
                         </div>
                     </label>
                 </div>
@@ -156,43 +76,53 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="create_wishlist" name="create_wishlist">
-                    <label class="form-check-label" for="create_wishlist">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="read_puzzle" name="read_puzzle">
+                    <label class="form-check-label" for="read_puzzle">
                         <div>
-                            <span>create_wishlist</span>
+                            <span>read_puzzle</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to create a puzzle on your wishlist</span>
+                            <span class="text-body-secondary p-0">Grants read-only access to read puzzle information</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="edit_wishlist" name="edit_wishlist">
-                    <label class="form-check-label" for="edit_wishlist">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="write_puzzle" name="write_puzzle">
+                    <label class="form-check-label" for="write_puzzle">
                         <div>
-                            <span>edit_wishlist</span>
+                            <span>write_puzzle</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to edit a puzzle on your wishlist</span>
+                            <span class="text-body-secondary p-0">Grants create, edit, and delete access to any puzzle</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="delete_wishlist" name="delete_wishlist">
-                    <label class="form-check-label" for="delete_wishlist">
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="create_puzzle" name="create_puzzle">
+                    <label class="form-check-label" for="create_puzzle">
                         <div>
-                            <span>delete_wishlist</span>
+                            <span>create_puzzle</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to delete a puzzle on your wishlist</span>
+                            <span class="text-body-secondary p-0">Grants the ability to create a puzzle</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="write_wishlist" name="write_wishlist">
-                    <label class="form-check-label" for="write_wishlist">
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="edit_puzzle" name="edit_puzzle">
+                    <label class="form-check-label" for="edit_puzzle">
                         <div>
-                            <span>write_wishlist</span>
+                            <span>edit_puzzle</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants create, edit, and delete access to your wishlist</span>
+                            <span class="text-body-secondary p-0">Grants the ability to edit any puzzle</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="delete_puzzle" name="delete_puzzle">
+                    <label class="form-check-label" for="delete_puzzle">
+                        <div>
+                            <span>delete_puzzle</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants the ability to delete any puzzle</span>
                         </div>
                     </label>
                 </div>
@@ -206,43 +136,53 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="add_user_inventory" name="add_user_inventory">
-                    <label class="form-check-label" for="add_user_inventory">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="read_wishlist" name="read_wishlist">
+                    <label class="form-check-label" for="read_wishlist">
                         <div>
-                            <span>add_user_inventory</span>
+                            <span>read_wishlist</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to add a puzzle to your user inventory</span>
+                            <span class="text-body-secondary p-0">Grants read-only access to your wishlist</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="edit_user_inventory" name="edit_user_inventory">
-                    <label class="form-check-label" for="edit_user_inventory">
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="write_wishlist" name="write_wishlist">
+                    <label class="form-check-label" for="write_wishlist">
                         <div>
-                            <span>edit_user_inventory</span>
+                            <span>write_wishlist</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to edit a puzzle in your user inventory</span>
+                            <span class="text-body-secondary p-0">Grants create, edit, and delete access to your wishlist</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="remove_user_inventory" name="remove_user_inventory">
-                    <label class="form-check-label" for="remove_user_inventory">
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="create_wishlist" name="create_wishlist">
+                    <label class="form-check-label" for="create_wishlist">
                         <div>
-                            <span>remove_user_inventory</span>
+                            <span>create_wishlist</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants the ability to remove a puzzle from your user inventory</span>
+                            <span class="text-body-secondary p-0">Grants the ability to create a puzzle on your wishlist</span>
                         </div>
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="write_user_inventory" name="write_user_inventory">
-                    <label class="form-check-label" for="write_user_inventory">
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="edit_wishlist" name="edit_wishlist">
+                    <label class="form-check-label" for="edit_wishlist">
                         <div>
-                            <span>write_user_inventory</span>
+                            <span>edit_wishlist</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants add, edit, and delete access to your user inventory</span>
+                            <span class="text-body-secondary p-0">Grants the ability to edit a puzzle on your wishlist</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="delete_wishlist" name="delete_wishlist">
+                    <label class="form-check-label" for="delete_wishlist">
+                        <div>
+                            <span>delete_wishlist</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants the ability to delete a puzzle on your wishlist</span>
                         </div>
                     </label>
                 </div>
@@ -253,6 +193,66 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                             <span>user_inventory</span>
                             <br>
                             <span class="text-body-secondary p-0">Grants read, add, edit, and delete access to your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="read_user_inventory" name="read_user_inventory">
+                    <label class="form-check-label" for="read_user_inventory">
+                        <div>
+                            <span>read_user_inventory</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants read-only access to your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="write_user_inventory" name="write_user_inventory">
+                    <label class="form-check-label" for="write_user_inventory">
+                        <div>
+                            <span>write_user_inventory</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants add, edit, and delete access to your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="add_user_inventory" name="add_user_inventory">
+                    <label class="form-check-label" for="add_user_inventory">
+                        <div>
+                            <span>add_user_inventory</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants the ability to add a puzzle to your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="edit_user_inventory" name="edit_user_inventory">
+                    <label class="form-check-label" for="edit_user_inventory">
+                        <div>
+                            <span>edit_user_inventory</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants the ability to edit a puzzle in your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="remove_user_inventory" name="remove_user_inventory">
+                    <label class="form-check-label" for="remove_user_inventory">
+                        <div>
+                            <span>remove_user_inventory</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants the ability to remove a puzzle from your user inventory</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="read" name="read">
+                    <label class="form-check-label" for="read">
+                        <div>
+                            <span>read</span>
+                            <br>
+                            <span class="text-body-secondary p-0">Grants read-only access to the API</span>
                         </div>
                     </label>
                 </div>
@@ -329,9 +329,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         master: puzzle,
         children: [
             read_puzzle,
-            create_puzzle,
-            edit_puzzle,
-            delete_puzzle,
+            writepuzzlegrp
         ]
     }
 
@@ -348,9 +346,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         master: wishlist,
         children: [
             read_wishlist,
-            create_wishlist,
-            edit_wishlist,
-            delete_wishlist,
+            writewishlistgrp
         ]
     }
 
@@ -367,29 +363,18 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         master: user_inventory,
         children: [
             read_user_inventory,
-            add_user_inventory,
-            edit_user_inventory,
-            remove_user_inventory,
+            writeuserinventorygrp
         ]
     }
 
     let writegrp = {
         master: write,
         children: [
-            read_profile,
-            read_puzzle,
-            read_wishlist,
-            read_user_inventory,
-            write_profile,
-            create_puzzle,
-            edit_puzzle,
-            delete_puzzle,
-            create_wishlist,
-            edit_wishlist,
-            delete_wishlist,
-            add_user_inventory,
-            edit_user_inventory,
-            remove_user_inventory,
+            readgrp,
+            profilegrp,
+            puzzlegrp,
+            wishlistgrp,
+            userinventorygrp,
         ]
     }
 
@@ -407,20 +392,37 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
 
     function checkAll(group) {
         group.children.forEach(element => {
-            element.prop('checked', true)
-            element.prop('disabled', true)
+            if (element.master == null) {
+                element.prop('checked', true)
+                element.prop('disabled', true)
+            } else {
+                element.master.prop('checked', true)
+                element.master.prop('disabled', true)
+                checkAll(element)
+            }
         });
     }
 
     function uncheck(group) {
         group.children.forEach(element => {
-            element.prop('checked', false);
-            element.prop('disabled', false)
+            if (element.master == null) {
+                element.prop('checked', false);
+                element.prop('disabled', false);
+            } else {
+                element.master.prop('checked', false);
+                element.master.prop('disabled', false);
+                uncheck(element)
+            }
+
             let filtered = groups.filter(grp => grp !== group);
             filtered.forEach(grp => {
                 if (grp.children.includes(element) && grp.master.prop('checked') === true) {
-                    element.prop('checked', true);
-                    element.prop('disabled', true)
+                    if (element.master == null || element.children == null) {
+                        element.prop('checked', true)
+                        element.prop('disabled', true)
+                    } else {
+                        uncheck(element)
+                    }
                 }
             })
         });
