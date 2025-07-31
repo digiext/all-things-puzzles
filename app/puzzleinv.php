@@ -140,8 +140,11 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
                     <li class='list-group-item hstack gap-2 bg-secondary-subtle'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc-" . $puzzle->getId() . "'>" . ($puzzle->getUpc() == "" ? "<i class='text-body-secondary'>None</i>" : $puzzle->getUpc()) . "</span></li>
                 </ul>
                 <div class='card-footer bg-secondary-subtle text-center'>
-                    <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>
-                    <button class='btn btn-danger delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></i> Delete Puzzle</td>
+                    <a class='btn btn-primary me-2' href='puzzleedit.php?id=" . $puzzle->getId() . "'>Edit Puzzle</a>";
+            if (isAdmin()) {
+                echo "<button class='btn btn-danger delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></i> Delete Puzzle</td>";
+            }
+            echo "        
                 </div>
             </div>
             </div>";
