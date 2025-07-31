@@ -69,6 +69,10 @@ function perm_to_scopes(int $permsInt): string
         }
     }
 
+    if (count($perms) == (count(PERM_LOOKUP) - count(COMPOUND_PERMS))) {
+        return 'all';
+    }
+
     return join(', ', $perms);
 }
 
