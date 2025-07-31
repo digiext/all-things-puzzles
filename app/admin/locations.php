@@ -16,7 +16,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new LocationGateway($db);
-$locations = $gateway->findAll();
+$locations = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]) ?? [];
 ?>
 
 <script src="scripts/locations.js"></script>

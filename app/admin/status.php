@@ -20,7 +20,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new StatusGateway($db);
-$statuses = $gateway->findAll();
+$statuses = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/status.js"></script>

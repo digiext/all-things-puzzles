@@ -24,15 +24,15 @@ include 'header.php';
 include 'nav.php';
 
 $gateway = new BrandGateway($db);
-$brands = $gateway->findAll();
+$brands = $gateway->findAll() ?? [];
 $gateway = new SourceGateway($db);
-$sources = $gateway->findAll();
+$sources = $gateway->findAll() ?? [];
 $gateway = new LocationGateway($db);
-$locations = $gateway->findAll();
+$locations = $gateway->findAll() ?? [];
 $gateway = new DispositionGateway($db);
-$dispositions = $gateway->findAll();
+$dispositions = $gateway->findAll() ?? [];
 $gateway = new CategoryGateway($db);
-$categories = $gateway->findAll();
+$categories = $gateway->findAll() ?? [];
 
 ?>
 

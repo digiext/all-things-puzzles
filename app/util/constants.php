@@ -142,3 +142,15 @@ const DISPOSITION_DESCRIPTION = 'dispositiondesc';
 // BRAND GATEWAY
 const BRAND_ID = 'brandid';
 const BRAND_NAME = 'brandname';
+
+// SOURCE GATEWAY
+const SOURCE_ID = 'sourceid';
+const SOURCE_DESCRIPTION = 'sourcedesc';
+
+// LOCATION GATEWAY
+const LOCATION_ID = 'locationid';
+const LOCATION_DESCRIPTION = 'locationdesc';
+
+// CATEGORY GATEWAY
+const CATEGORY_ID = 'categoryid';
+const CATEGORY_DESCRIPTION = 'categorydesc';

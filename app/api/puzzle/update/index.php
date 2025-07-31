@@ -24,7 +24,7 @@ if ($req == POST) {
         success($gateway->findById(intval($_POST[ID])));
     } else {
         error([
-            ERROR_CODE => "update_failed",
+            ERROR_CODE => "failed_to_update_puzzle",
             MESSAGE => "Failed to update puzzle",
         ], 500);
     }

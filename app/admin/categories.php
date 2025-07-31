@@ -16,7 +16,10 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new CategoryGateway($db);
-$categories = $gateway->findAll();
+$categories = $gateway->findAll([
+        SORT => CATEGORY_ID,
+        MAX_PER_PAGE => 9999
+]) ?? [];
 ?>
 
 <script src="scripts/categories.js"></script>

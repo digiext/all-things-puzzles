@@ -96,7 +96,7 @@ class BrandGateway implements IGatewayWithID
     }
 
     // Update brand name in brand table based on brand id
-    public function updateName(Brand|int $brand, string $name): bool
+    public function updateName(Brand|int $brand, string $name): Brand|false
     {
         $sql = "UPDATE brand SET brandname = :name WHERE brandid = :id";
         $id = $brand instanceof Brand ? $brand->getId() : $brand;
@@ -105,7 +105,11 @@ class BrandGateway implements IGatewayWithID
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $success = $stmt->execute();
+
+            if ($success) {
+                return new Brand($id, $name);
+            } else return false;
         } catch (PDOException) {
             return false;
         }

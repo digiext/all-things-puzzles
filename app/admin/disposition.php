@@ -20,7 +20,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new DispositionGateway($db);
-$dispositions = $gateway->findAll();
+$dispositions = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/disposition.js"></script>

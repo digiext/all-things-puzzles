@@ -78,6 +78,18 @@ const API_ERROR_INVALID_BRAND = [
     ERROR_CODE => "invalid_brand",
     MESSAGE => "Brand does not exist or is invalid",
 ];
+const API_ERROR_INVALID_SOURCE = [
+    ERROR_CODE => "invalid_source",
+    MESSAGE => "Source does not exist or is invalid",
+];
+const API_ERROR_INVALID_LOCATION = [
+    ERROR_CODE => "invalid_location",
+    MESSAGE => "Location does not exist or is invalid",
+];
+const API_ERROR_INVALID_CATEGORY = [
+    ERROR_CODE => "invalid_category",
+    MESSAGE => "Category does not exist or is invalid",
+];
 
 // PERMISSIONS
 const PERM_READ_PROFILE = 1; // 1

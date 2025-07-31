@@ -20,7 +20,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new OwnershipGateway($db);
-$ownerships = $gateway->findAll();
+$ownerships = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/ownership.js"></script>

@@ -4,10 +4,11 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Location;
 use puzzlethings\src\object\Source;
 
-class LocationGateway
+class LocationGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -34,7 +35,7 @@ class LocationGateway
     }
 
     // Count total number of records in location table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM location";
 
@@ -49,9 +50,16 @@ class LocationGateway
     }
 
     // Find all records in location table
-    public function findAll(): array
+    public function findAll(mixed $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM location";
+        $sort = $options[SORT] ?? LOCATION_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM location ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -63,8 +71,8 @@ class LocationGateway
             }
 
             return $sources;
-        } catch (PDOException) {
-            return [];
+        } catch (PDOException $e) {
+            return $verbose ? $e : null;
         }
     }
 
@@ -88,7 +96,7 @@ class LocationGateway
     }
 
     // Update description in location table based on locationid
-    public function updateDesc(Location|int $location, string $name): bool
+    public function updateDesc(Location|int $location, string $name): Location|false
     {
         $sql = "UPDATE location SET locationdesc = :name WHERE locationid = :id";
         $id = $location instanceof Location ? $location->getId() : $location;
@@ -97,7 +105,10 @@ class LocationGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $success = $stmt->execute();
+
+            if ($success) return new Location($id, $name);
+            else return false;
         } catch (PDOException) {
             return false;
         }

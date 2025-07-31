@@ -16,7 +16,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new BrandGateway($db);
-$brands = $gateway->findAll();
+$brands = $gateway->findAll([
+        MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/brands.js"></script>

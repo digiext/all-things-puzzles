@@ -20,7 +20,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new UserGateway($db);
-$users = $gateway->findAll();
+$users = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/users.js"></script>

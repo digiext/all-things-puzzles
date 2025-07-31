@@ -16,7 +16,7 @@ if ($req == DELETE) {
         deleted();
     } else {
         error([
-            ERROR_CODE => "delete_failed",
+            ERROR_CODE => "failed_to_delete_puzzle",
             MESSAGE => "Failed to delete puzzle"
         ]);
     }

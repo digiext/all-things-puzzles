@@ -16,7 +16,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new SourceGateway($db);
-$sources = $gateway->findAll();
+$sources = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]) ?? [];
 ?>
 
 <script src="scripts/sources.js"></script>
