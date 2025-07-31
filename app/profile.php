@@ -7,11 +7,14 @@ use puzzlethings\src\gateway\UserPuzzleGateway;
 use puzzlethings\src\object\APIToken;
 use puzzlethings\src\object\UserPuzzle;
 
-
 global $db;
 include 'util/api_constants.php';
 include 'util/function.php';
 include 'util/db.php';
+
+if (isset($_SESSION['blockRefresh'])) {
+    unset($_SESSION['blockRefresh']);
+}
 
 //If Not Logged In Reroute to index.php
 if (!isLoggedIn()) {
@@ -175,12 +178,12 @@ function status(string $expiration): string
                 data-id-field="id">
                 <thead>
                     <tr>
-                        <th scope="col" class="col-2 text-center align-middle visually-hidden" data-field="id">ID</th>
+                        <th scope="col" class="text-center align-middle visually-hidden" data-field="id">ID</th>
                         <th scope="col" class="col-2 text-center align-middle" data-field="name">Name</th>
                         <th scope="col" class="col-1 text-center align-middle" data-field="status">Status</th>
-                        <th scope="col" class="col-6 text-center align-middle" data-field="scopes">Scopes</th>
+                        <th scope="col" class="col-7 text-center align-middle" data-field="scopes">Scopes</th>
                         <th scope="col" class="col-2 text-center align-middle" data-field="lifetime">Expiration</th>
-                        <th scope="col" class="col-1 text-center">Delete</th>
+                        <th scope="col" class="text-center">Delete</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">

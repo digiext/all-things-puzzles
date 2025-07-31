@@ -12,6 +12,13 @@ if (!isLoggedIn()) {
     header("Location: index.php");
 }
 
+if (isset($_SESSION['blockRefresh'])) {
+    header("Location: profile.php");
+    return;
+}
+
+$_SESSION['blockRefresh'] = true;
+
 $permLookupStrict = PERM_LOOKUP;
 unset($permLookupStrict[PERM_PROFILE]);
 unset($permLookupStrict[PERM_WRITE_PUZZLE]);
@@ -20,6 +27,8 @@ unset($permLookupStrict[PERM_WRITE_WISHLIST]);
 unset($permLookupStrict[PERM_WISHLIST]);
 unset($permLookupStrict[PERM_WRITE_USER_INVENTORY]);
 unset($permLookupStrict[PERM_USER_INVENTORY]);
+unset($permLookupStrict[PERM_WRITE_MISC]);
+unset($permLookupStrict[PERM_MISC]);
 unset($permLookupStrict[PERM_READ]);
 unset($permLookupStrict[PERM_WRITE]);
 

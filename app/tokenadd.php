@@ -225,7 +225,31 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     <label class="form-check-label" for="write_misc">
                         <span>write_misc</span>
                         <br>
-                        <span class="text-body-secondary p-0">Grants write access to brands, statuses, categories, and more</span>
+                        <span class="text-body-secondary p-0">Grants create, edit, and delete access to brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="create_misc" name="create_misc">
+                    <label class="form-check-label" for="create_misc">
+                        <span>create_misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants the ability to create brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="edit_misc" name="edit_misc">
+                    <label class="form-check-label" for="edit_misc">
+                        <span>edit_misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants the ability to edit brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check ms-5">
+                    <input class="form-check-input" type="checkbox" value="" id="delete_misc" name="delete_misc">
+                    <label class="form-check-label" for="delete_misc">
+                        <span>delete_misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants the ability to delete brands, statuses, categories, and more</span>
                     </label>
                 </div>
                 <div class="form-check">
@@ -245,13 +269,15 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     </label>
                 </div>
             </div>
-            <input class="btn btn-success" type="submit" name="submit">
+            <input class="btn btn-success" type="submit" name="submit" id="submit">
         </form>
     </div>
 </div>
 
 <script>
     let form = $('#form');
+    let submit = $('#submit');
+
     let read_profile = $('#read_profile');
     let read_puzzle = $('#read_puzzle');
     let read_wishlist = $('#read_wishlist');
@@ -276,6 +302,9 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
     let user_inventory = $('#user_inventory');
     let read_misc = $('#read_misc');
     let write_misc = $('#write_misc');
+    let create_misc = $('#create_misc');
+    let edit_misc = $('#edit_misc');
+    let delete_misc = $('#delete_misc');
     let misc = $('#misc');
     let write = $('#write');
 
@@ -338,11 +367,20 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         ]
     }
 
+    let writemiscgrp = {
+        master: write_misc,
+        children: [
+            create_misc,
+            edit_misc,
+            delete_misc,
+        ]
+    }
+
     let miscgrp = {
         master: misc,
         children: [
             read_misc,
-            write_misc,
+            writemiscgrp,
         ]
     }
 
@@ -365,6 +403,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
             puzzlegrp,
             wishlistgrp,
             userinventorygrp,
+            writemiscgrp,
             miscgrp
         ]
     }
@@ -377,6 +416,7 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         wishlistgrp,
         writeuserinventorygrp,
         userinventorygrp,
+        writemiscgrp,
         miscgrp,
         readgrp,
         writegrp
@@ -425,5 +465,13 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
             if ($(this).is(':checked')) checkAll(grp);
             else uncheck(grp);
         })
+    })
+
+    submit.on('click', function() {
+        let disabled = $(':disabled');
+
+        disabled.each(function () {
+            $(this).prop('disabled', false);
+        });
     })
 </script>

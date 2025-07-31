@@ -3,6 +3,7 @@ use puzzlethings\src\gateway\UserGateway as Gateway;
 
 require_once __DIR__ . "/../api_utils.php";
 
+require_auth();
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == GET) {
     try {
@@ -17,8 +18,7 @@ if ($req == GET) {
         if ($res instanceof PDOException) database_error();
         else if ($res == null) success([]);
         else {
-            if (is_authed()) $res = array_map(fn($itm) => array_merge($itm->jsonSerializeMin(), [LINK => api_link('/api/user/' . $itm->getId() . '/')]), $res);
-            else $res = array_map(fn ($itm) => $itm->jsonSerializeMin(), $res);
+            $res = array_map(fn($itm) => array_merge($itm->jsonSerializeMin(), [LINK => api_link('/api/user/' . $itm->getId() . '/')]), $res);
             success_with_pagination($res, $count);
         }
     } catch (Error $e) {

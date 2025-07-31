@@ -3,6 +3,7 @@ use puzzlethings\src\gateway\StatusGateway as Gateway;
 
 require_once __DIR__ . "/../api_utils.php";
 
+require_auth();
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == GET) {
     try {
