@@ -19,7 +19,8 @@ if (isset($_SESSION['blockRefresh'])) {
 
 $_SESSION['blockRefresh'] = true;
 
-$permLookupStrict = array_filter(PERM_LOOKUP, fn ($itm) => !in_array($itm, COMPOUND_PERMS));
+$compoundPerms = array_map(fn ($itm) => PERM_LOOKUP[$itm], COMPOUND_PERMS);
+$permLookupStrict = array_filter(PERM_LOOKUP, fn ($itm) => !in_array($itm, $compoundPerms));
 
 $perm = 0;
 foreach ($permLookupStrict as $int => $name) {
