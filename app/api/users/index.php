@@ -17,7 +17,7 @@ if ($req == GET) {
         if ($res instanceof PDOException) database_error();
         else if ($res == null) success([]);
         else {
-            $res = array_map(fn($itm) => array_merge($itm->jsonSerialize(), [LINK => api_link('/api/user/' . $itm->getId() . '/')]), $res);
+            $res = array_map(fn($itm) => array_merge($itm->jsonSerializeMin(), [LINK => api_link('/api/user/' . $itm->getId() . '/')]), $res);
             success_with_pagination($res, $count);
         }
     } catch (Error $e) {

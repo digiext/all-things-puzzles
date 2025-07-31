@@ -68,11 +68,20 @@ class User implements \JsonSerializable {
             "id" => $this->id,
             "username" => $this->username,
             "display_name" => $this->fullname,
-//            "email" => $this->email,
+            "email" => $this->email,
             "email_confirmed" => $this->emailconfirmed,
             "group" => GROUPS[$this->groupid],
             "theme_id" => $this->themeid,
             "last_login" => $this->lastlogin
+        ];
+    }
+
+    public function jsonSerializeMin(): mixed{
+        return [
+            "id" => $this->id,
+            "username" => $this->username,
+            "display_name" => $this->fullname,
+            "last_login" => $this->lastlogin,
         ];
     }
 }

@@ -71,7 +71,7 @@ function perm_to_scopes(int $permsInt): string
 
 function status(string $expiration): string
 {
-    $expire = DateTime::createFromFormat('Y-m-d H:i:s', $expiration);
+    $expire = DateTime::createFromFormat('Y-m-d', $expiration);
     $now = new DateTime();
 
     if ($now < $expire) {
@@ -188,7 +188,7 @@ function status(string $expiration): string
                         <td class='text-center align-middle status name'>" . $token->getName() . "</td>
                         <td class='text-center align-middle status'>" . status($token->getExpiration()) . "</td>
                         <td class='text-center align-middle scopes'>" . perm_to_scopes($token->getPermissions()) . "</td>
-                        <td class='text-center align-middle lifetime'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d H:i:s', $token->getExpiration())->format("F jS, Y") . "</span></td>
+                        <td class='text-center align-middle lifetime'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
                         <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                         </tr>";
                     } ?>

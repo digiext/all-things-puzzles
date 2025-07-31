@@ -32,6 +32,35 @@ foreach ($permLookupStrict as $int => $name) {
 
 $name = $_POST['tokenname'];
 $expire = $_POST['expire'];
+try {
+    $now = new DateTime('yesterday');
+    $now->setTime(23, 59, 59);
+    $oneYear = new DateTime()->modify('+1 year');
+    $check = new DateTime($expire);
+} catch (DateMalformedStringException $e) {
+    failAlert("Invalid expiration time!", 'profile.php');
+    return;
+}
+
+if (empty($name)) {
+    failAlert("Invalid token name!", 'profile.php');
+    return;
+}
+
+if ($check < $now) {
+    failAlert('Token can not be already expired!', 'profile.php');
+    return;
+}
+
+if ($check > $oneYear) {
+    failAlert("Tokens can not live for longer than a year!", 'profile.php');
+    return;
+}
+
+if ($perm == 0) {
+    failAlert("You need to select at least one permission!", 'profile.php');
+    return;
+}
 
 $token = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 48);
 

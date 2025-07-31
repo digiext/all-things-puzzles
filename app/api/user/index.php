@@ -3,19 +3,24 @@ use puzzlethings\src\gateway\UserGateway as Gateway;
 
 require_once __DIR__ . "/../api_utils.php";
 
+require_permissions(PERM_READ_PROFILE);
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == GET) {
     try {
         global $db;
         $gateway = new Gateway($db);
 
-        $id = $_GET['id'] ?? null;
-        $data = $gateway->findById($id);
+        if (($_GET[ID] ?? null) == null) error(API_ERROR_INVALID_USER);
+        $user = $gateway->findById($_GET[ID]);
+        if ($user == null) error(API_ERROR_INVALID_USER);
 
-        if ($data == null) {
+        global $auth;
+
+        if ($user == null) {
             error(API_ERROR_INVALID_USER);
         } else {
-            success($data);
+            if ($_GET[ID] != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) success($user->jsonSerializeMin());
+            success($user->jsonSerialize());
         }
     } catch (Error $e) {
         bad_request($e);

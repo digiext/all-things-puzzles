@@ -16,12 +16,9 @@ $title = 'Add New API Token';
 include 'header.php';
 include 'nav.php';
 
-$date = new DateTime();
-
-$date->add(new DateInterval('P30D'));
-
-$updatedDate = $date->format('Y-m-d');
-
+$now = date('Y-m-d');
+$oneMonth = new DateTime()->add(new DateInterval('P30D'))->format('Y-m-d');
+$oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
 ?>
 
 <div class="container mb-2 mt-4 hstack gap-3">
@@ -35,7 +32,7 @@ $updatedDate = $date->format('Y-m-d');
 
             <div class="p-2 mb-2 mx-1" id="dexpire">
                 <label for="expire" class="form-label"><strong>Expiration Date</strong></label>
-                <input type="date" class="form-control" name="expire" id="expire" value="<?php echo $updatedDate ?>">
+                <input type="date" class="form-control" name="expire" id="expire" value="<?php echo $oneMonth; ?>" min="<?php echo $now; ?>" max="<?php echo $oneYear; ?>">
             </div>
 
             <div class="p-2 mb-2 mx-1">
@@ -45,7 +42,7 @@ $updatedDate = $date->format('Y-m-d');
                         <div>
                             <span>read_profile</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants read-only access to your profile, including username, full name, and last login</span>
+                            <span class="text-body-secondary p-0">Grants read-only access to your profile, including username, display name, and email</span>
                         </div>
                     </label>
                 </div>
@@ -265,14 +262,174 @@ $updatedDate = $date->format('Y-m-d');
                         <div>
                             <span>write</span>
                             <br>
-                            <span class="text-body-secondary p-0">Grants full read and write access to the API</span>
+                            <span class="text-body-secondary p-0">Grants <span class="text-danger fw-bolder fst-italic"><i class="bi bi-exclamation-triangle"></i> full read and write access <i class="bi bi-exclamation-triangle"></i></span> to the API</span>
                         </div>
                     </label>
                 </div>
             </div>
-            <div class="p-2 mb-2 mx-1">
-                <button type="submit" class="btn btn-success me-2" name="submit" id="submit">Submit</button>
-                <a class="btn btn-danger" name="cancel" href="profile.php">Cancel</a>
-            </div>
+            <input class="btn btn-success" type="submit" name="submit">
         </form>
     </div>
+</div>
+
+<script>
+    let form = $('#form');
+    let read_profile = $('#read_profile');
+    let read_puzzle = $('#read_puzzle');
+    let read_wishlist = $('#read_wishlist');
+    let read_user_inventory = $('#read_user_inventory');
+    let read = $('#read');
+    let write_profile = $('#write_profile');
+    let profile = $('#profile');
+    let create_puzzle = $('#create_puzzle');
+    let edit_puzzle = $('#edit_puzzle');
+    let delete_puzzle = $('#delete_puzzle');
+    let write_puzzle = $('#write_puzzle');
+    let puzzle = $('#puzzle');
+    let create_wishlist = $('#create_wishlist');
+    let edit_wishlist = $('#edit_wishlist');
+    let delete_wishlist = $('#delete_wishlist');
+    let write_wishlist = $('#write_wishlist');
+    let wishlist = $('#wishlist');
+    let add_user_inventory = $('#add_user_inventory');
+    let edit_user_inventory = $('#edit_user_inventory');
+    let remove_user_inventory = $('#remove_user_inventory');
+    let write_user_inventory = $('#write_user_inventory');
+    let user_inventory = $('#user_inventory');
+    let write = $('#write');
+
+    let readgrp = {
+        master: read,
+        children: [
+            read_profile,
+            read_puzzle,
+            read_wishlist,
+            read_user_inventory,
+        ]
+    };
+
+    let profilegrp = {
+        master: profile,
+        children: [
+            read_profile,
+            write_profile,
+        ]
+    }
+
+    let writepuzzlegrp = {
+        master: write_puzzle,
+        children: [
+            create_puzzle,
+            edit_puzzle,
+            delete_puzzle,
+        ]
+    }
+
+    let puzzlegrp = {
+        master: puzzle,
+        children: [
+            read_puzzle,
+            create_puzzle,
+            edit_puzzle,
+            delete_puzzle,
+        ]
+    }
+
+    let writewishlistgrp = {
+        master: write_wishlist,
+        children: [
+            create_wishlist,
+            edit_wishlist,
+            delete_wishlist,
+        ]
+    }
+
+    let wishlistgrp = {
+        master: wishlist,
+        children: [
+            read_wishlist,
+            create_wishlist,
+            edit_wishlist,
+            delete_wishlist,
+        ]
+    }
+
+    let writeuserinventorygrp = {
+        master: write_user_inventory,
+        children: [
+            add_user_inventory,
+            edit_user_inventory,
+            remove_user_inventory,
+        ]
+    }
+
+    let userinventorygrp = {
+        master: user_inventory,
+        children: [
+            read_user_inventory,
+            add_user_inventory,
+            edit_user_inventory,
+            remove_user_inventory,
+        ]
+    }
+
+    let writegrp = {
+        master: write,
+        children: [
+            read_profile,
+            read_puzzle,
+            read_wishlist,
+            read_user_inventory,
+            write_profile,
+            create_puzzle,
+            edit_puzzle,
+            delete_puzzle,
+            create_wishlist,
+            edit_wishlist,
+            delete_wishlist,
+            add_user_inventory,
+            edit_user_inventory,
+            remove_user_inventory,
+        ]
+    }
+
+    let groups = [
+        readgrp,
+        profilegrp,
+        writepuzzlegrp,
+        puzzlegrp,
+        writewishlistgrp,
+        wishlistgrp,
+        writeuserinventorygrp,
+        userinventorygrp,
+        writegrp
+    ]
+
+    function checkAll(group) {
+        group.children.forEach(element => {
+            element.prop('checked', true)
+            element.prop('disabled', true)
+        });
+    }
+
+    function uncheck(group) {
+        group.children.forEach(element => {
+            element.prop('checked', false);
+            element.prop('disabled', false)
+            let filtered = groups.filter(grp => grp !== group);
+            filtered.forEach(grp => {
+                if (grp.children.includes(element) && grp.master.prop('checked') === true) {
+                    element.prop('checked', true);
+                    element.prop('disabled', true)
+                }
+            })
+        });
+    }
+
+    groups.forEach(grp => {
+        grp.master.on('change', function() {
+            if ($(this).is(':checked')) checkAll(grp);
+            else uncheck(grp);
+        })
+    })
+</script>

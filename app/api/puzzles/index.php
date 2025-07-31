@@ -3,6 +3,7 @@ use puzzlethings\src\gateway\PuzzleGateway as Gateway;
 
 require_once __DIR__ . "/../api_utils.php";
 
+require_permissions(PERM_READ_PUZZLE);
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == GET) {
     try {
