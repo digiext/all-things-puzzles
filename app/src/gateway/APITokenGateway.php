@@ -1,6 +1,7 @@
 <?php
 
 namespace puzzlethings\src\gateway;
+
 use PDO;
 use PDOException;
 use puzzlethings\src\gateway\interfaces\IGatewayWithID;
@@ -16,22 +17,24 @@ class APITokenGateway implements IGatewayWithID
         $this->db = $db;
     }
 
-    public function create(User|int $user, string $token, int $permissions): APIToken|false
+    public function create(string $tokenname, User|int $user, string $token, int $permissions, string $expiration): APIToken|false
     {
         $userid = $user instanceof User ? $user->getId() : $user;
-        $sql = "INSERT INTO apitokens (apitoken, userid, permissions) VALUES (:apitoken, :userid, :permissions)";
+        $sql = "INSERT INTO apitokens (tokenname, apitoken, userid, permissions, expiration) VALUES (:tokenname, :apitoken, :userid, :permissions, :expiration)";
 
         $apitoken = hash('sha512', $token);
 
         try {
             $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':tokenname', $tokenname);
             $stmt->bindParam(':apitoken', $apitoken);
             $stmt->bindParam(':userid', $userid, PDO::PARAM_INT);
             $stmt->bindParam(':permissions', $permissions, PDO::PARAM_INT);
+            $stmt->bindParam(':expiration', $expiration);
             $stmt->execute();
 
             $id = $this->db->lastInsertId();
-            return new APIToken($id, $user, $permissions);
+            return new APIToken($id, $tokenname, $user, $permissions, $expiration);
         } catch (PDOException $e) {
             error_log("Database error generating new API Token: " . $e->getMessage());
             return false;
@@ -64,6 +67,9 @@ class APITokenGateway implements IGatewayWithID
 
         try {
             $stmt = $this->db->query($sql);
+
+            if ($stmt->rowCount() == 0) return [];
+
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $tokens = array();
 
@@ -115,6 +121,34 @@ class APITokenGateway implements IGatewayWithID
         } catch (PDOException $e) {
             error_log("Database error while finding API token: " . $e->getMessage());
             return null;
+        }
+    }
+
+    public function findByUser(User|int $user): array
+    {
+        $id = $user instanceof User ? $user->getId() : $user;
+
+        $sql = "SELECT * FROM apitokens WHERE userid = :userid";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":userid", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 0) return [];
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $tokens = array();
+
+            global $db;
+            foreach ($result as $res) {
+                $tokens[] = APIToken::of($res, $db);
+            }
+
+            return $tokens;
+        } catch (PDOException $e) {
+            error_log("Database error while finding API tokens: " . $e->getMessage());
+            return [];
         }
     }
 

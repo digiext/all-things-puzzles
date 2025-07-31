@@ -1,6 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\NoReturn;
 use puzzlethings\src\gateway\APITokenGateway;
 use puzzlethings\src\object\APIToken;
 
@@ -11,7 +10,7 @@ header("Access-Control-Allow-Origin: *");
 
 $auth = get_auth();
 
-#[NoReturn] function error(array $error, int $statusCode = 404): void
+function error(array $error, int $statusCode = 404): void
 {
     http_response_code($statusCode);
 
@@ -28,22 +27,22 @@ $auth = get_auth();
     die($json);
 }
 
-#[NoReturn] function unauthorized(): void
+function unauthorized(): void
 {
     error(API_ERROR_UNAUTHORIZED, 401);
 }
 
-#[NoReturn] function bad_request(Error $e): void
+function bad_request(Error $e): void
 {
     error(array_merge(API_ERROR_BAD_REQUEST, ['error_message' => $e->getMessage()]), 400);
 }
 
-#[NoReturn] function wrong_method(array $accepted): void
+function wrong_method(array $accepted): void
 {
     error(array_merge(API_ERROR_WRONG_METHOD, [ACCEPTED_METHODS => $accepted]), 405);
 }
 
-#[NoReturn] function database_error(): void
+function database_error(): void
 {
     error(API_ERROR_DATABASE, 500);
 }
@@ -65,7 +64,7 @@ function success(mixed $data, int $statusCode = 200): void
     die($json);
 }
 
-#[NoReturn] function deleted(): void
+function deleted(): void
 {
     http_response_code(204);
     die();
@@ -93,7 +92,8 @@ function success_with_pagination(mixed $data, int $count, int $statusCode = 200)
     echo $json;
 }
 
-function search_options(string $defaultSort, array $filterSet): array {
+function search_options(string $defaultSort, array $filterSet): array
+{
     $maxperpage = $_GET[MAX_PER_PAGE] ?? 10;
     $page = $_GET[PAGE] ?? 0;
     $sort = $_GET[SORT] ?? $defaultSort;
@@ -146,7 +146,8 @@ function prev_page_link(): ?string
     return api_link(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) . "?" . http_build_query($query));
 }
 
-function next_page_link(array $data, int $count): ?string {
+function next_page_link(array $data, int $count): ?string
+{
     if (($_GET[MAX_PER_PAGE] ?? 10) * ($_GET[PAGE] ?? 0) + count($data) >= $count) {
         return null;
     } else {
@@ -157,17 +158,20 @@ function next_page_link(array $data, int $count): ?string {
     }
 }
 
-function api_link(string $path): string {
+function api_link(string $path): string
+{
     return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $path;
 }
 
-function constrain(string $field, array &$values, Closure $fn): void {
+function constrain(string $field, array &$values, Closure $fn): void
+{
     if (array_key_exists($field, $values)) {
         $values[$field] = $fn($values[$field]);
     }
 }
 
-function remove_id(string $idfield, array &$values): void {
+function remove_id(string $idfield, array &$values): void
+{
     if (array_key_exists($idfield, $values)) {
         unset($values[$idfield]);
     }
@@ -178,7 +182,8 @@ function require_auth(): void
     if (!is_authed()) unauthorized();
 }
 
-function require_permissions(int $requiredPermissions): void {
+function require_permissions(int $requiredPermissions): void
+{
     global $auth;
     if ($auth == null) unauthorized();
 
@@ -189,38 +194,12 @@ function require_permissions(int $requiredPermissions): void {
 
 function missing_permissions(int $requiredPermissions): array
 {
-    $permLookup = [
-        PERM_READ => "read",
-        PERM_WRITE => "write",
-        PERM_READ_PROFILE => "read_profile",
-        PERM_WRITE_PROFILE => "write_profile",
-        PERM_PROFILE => "profile",
-        PERM_READ_PUZZLE => "read_puzzle",
-        PERM_CREATE_PUZZLE => "create_puzzle",
-        PERM_EDIT_PUZZLE => "edit_puzzle",
-        PERM_DELETE_PUZZLE => "delete_puzzle",
-        PERM_WRITE_PUZZLE => "write_puzzle",
-        PERM_PUZZLE => "puzzle",
-        PERM_READ_WISHLIST => "read_wishlist",
-        PERM_CREATE_WISHLIST => "create_wishlist",
-        PERM_EDIT_WISHLIST => "edit_wishlist",
-        PERM_DELETE_WISHLIST => "delete_wishlist",
-        PERM_WRITE_WISHLIST => "write_wishlist",
-        PERM_WISHLIST => "wishlist",
-        PERM_READ_USER_INVENTORY => "read_user_inventory",
-        PERM_CREATE_USER_INVENTORY => "create_user_inventory",
-        PERM_EDIT_USER_INVENTORY => "edit_user_inventory",
-        PERM_DELETE_USER_INVENTORY => "delete_user_inventory",
-        PERM_WRITE_USER_INVENTORY => "write_user_inventory",
-        PERM_USER_INVENTORY => "user_inventory",
-    ];
-
     global $auth;
     $missingPermMask = $requiredPermissions ^ ($requiredPermissions & $auth->getPermissions());
     $missingPerms = [];
     foreach (range(0, 31) as $bits) {
         if (($missingPermMask >> $bits) & 1) {
-            $missingPerms[] = $permLookup[1 << $bits];
+            $missingPerms[] = PERM_LOOKUP[1 << $bits];
         }
     }
 
@@ -246,12 +225,14 @@ function get_auth(): ?APIToken
     } else return null;
 }
 
-function is_authed(): bool {
+function is_authed(): bool
+{
     global $auth;
     return $auth != null;
 }
 
-function has_permissions(int $requiredPermissions): bool {
+function has_permissions(int $requiredPermissions): bool
+{
     global $auth;
     return $auth != null && ($auth->getPermissions() & $requiredPermissions) == $requiredPermissions;
 }

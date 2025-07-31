@@ -1,4 +1,5 @@
 <?php
+
 namespace puzzlethings\src\object;
 
 use PDO;
@@ -6,19 +7,27 @@ use puzzlethings\src\gateway\UserGateway;
 
 class APIToken implements \JsonSerializable
 {
-    private int $id;
+    private string $name, $expiration;
+    private int $id, $permissions;
     private User $user;
-    private int $permissions;
 
-    public function __construct(int $id, User $user, int $permissions) {
+    public function __construct(int $id, string $name, User $user, int $permissions, string $expiration)
+    {
+        $this->name = $name;
         $this->id = $id;
         $this->user = $user;
         $this->permissions = $permissions;
+        $this->expiration = $expiration;
     }
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function getUser(): User
@@ -31,17 +40,25 @@ class APIToken implements \JsonSerializable
         return $this->permissions;
     }
 
-    public static function of(mixed $res, PDO $db): APIToken {
+    public function getExpiration(): string
+    {
+        return $this->expiration;
+    }
+
+    public static function of(mixed $res, PDO $db): APIToken
+    {
         $user = new UserGateway($db)->findById($res['userid']);
-        return new APIToken($res['tokenid'], $user, $res['permissions']);
+        return new APIToken($res['tokenid'], $res['tokenname'], $user, $res['permissions'], $res['expiration']);
     }
 
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'user' => $this->user,
             'permissions' => $this->permissions,
+            'expiration' => $this->expiration,
         ];
     }
 }

@@ -1,0 +1,89 @@
+<?php
+
+use puzzlethings\src\gateway\APITokenGateway;
+
+global $db;
+require_once 'util/function.php';
+require_once 'util/db.php';
+require_once 'util/api_constants.php';
+
+//If Not Logged In Reroute to index.php
+if (!isLoggedIn()) {
+    header("Location: index.php");
+}
+
+$permLookupStrict = PERM_LOOKUP;
+unset($permLookupStrict[PERM_PROFILE]);
+unset($permLookupStrict[PERM_WRITE_PUZZLE]);
+unset($permLookupStrict[PERM_PUZZLE]);
+unset($permLookupStrict[PERM_WRITE_WISHLIST]);
+unset($permLookupStrict[PERM_WISHLIST]);
+unset($permLookupStrict[PERM_WRITE_USER_INVENTORY]);
+unset($permLookupStrict[PERM_USER_INVENTORY]);
+unset($permLookupStrict[PERM_READ]);
+unset($permLookupStrict[PERM_WRITE]);
+
+$perm = 0;
+foreach ($permLookupStrict as $int => $name) {
+    if (array_key_exists($name, $_POST)) {
+        $perm += $int;
+    }
+}
+
+$name = $_POST['tokenname'];
+$expire = $_POST['expire'];
+
+$token = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1, 16))), 1, 48);
+
+$gateway = new APITokenGateway($db);
+$gateway->create($name, getLoggedInUser(), $token, $perm, $expire);
+
+$title = 'Generated Token';
+include 'header.php';
+include 'nav.php';
+?>
+
+<div class="container p-3 mt-4 mb-2">
+    <h4>Your API Token has been generated!</h4>
+    <hr>
+    <div class="alert alert-danger">Copy it now, as you will never see it again!</div>
+
+    <div class="col-auto input-group">
+        <input type="password" class="form-control" id="token" disabled value="<?php echo $token ?>">
+        <button class="btn btn-secondary" type="button" id="show"><i class="bi bi-eye" id="eye-icon"></i></button>
+        <button class="btn btn-secondary" type="button" id="copyToClipboard"><i class="bi bi-clipboard" id="clipboard-icon"></i></button>
+    </div>
+
+    <br>
+    <button onclick="window.location.href = 'profile.php'" class="btn btn-danger">Return to profile</button>
+</div>
+
+<script>
+    $(function() {
+        let token = $('#token');
+
+        let eyeIcon = $('#eye-icon')
+        $('#show').on('click', function() {
+            if (token.attr('type') === 'password') {
+                token.attr('type', 'text');
+                eyeIcon.removeClass('bi-eye');
+                eyeIcon.addClass('bi-eye-slash');
+            } else {
+                token.attr('type', 'password')
+                eyeIcon.removeClass('bi-eye-slash');
+                eyeIcon.addClass('bi-eye');
+            }
+        })
+
+        let clipboardIcon = $('#clipboard-icon')
+        $('#copyToClipboard').on('click', function() {
+            navigator.clipboard.writeText(token.val())
+            clipboardIcon.removeClass('bi-clipboard');
+            clipboardIcon.addClass('bi-clipboard-check');
+            setTimeout(() => {
+                clipboardIcon.removeClass('bi-clipboard-check');
+                clipboardIcon.addClass('bi-clipboard');
+            }, 15000)
+        })
+    })
+</script>

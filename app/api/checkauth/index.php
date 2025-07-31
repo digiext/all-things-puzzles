@@ -23,9 +23,9 @@ success([
         'write_wishlist' => has_permissions(PERM_WRITE_WISHLIST),
         'wishlist' => has_permissions(PERM_WISHLIST),
         'read_user_inventory' => has_permissions(PERM_READ_USER_INVENTORY),
-        'create_user_inventory' => has_permissions(PERM_CREATE_USER_INVENTORY),
+        'create_user_inventory' => has_permissions(PERM_ADD_USER_INVENTORY),
         'edit_user_inventory' => has_permissions(PERM_EDIT_USER_INVENTORY),
-        'delete_user_inventory' => has_permissions(PERM_DELETE_USER_INVENTORY),
+        'delete_user_inventory' => has_permissions(PERM_REMOVE_USER_INVENTORY),
         'write_user_inventory' => has_permissions(PERM_WRITE_USER_INVENTORY),
         'user_inventory' => has_permissions(PERM_USER_INVENTORY),
     ]
