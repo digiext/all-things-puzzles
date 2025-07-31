@@ -10,8 +10,9 @@ if ($req == GET) {
         global $db;
         $gateway = new Gateway($db);
 
-        if (($_GET[ID] ?? null) == null) error(API_ERROR_INVALID_USER);
-        $user = $gateway->findById($_GET[ID]);
+        global $auth;
+        if (($_GET[ID] ?? $auth->getUser()->getId()) == null) error(API_ERROR_INVALID_USER);
+        $user = $gateway->findById($_GET[ID] ?? $auth->getUser()->getId());
         if ($user == null) error(API_ERROR_INVALID_USER);
 
         global $auth;
@@ -19,7 +20,7 @@ if ($req == GET) {
         if ($user == null) {
             error(API_ERROR_INVALID_USER);
         } else {
-            if ($_GET[ID] != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) success($user->jsonSerializeMin());
+            if (($_GET[ID] ?? $auth->getUser()->getId()) != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) success($user->jsonSerializeMin());
             success($user->jsonSerialize());
         }
     } catch (Error $e) {

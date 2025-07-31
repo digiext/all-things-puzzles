@@ -81,7 +81,7 @@ if ($req == PUT) {
         }
 
         if ($status === UPLOAD_ERR_NO_FILE) {
-            success($puzzle);
+            success($puzzle, 201);
         }
 
         $filesize = filesize($tmp);
@@ -113,7 +113,7 @@ if ($req == PUT) {
 
             $data = $puzzle->jsonSerialize();
             $data[PUZ_PICTURE_URL] = $uploadedFile;
-            success($data);
+            success($data, 201);
         }
 
         // warningAlert("Puzzle successfully created, however, thumbnail failed to save!");
@@ -121,5 +121,5 @@ if ($req == PUT) {
             ERROR_CODE => "file_upload_error",
             MESSAGE => "Puzzle created, however, the file failed to transfer!"
         ], 500);
-    } else success($puzzle);
+    } else success($puzzle, 201);
 } else wrong_method([PUT]);

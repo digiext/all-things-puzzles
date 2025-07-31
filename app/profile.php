@@ -72,11 +72,15 @@ function perm_to_scopes(int $permsInt): string
 function status(string $expiration): string
 {
     $expire = DateTime::createFromFormat('Y-m-d', $expiration);
-    $now = new DateTime();
+    $oneWeek = DateTime::createFromFormat('Y-m-d', $expiration)->sub(new DateInterval('P1W'));
+    $now = new DateTime()->setTime(0, 0);
 
-    if ($now < $expire) {
+    if ($now < $oneWeek) {
         // Not Expired
         return "<span class='badge rounded-pill text-bg-success'><i class='bi bi-check'></i> Active</span>";
+    } elseif ($now < $expire) {
+        // One Week till Expiration
+        return "<span class='badge rounded-pill text-bg-warning'><i class='bi bi-clock-history'></i> Expiring</span>";
     } else {
         // Expired
         return "<span class='badge rounded-pill text-bg-danger'><i class='bi bi-x'></i> Expired</span>";
