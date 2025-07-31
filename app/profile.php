@@ -18,7 +18,7 @@ if (!isLoggedIn()) {
     header("Location: index.php");
 }
 
-$title = 'Home Page';
+$title = 'Profile Page';
 include 'header.php';
 include 'nav.php';
 
@@ -132,7 +132,15 @@ function status(string $expiration): string
                     <div id="passwordFeedback"></div>
                 </div>
             </form>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete User</button>
+            </div>
+
         </div>
+
+
+
+        <!-- Vertical Line between blocks -->
         <div class="vr d-none d-sm-block"></div>
 
         <!-- Right Side Info Block -->
@@ -191,7 +199,28 @@ function status(string $expiration): string
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
+<!-- Delete User Confirmation Modal -->
+<div class="modal fade" id="userdelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="userLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="userLabel">Delete Confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="column" action="userdelete.php" method="post" name="userdelete">
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">Are you <strong>sure</strong> you want to delete your account?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-success" name="submit">Yes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Token Confirmation Modal -->
 <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -223,6 +252,8 @@ function status(string $expiration): string
         </div>
     </div>
 </div>
+
+
 
 <script>
     $(function() {
