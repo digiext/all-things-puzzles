@@ -205,6 +205,30 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
                     </label>
                 </div>
                 <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="misc" name="misc">
+                    <label class="form-check-label" for="misc">
+                        <span>misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants read and write access to brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="read_misc" name="read_misc">
+                    <label class="form-check-label" for="read_misc">
+                        <span>read_misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants full read-only access to brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" value="" id="write_misc" name="write_misc">
+                    <label class="form-check-label" for="write_misc">
+                        <span>write_misc</span>
+                        <br>
+                        <span class="text-body-secondary p-0">Grants write access to brands, statuses, categories, and more</span>
+                    </label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="read" name="read">
                     <label class="form-check-label" for="read">
                         <span>read</span>
@@ -250,17 +274,10 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
     let remove_user_inventory = $('#remove_user_inventory');
     let write_user_inventory = $('#write_user_inventory');
     let user_inventory = $('#user_inventory');
+    let read_misc = $('#read_misc');
+    let write_misc = $('#write_misc');
+    let misc = $('#misc');
     let write = $('#write');
-
-    let readgrp = {
-        master: read,
-        children: [
-            read_profile,
-            read_puzzle,
-            read_wishlist,
-            read_user_inventory,
-        ]
-    };
 
     let profilegrp = {
         master: profile,
@@ -321,6 +338,25 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         ]
     }
 
+    let miscgrp = {
+        master: misc,
+        children: [
+            read_misc,
+            write_misc,
+        ]
+    }
+
+    let readgrp = {
+        master: read,
+        children: [
+            read_profile,
+            read_puzzle,
+            read_wishlist,
+            read_user_inventory,
+            read_misc,
+        ]
+    };
+
     let writegrp = {
         master: write,
         children: [
@@ -329,11 +365,11 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
             puzzlegrp,
             wishlistgrp,
             userinventorygrp,
+            miscgrp
         ]
     }
 
     let groups = [
-        readgrp,
         profilegrp,
         writepuzzlegrp,
         puzzlegrp,
@@ -341,6 +377,8 @@ $oneYear = new DateTime()->add(new DateInterval('P1Y'))->format('Y-m-d');
         wishlistgrp,
         writeuserinventorygrp,
         userinventorygrp,
+        miscgrp,
+        readgrp,
         writegrp
     ]
 
