@@ -214,6 +214,19 @@ function getThumbnail($path)
     }
 }
 
+function getThumbnailCompleted($path)
+{
+    if (($path ?? '') === '') {
+        return 'images/no-image-dark.svg';
+    } else if (file_exists('images/uploads/completed/' . $path)) {
+        return 'images/uploads/completed/' . $path;
+    } else if (key_exists('IMAGE_MIRROR', $_ENV) && $_ENV['IMAGE_MIRROR'] != "" && fopen($_ENV['IMAGE_MIRROR'] . 'completed/' . $path, "r")) {
+        return $_ENV['IMAGE_MIRROR'] . 'completed/' . $path;
+    } else {
+        return 'images/fail-load-image-dark.svg';
+    }
+}
+
 function getNiceDateRepresentation($date): string
 {
     $timestamp = strtotime($date);

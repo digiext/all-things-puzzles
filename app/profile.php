@@ -97,104 +97,108 @@ function status(string $expiration): string
 
 <script src="scripts/profile_validator.js"></script>
 
-<div class="fluid-container p-3 mt-4 mb-2">
-    <h4>Hello, <?php echo $user->getFullname() ?? $user->getUsername() ?></h4>
-    <hr>
-    <div class="hstack gap-2">
-        <div class="col-md-4 col-sm-12">
-            <form class="p-2 mb-2 mx-1 align-items-center" action="useredit.php?ctx=uname" method="post">
-                <div class="col-6">
-                    <label for="updateUsername"><strong>Username</strong></label>
-                </div>
-                <div class="col-12 input-group">
-                    <span class="input-group-text" id="usernameAddon">@</span>
-                    <input type="text" class="form-control" id="updateUsername" name="username" value="<?php echo $user->getUsername() ?>">
-                    <button class="btn btn-outline-success rounded-end" type="submit" id="updateUsernameSubmit" disabled>Update</button>
-                    <div id="usernameFeedback"></div>
-                </div>
-            </form>
-            <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=dname" method="post">
-                <div class="col-6">
-                    <label for="updateFullname"><strong>Display Name</strong></label>
-                </div>
-                <div class="col-12 input-group">
-                    <input type="text" class="form-control" id="updateFullname" name="fullname" value="<?php echo $user->getFullname() ?>">
-                    <button class="btn btn-outline-success rounded-end" type="submit" id="updateFullnameSubmit" disabled>Update</button>
-                    <div id="fullnameFeedback"></div>
-                </div>
-            </form>
-            <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=email" method="post">
-                <div class="col-6">
-                    <label for="updateEmail"><strong>Email</strong></label>
-                </div>
-                <div class="col-12 input-group">
-                    <input type="email" class="form-control" id="updateEmail" name="email" value="<?php echo $user->getEmail() ?>">
-                    <button class="btn btn-outline-success rounded-end" type="submit" id="updateEmailSubmit" disabled>Update</button>
-                    <div id="emailFeedback"></div>
-                </div>
-            </form>
-            <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=pword" method="post">
-                <div class="col-6">
-                    <label for="updatePassword"><strong>Password</strong></label>
-                </div>
-                <div class="col-12 input-group">
-                    <input type="password" class="form-control" id="updatePassword" name="password" value="">
-                    <button class="btn btn-outline-success rounded-end" type="submit" id="updatePasswordSubmit" disabled>Update</button>
-                    <div id="passwordFeedback"></div>
-                </div>
-            </form>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete Account</button>
+<div class="container-fluid mb-2 mt-4 hstack justify-content-between">
+    <h4 class="justify-content-start">Hello, <?php echo $user->getFullname() ?? $user->getUsername() ?></h4>
+    <div class="d-grid gap-2 d-md-flex">
+        <a class="btn btn-primary justify-content-end" href="home.php">Home</a>
+    </div>
+</div>
+<hr>
+<div class="hstack gap-2">
+    <div class="col-md-4 col-sm-12">
+        <form class="p-2 mb-2 mx-1 align-items-center" action="useredit.php?ctx=uname" method="post">
+            <div class="col-6">
+                <label for="updateUsername"><strong>Username</strong></label>
             </div>
-
+            <div class="col-12 input-group">
+                <span class="input-group-text" id="usernameAddon">@</span>
+                <input type="text" class="form-control" id="updateUsername" name="username" value="<?php echo $user->getUsername() ?>">
+                <button class="btn btn-outline-success rounded-end" type="submit" id="updateUsernameSubmit" disabled>Update</button>
+                <div id="usernameFeedback"></div>
+            </div>
+        </form>
+        <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=dname" method="post">
+            <div class="col-6">
+                <label for="updateFullname"><strong>Display Name</strong></label>
+            </div>
+            <div class="col-12 input-group">
+                <input type="text" class="form-control" id="updateFullname" name="fullname" value="<?php echo $user->getFullname() ?>">
+                <button class="btn btn-outline-success rounded-end" type="submit" id="updateFullnameSubmit" disabled>Update</button>
+                <div id="fullnameFeedback"></div>
+            </div>
+        </form>
+        <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=email" method="post">
+            <div class="col-6">
+                <label for="updateEmail"><strong>Email</strong></label>
+            </div>
+            <div class="col-12 input-group">
+                <input type="email" class="form-control" id="updateEmail" name="email" value="<?php echo $user->getEmail() ?>">
+                <button class="btn btn-outline-success rounded-end" type="submit" id="updateEmailSubmit" disabled>Update</button>
+                <div id="emailFeedback"></div>
+            </div>
+        </form>
+        <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=pword" method="post">
+            <div class="col-6">
+                <label for="updatePassword"><strong>Password</strong></label>
+            </div>
+            <div class="col-12 input-group">
+                <input type="password" class="form-control" id="updatePassword" name="password" value="">
+                <button class="btn btn-outline-success rounded-end" type="submit" id="updatePasswordSubmit" disabled>Update</button>
+                <div id="passwordFeedback"></div>
+            </div>
+        </form>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete Account</button>
         </div>
 
+    </div>
 
 
-        <!-- Vertical Line between blocks -->
-        <div class="vr d-none d-sm-block"></div>
 
-        <!-- Right Side Info Block -->
-        <div class="col d-none d-sm-block">
-            <h4>User Stats</h4>
-            <div><strong>Total Puzzles Owned:</strong> <?php echo $ugateway->count($totaloptions) ?></div>
-            <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
-            <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
-            <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
-            <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
-            <hr>
-            <div class="container mb-2 mt-4 pe-3 ps-0 hstack justify-content-between">
-                <h4 class="text-center align-text-bottom">API Token Management</h4>
-                <div class="d-grid gap-2 d-md-flex">
-                    <a class="btn btn-primary" href="tokenadd.php">Add New</a>
-                    <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
-                </div>
+    <!-- Vertical Line between blocks -->
+    <div class="vr d-none d-sm-block"></div>
+
+    <!-- Right Side Info Block -->
+    <div class="col d-none d-sm-block">
+        <h4>User Stats</h4>
+        <div><strong>Total Puzzles Owned:</strong> <?php echo $ugateway->count($totaloptions) ?></div>
+        <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
+        <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
+        <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
+        <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
+        <hr>
+        <div class="container mb-2 mt-4 pe-3 ps-0 hstack justify-content-between">
+            <h4 class="text-center align-text-bottom">API Token Management</h4>
+            <div class="d-grid gap-2 d-md-flex">
+                <a class="btn btn-primary" href="tokenadd.php">Add New</a>
+                <div class="row buttons-toolbar d-grid gap-2 d-md-flex"></div>
             </div>
-            <table
-                id="table"
-                data-classes="table table-dark table-bordered table-striped table-hover"
-                data-toggle="table"
-                data-pagination="true"
-                data-search="false"
-                data-buttons-toolbar=".buttons-toolbar"
-                data-page-list="10,25,50,100,all"
-                data-search-on-enter-key="false"
-                data-id-field="id">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-center align-middle visually-hidden" data-field="id">ID</th>
-                        <th scope="col" class="col-2 text-center align-middle" data-field="name">Name</th>
-                        <th scope="col" class="col-1 text-center align-middle" data-field="status">Status</th>
-                        <th scope="col" class="col-7 text-center align-middle" data-field="scopes">Scopes</th>
-                        <th scope="col" class="col-2 text-center align-middle" data-field="lifetime">Expiration</th>
-                        <th scope="col" class="text-center">Delete</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <?php foreach ($tokens as $token) {
-                        if (!($token instanceof APIToken)) continue;
-                        echo
-                        "<tr>
+        </div>
+        <table
+            id="table"
+            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-toggle="table"
+            data-pagination="true"
+            data-search="false"
+            data-buttons-toolbar=".buttons-toolbar"
+            data-page-list="10,25,50,100,all"
+            data-search-on-enter-key="false"
+            data-id-field="id">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle visually-hidden" data-field="id">ID</th>
+                    <th scope="col" class="col-2 text-center align-middle" data-field="name">Name</th>
+                    <th scope="col" class="col-1 text-center align-middle" data-field="status">Status</th>
+                    <th scope="col" class="col-7 text-center align-middle" data-field="scopes">Scopes</th>
+                    <th scope="col" class="col-2 text-center align-middle" data-field="lifetime">Expiration</th>
+                    <th scope="col" class="text-center">Delete</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <?php foreach ($tokens as $token) {
+                    if (!($token instanceof APIToken)) continue;
+                    echo
+                    "<tr>
                         <th scope='row' class='text-center align-middle id visually-hidden'>" . $token->getId() . "</th>
                         <td class='text-center align-middle status name'>" . $token->getName() . "</td>
                         <td class='text-center align-middle status'>" . status($token->getExpiration()) . "</td>
@@ -202,12 +206,12 @@ function status(string $expiration): string
                         <td class='text-center align-middle lifetime'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
                         <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                         </tr>";
-                    } ?>
-                </tbody>
-            </table>
-        </div>
-
+                } ?>
+            </tbody>
+        </table>
     </div>
+
+</div>
 </div>
 
 <!-- Delete User Confirmation Modal -->

@@ -93,6 +93,7 @@ const UINV_QUALITY = "qualityrating";
 const UINV_OVERALL = "overallrating";
 const UINV_OWNERSHIP = "ownershipid";
 const UINV_LOANED = "loanedoutto";
+const UINV_COMPLETE_URL = "completepicurl";
 
 const UINV_FILTER_USER = "userid";
 const UINV_FILTER_STATUS = "status";

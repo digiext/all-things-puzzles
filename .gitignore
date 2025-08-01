@@ -3,4 +3,5 @@ vendor/
 app/.env
 images/uploads/
 !images/uploads/thumbnails/.gitkeep
+!images/uploads/completed/.gitkeep
 apidocs/
