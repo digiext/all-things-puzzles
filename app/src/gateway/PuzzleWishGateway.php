@@ -175,7 +175,7 @@ class PuzzleWishGateway
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($stmt->rowCount() == 0) return null;
+            if ($stmt->rowCount() == 0) return [];
 
             $upuzzles = array();
             foreach ($result as $res) {
@@ -184,6 +184,7 @@ class PuzzleWishGateway
 
             return $upuzzles;
         } catch (PDOException $e) {
+            error_log('Error while fetching wishlist: ' . $e->getMessage());
             return null;
         }
     }

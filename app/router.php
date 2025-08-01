@@ -7,7 +7,7 @@ if (str_starts_with($path, "/api")) {
     include __DIR__ . '/util/api_constants.php';
     // API Rewrites
 
-    if (preg_match("/^\/api\/(brand|category|disposition|location|ownership|puzzle|source|status|user)\/(\d+)\/?(\S*)$/", $path, $matches)) {
+    if (preg_match("/^\/api\/(brand|category|disposition|location|ownership|puzzle|source|status|user|wishlist)\/(\d+)\/?(\S*)$/", $path, $matches)) {
         $apipath = $matches[1];
         $id = $matches[2];
         $extra = $matches[3];

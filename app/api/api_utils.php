@@ -195,6 +195,13 @@ function remove_id(string $idfield, array &$values): void
     }
 }
 
+function is_admin(): bool
+{
+    global $auth;
+    if ($auth == null) return false;
+    return $auth->getUser()->getGroupId() === GROUP_ID_ADMIN;
+}
+
 function require_auth(): void
 {
     if (!is_authed()) unauthorized();
@@ -202,10 +209,7 @@ function require_auth(): void
 
 function require_admin(): void
 {
-    global $auth;
-    if ($auth == null) unauthorized();
-
-    if ($auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) unauthorized();
+    if (!is_admin()) unauthorized();
 }
 
 function require_permissions(int $requiredPermissions): void
