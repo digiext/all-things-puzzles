@@ -15,8 +15,8 @@ $id = $_GET['id'];
 
 $gateway = new UserPuzzleGateway($db);
 $completedpic = $gateway->findById($id)->getPicture();
-if (file_exists(UPLOAD_DIR_ABSOLUTE . $completedpic)) {
-    unlink(UPLOAD_DIR_ABSOLUTE . $completedpic);
+if (file_exists(UPLOAD_DIR_ABSOLUTE . "/" . $completedpic)) {
+    unlink(UPLOAD_DIR_ABSOLUTE . "/" . $completedpic);
 } else {
     failAlert("Completed picture file was not found");
 }

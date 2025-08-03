@@ -1,7 +1,7 @@
 vendor/
 .idea/
 app/.env
-images/uploads/
-!images/uploads/thumbnails/.gitkeep
-!images/uploads/completed/.gitkeep
+app/images/uploads/
+!app/images/uploads/thumbnails/.gitkeep
+!app/images/uploads/completed/.gitkeep
 apidocs/
