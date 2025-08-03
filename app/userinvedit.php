@@ -133,6 +133,13 @@ $userpuzzle = $gateway->findById($id);
                 </div>
             </div>
 
+            <?php
+            if (!empty($userpuzzle->getPicture())) {
+                echo
+                "<div class='p-2 mb-2 mx-1'>Current picture is " . $userpuzzle->getPicture() . ". If you want to delete it, click the button
+                <a class='btn btn-danger p-2 mb-2 mx-1' href='completedelete.php?id=" . $userpuzzle->getId() . "'>Delete Picture</a></div>";
+            } ?>
+
             <div class="p-2 mb-2 mx-1">
                 <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
                 <a class="btn btn-danger" name="cancel" href="userinv.php">Cancel</a>

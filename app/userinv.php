@@ -49,7 +49,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
         data-id-field="id">
         <thead>
             <tr>
-                <th scope="col" class="text-center">ID</th>
+                <th scope="col" class="text-center visually-hidden">ID</th>
                 <th scope="col" class="text-center align-middle">Picture</th>
                 <th scope="col" class="align-middle" data-sortable="true" data-field="name">Name</th>
                 <th scope="col" class="text-center" data-sortable="true" data-field="pieces">Pieces</th>
@@ -72,7 +72,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                 if (!($userpuzzle instanceof UserPuzzle)) continue;
                 echo
                 "<tr class='user-puzzle-row'>
-                        <th scope='row' class='align-middle id'>" . $userpuzzle->getId() . "</th>
+                        <th scope='row' class='align-middle id visually-hidden'>" . $userpuzzle->getId() . "</th>
                         <td class='text-center align-middle''><img src='" . (empty(getThumbnail($userpuzzle->getPuzzle()->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnail($userpuzzle->getPuzzle()->getPicture())) . "' alt='Puzzle image' height=100></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
@@ -104,12 +104,11 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
             </div>
             <div class="modal-body">
 
-                <input type="text" class="form-control" id="picId" name="id" value="" readonly>
+                <input type="text" class="form-control visually-hidden" id="picId" name="id" value="" readonly>
 
                 <img id="picPath" src="" class="img-fluid">
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" href="completedelete.php?id=<?php echo $userpuzzles[0]->getId(); ?>">Delete Picture</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
