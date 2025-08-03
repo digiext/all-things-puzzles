@@ -89,3 +89,21 @@ docker exec -it all-things-puzzles-php-1 composer update
 ## Access application
 
 Go to your default webpage.  Ex: <http://ip_address_of_machine/> or <http://hostname/>
+
+## Upgrading Application
+
+Pull latest changes
+```bash
+cd all-things-puzzles
+
+git pull
+```
+
+Upgrade database with any changes needed
+```bash
+docker exec -i <MariaDB Container Name> mariadb -uroot -p<Root Password> puzzlethings < v<Version Number>.sql
+```
+
+Delete sql file
+```bash
+rm v<Version Number>.sql
