@@ -331,6 +331,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Return a list of completed puzzles for a specific user
     public function userCompleted(int $id): array
     {
         $sql = "SELECT * FROM userinv WHERE enddate != '1970-01-01' AND userid = :id";
@@ -381,6 +382,52 @@ class UserPuzzleGateway
         } catch (PDOException $e) {
             error_log("Database error while retrieveing last completed puzzle: " . $e->getMessage());
             return null;
+        }
+    }
+
+    // Return list of puzzles with to do status for specific user
+    public function userToDo(int $id): array
+    {
+
+        $sql = "SELECT * FROM userinv WHERE statusid = (SELECT statusid FROM status WHERE statusdesc = 'To Do') AND userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $usertodo = array();
+
+            foreach ($result as $res) {
+                $usertodo[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $usertodo;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // Return list of puzzles with in progress status for specific user
+    public function userInProgress(int $id): array
+    {
+
+        $sql = "SELECT * FROM userinv WHERE statusid = (SELECT statusid FROM status WHERE statusdesc = 'In Progress') AND userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $userinprog = array();
+
+            foreach ($result as $res) {
+                $userinprog[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $userinprog;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
         }
     }
 

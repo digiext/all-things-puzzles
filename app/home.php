@@ -111,6 +111,12 @@ $highestrated = $gateway->highestrated();
 <div class="container text-center">
     <div class="row g-5 justify-content-center">
         <div class="col-md-4 col-sm-12">
+            <h3 class="text-center">Reports</h3>
+            <div class="card my-2">
+                <a class="btn btn-secondary btn-lg" href="reports/reports.php" type="button">Reports</a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
             <h3 class="text-center">Puzzle Wishlist</h3>
             <div class="card my-2">
                 <a class="btn btn-secondary btn-lg" href="puzzlewish.php" type="button">Wishlist</a>
