@@ -2,15 +2,18 @@
 namespace puzzlethings\src\object;
 
 use DateTime;
+use PDO;
+use puzzlethings\src\gateway\ThemeGateway;
 
 class User implements \JsonSerializable {
     private int $id;
     private string $username;
     private ?string $fullname, $email, $password, $hash, $lastlogin;
-    private ?int $groupid, $themeid;
+    private ?int $groupid;
+    private ?Theme $theme;
     private bool $emailconfirmed;
 
-    public function __construct(int $id, ?string $username, ?string $fullname, ?string $email, ?bool $emailconfirmed, ?string $password, ?string $hash, ?int $groupid, ?int $themeid, ?string $lastlogin) {
+    public function __construct(int $id, ?string $username, ?string $fullname, ?string $email, ?bool $emailconfirmed, ?string $password, ?string $hash, ?int $groupid, ?Theme $theme, ?string $lastlogin) {
         $this->id = $id;
         $this->username = $username;
         $this->fullname = $fullname;
@@ -19,12 +22,13 @@ class User implements \JsonSerializable {
         $this->password = $password;
         $this->hash = $hash;
         $this->groupid = $groupid;
-        $this->themeid = $themeid;
+        $this->theme = $theme;
         $this->lastlogin = $lastlogin;
     }
 
-    public static function of(mixed $res): User {
-        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $res['themeid'], $res['lastlogin']);
+    public static function of(mixed $res, PDO $db): User {
+        $theme = new ThemeGateway($db)->findById($res['themeid']);
+        return new User($res["userid"], $res["user_name"], $res['full_name'], $res['email'], $res['emailconfirmed'] ?? false, $res['user_password'], $res['user_hash'], $res['usergroupid'], $theme, $res['lastlogin']);
     }
 
     public function getId(): ?int {
@@ -55,8 +59,8 @@ class User implements \JsonSerializable {
         return $this->groupid;
     }
 
-    public function getThemeId(): ?int {
-        return $this->themeid;
+    public function getTheme(): ?Theme {
+        return $this->theme;
     }
 
     public function getLastLogin(): ?string {
@@ -71,7 +75,7 @@ class User implements \JsonSerializable {
             "email" => $this->email,
             "email_confirmed" => $this->emailconfirmed,
             "group" => GROUPS[$this->groupid],
-            "theme_id" => $this->themeid,
+            "theme" => $this->theme,
             "last_login" => $this->lastlogin
         ];
     }

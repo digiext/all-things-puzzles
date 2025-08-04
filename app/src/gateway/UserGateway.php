@@ -6,6 +6,7 @@ use PDO;
 use PDOException;
 use puzzlethings\src\gateway\interfaces\IGatewayWithFilters;
 use puzzlethings\src\gateway\interfaces\IGatewayWithID;
+use puzzlethings\src\object\Theme;
 use puzzlethings\src\object\User;
 
 const INVALID_USERNAME = 1;
@@ -142,7 +143,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
             $users = array();
 
             foreach ($result as $res) {
-                $users[] = User::of($res);
+                $users[] = User::of($res, $this->db);
             }
 
             return $users;
@@ -205,7 +206,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
 
             if ($stmt->rowCount() == 0) return null;
 
-            return User::of($result);
+            return User::of($result, $this->db);
         } catch (PDOException) {
             return null;
         }
@@ -223,7 +224,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
 
             if ($stmt->rowCount() == 0) return null;
 
-            return User::of($result);
+            return User::of($result, $this->db);
         } catch (PDOException) {
             return null;
         }
@@ -244,7 +245,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -266,7 +267,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -288,7 +289,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -314,7 +315,30 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function updateTheme(User|int $user, Theme|int $theme): User|false
+    {
+        $sql = "UPDATE user SET themeid = :themeid WHERE userid = :id";
+        $id = $user instanceof User ? $user->getId() : $user;
+        $tid = $theme instanceof Theme ? $theme->getId() : $theme;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':themeid', $tid, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                $userSql =  "SELECT * FROM user WHERE userid = :id";
+                $userStmt = $this->db->prepare($userSql);
+                $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $userStmt->execute();
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -336,7 +360,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -357,7 +381,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -427,7 +451,7 @@ class UserGateway implements IGatewayWithID, IGatewayWithFilters
                     error_log("Database error on updating last login: " . $e->getMessage());
                 }
 
-                return User::of($record);
+                return User::of($record, $this->db);
             } else return false;
         } catch (PDOException $e) {
             error_log("Database error on signing in: " . $e->getMessage());
