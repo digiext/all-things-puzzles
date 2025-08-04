@@ -506,4 +506,44 @@ class UserPuzzleGateway
             exit($e->getMessage());
         }
     }
+
+    // List of loaned out puzzles
+    public function loanedOut(): array
+    {
+        $sql = "SELECT * FROM userinv WHERE ownershipid = (SELECT ownershipid FROM ownership WHERE ownershipdesc = 'Loaned Out')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $completed = array();
+
+            foreach ($result as $res) {
+                $completed[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $completed;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List of loaned out puzzles
+    public function borrowed(): array
+    {
+        $sql = "SELECT * FROM userinv WHERE ownershipid = (SELECT ownershipid FROM ownership WHERE ownershipdesc = 'Borrowed')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $completed = array();
+
+            foreach ($result as $res) {
+                $completed[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $completed;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 }

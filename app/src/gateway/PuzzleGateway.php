@@ -384,4 +384,104 @@ class PuzzleGateway implements IGatewayWithID, IGatewayWithFilters
             exit($e->getMessage());
         }
     }
+
+    // List puzzles in disposition status keep
+    public function puzzleKeep(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Keep')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status sell
+    public function puzzleSell(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Sell')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status trade
+    public function puzzleTrade(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Trade')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status donate
+    public function puzzleDonate(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Donate')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status donate
+    public function puzzleGiveAway(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Give Away')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 }
