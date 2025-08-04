@@ -40,21 +40,17 @@ $migrationFile = json_decode(file_get_contents(__DIR__ . '/../../migrate/migrati
 $current = $migrationFile['current'];
 $previous = $migrationFile['previous'];
 
-$allvers = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/main/migrate/versions.json') ?? [], true) ?? [];
-if (isset($_ENV['DEVELOPMENT']) && $_ENV['DEVELOPMENT'] == 'true') {
-    $versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
-} else {
-    $versions = $allvers;
-}
+$allversions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/testing/migrate/versions.json') ?? [], true) ?? [];
+$localversions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
 
-krsort($versions);
-krsort($allvers);
+krsort($localversions);
+krsort($allversions);
 
-$versions = array_reduce($versions, function ($res, $ver) {
+$localversions = array_reduce($localversions, function ($res, $ver) {
     $res[$ver['id']] = $ver;
     return $res;
 });
-$latest = $allvers[array_key_first($allvers)] ?? ['id' => $current, 'version' => 'Error'];
+$latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'version' => 'Error'];
 ?>
 
 <div class="alert alert-danger" id="alertBox">Alert</div>
@@ -71,7 +67,7 @@ $latest = $allvers[array_key_first($allvers)] ?? ['id' => $current, 'version' =>
             <strong>Latest Version:</strong> <?php echo $latest['version'] != 'Error' ? ("v" . $latest['version']) : $latest['version']; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="currentVersion">
-            <strong>Current Version:</strong> <?php echo $versions[$current]['version'] != null ? ("v" . $versions[$current]['version']) : "Unknown ($current)"; ?>
+            <strong>Current Version:</strong> <?php echo $localversions[$current]['version'] != null ? ("v" . $localversions[$current]['version']) : "Unknown ($current)"; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="previousVersions">
             <strong>Previous Versions:</strong>
@@ -81,7 +77,7 @@ $latest = $allvers[array_key_first($allvers)] ?? ['id' => $current, 'version' =>
             } else {
                 echo "<ul>";
                 foreach ($previous as $version) {
-                    $ver = $versions[$version];
+                    $ver = $localversions[$version];
                     if ($ver != null) {
                         echo "<li>v" . $ver['version'] . "</li>";
                     } else {
@@ -96,17 +92,24 @@ $latest = $allvers[array_key_first($allvers)] ?? ['id' => $current, 'version' =>
     <div class="vr"></div>
     <div class="px-3 w-100 overflow-y-scroll">
         <?php
-            $latest = $versions[array_key_first($versions)];
-            if ($current != $latest['id']) {
-                echo "<button class='btn btn-primary mt-3' onclick='migrateFull()' id='migratelatest'>Migrate Until Latest (v" . $latest['version'] . ")</button>";
+            $latestloc = $localversions[array_key_first($localversions)];
+            if ($current < $latestloc['id']) {
+                echo "<button class='btn btn-primary mt-3' onclick='migrateFull()' id='migratelatest'>Migrate Until Latest Local Version (v" . $latest['version'] . ")</button>";
             }
 
-            foreach ($versions as $version) {
+            foreach ($allversions as $version) {
                 $id = $version['id'];
                 $greater = $current >= $id;
                 $description = $version['description'];
                 $sql = $version['sql'];
-                $sqlbtn = $sql != null ? "<button class='btn btn-primary mx-1 migrate-button' onclick='migrateSQL($id)'><span>Migrate SQL</span></button>" : "";
+
+                if ($sql == null) {
+                    $sqlbtn = "";
+                } else if (file_exists(__DIR__ . "/../../migrate/$sql")) {
+                    $sqlbtn = "<button class='btn btn-primary mx-1 migrate-button' onclick='migrateSQL($id)'><span>Migrate SQL</span></button>";
+                } else {
+                    $sqlbtn = "<button class='btn btn-warning mx-1 migrate-button' onclick='alert(`SQL file not found on server!`)'><span>Migrate SQL</span></button>";
+                }
                 $ver = $version['version'];
 
                 echo
