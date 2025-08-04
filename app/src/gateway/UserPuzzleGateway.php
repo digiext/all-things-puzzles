@@ -24,12 +24,23 @@ class UserPuzzleGateway
     // Create new record in userinv table
     public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, float $overallrating, Ownership|int $ownership, string $loanedoutto): UserPuzzle|false
     {
+        $userId = $user instanceof User ? $user->getId() : $user;
+        $puzzleId = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
+        $sql = "SELECT * FROM userinv WHERE userid = :userid AND puzzleid = :puzzleid";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':userid' => $userId,
+            ':puzzleid' => $puzzleId,
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+            return UserPuzzle::of($stmt->fetch(), $this->db);
+        }
+
         $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, overallrating, ownershipid, loanedoutto) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :overallrating, :ownershipid, :loanedoutto)";
 
         $startdate = date("Y-m-d H:i:s", strtotime($startdate));
         $enddate = date("Y-m-d H:i:s", strtotime($enddate));
-        $userId = $user instanceof User ? $user->getId() : $user;
-        $puzzleId = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
         $statusId = $status instanceof Status ? $status->getId() : $status;
         $ownershipId = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
 
@@ -285,8 +296,9 @@ class UserPuzzleGateway
     }
 
     // Delete record from userinv based on userinvid
-    public function delete(UserPuzzle|int $id): bool
+    public function delete(UserPuzzle|int $upuz): bool
     {
+        $id = $upuz instanceof UserPuzzle ? $upuz->getId() : $upuz;
         $sql = "DELETE FROM userinv WHERE userinvid = :userinvid";
 
         try {

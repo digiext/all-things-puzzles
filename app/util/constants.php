@@ -94,6 +94,20 @@ const UINV_OVERALL = "overallrating";
 const UINV_OWNERSHIP = "ownershipid";
 const UINV_LOANED = "loanedoutto";
 const UINV_COMPLETE_URL = "completepicurl";
+const UINV_FIELDS = [
+    UINV_ID,
+    UINV_STATUS,
+    UINV_MISSING,
+    UINV_STARTDATE,
+    UINV_ENDDATE,
+    UINV_TOTALDAYS,
+    UINV_DIFFICULTY,
+    UINV_QUALITY,
+    UINV_OVERALL,
+    UINV_OWNERSHIP,
+    UINV_LOANED,
+    UINV_COMPLETE_URL,
+];
 
 const UINV_FILTER_USER = "userid";
 const UINV_FILTER_STATUS = "status";

@@ -58,6 +58,10 @@ const API_ERROR_INVALID_PUZZLE = [
     ERROR_CODE => "invalid_puzzle",
     MESSAGE => "Puzzle does not exist or is invalid",
 ];
+const API_ERROR_INVALID_USER_INVENTORY_PUZZLE = [
+    ERROR_CODE => "invalid_user_inventory_puzzle",
+    MESSAGE => "User inventory puzzle does not exist or is invalid",
+];
 const API_ERROR_INVALID_WISHLIST_PUZZLE = [
     ERROR_CODE => "invalid_wishlist_puzzle",
     MESSAGE => "Wishlist puzzle does not exist or is invalid",

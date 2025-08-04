@@ -5,7 +5,7 @@ $(function () {
         let row = $(this).closest('tr');
         let rowId = row.children('.id');
         let rowName = row.children('.name');
-        let rowPic = row.children('.picture').first().find('img').attr('src');
+        let rowPic = $(this).find('img').attr('src');
 
         let modalId = $("#picId");
         let modalName = $("#picName");

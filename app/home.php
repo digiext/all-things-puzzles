@@ -56,7 +56,7 @@ $highestrated = $gateway->highestrated();
                     <?php foreach ($completed as $puzzle) {
                         if (!($puzzle instanceof UserPuzzle)) continue;
                         echo
-                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . " - " . $puzzle->getUserId()->getUsername() . "</li>";
+                        "<li class='list-group-item'>" . $puzzle->getPuzzle()->getName() . " - " . $puzzle->getUser()->getUsername() . "</li>";
                     } ?>
                 </ul>
             </div>

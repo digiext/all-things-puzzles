@@ -73,7 +73,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                 echo
                 "<tr class='user-puzzle-row'>
                         <th scope='row' class='align-middle id visually-hidden'>" . $userpuzzle->getId() . "</th>
-                        <td class='text-center align-middle''><img src='" . (empty(getThumbnail($userpuzzle->getPuzzle()->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnail($userpuzzle->getPuzzle()->getPicture())) . "' alt='Puzzle image' height=100></th>
+                        <td class='text-center align-middle picture''><a href='#picturelarge' data-bs-toggle='modal' data-bs-target='#picturelarge'><img src='" . (empty(getThumbnail($userpuzzle->getPuzzle()->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnail($userpuzzle->getPuzzle()->getPicture())) . "' alt='Puzzle image' height=100></a></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getMissingPieces() . "</td>
@@ -103,10 +103,8 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 <input type="text" class="form-control visually-hidden" id="picId" name="id" value="" readonly>
-
-                <img id="picPath" src="" class="img-fluid">
+                <img id="picPath" src="" class="img-fluid mx-auto d-block">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

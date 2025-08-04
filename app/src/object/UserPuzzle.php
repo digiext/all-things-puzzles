@@ -53,7 +53,7 @@ class UserPuzzle implements \JsonSerializable
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
