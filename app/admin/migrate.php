@@ -15,7 +15,7 @@ if (!isAdmin()) {
     header("Location: ../admin.php");
 }
 
-$title = 'SQL Migration Dashboard';
+$title = 'Migration Dashboard';
 include '../header.php';
 include '../nav.php';
 
@@ -25,7 +25,11 @@ if (!file_exists(__DIR__ . '/../../migrate/versions.json')) {
     $failAlert('Could not read versions file! Check permissions!');
 }
 
-$versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+if (isset($_ENV['DEVELOPMENT']) && $_ENV['DEVELOPMENT'] == 'true') {
+    $versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+} else {
+    $versions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/testing/migrate/versions.json'), true);
+}
 $versions = array_reduce($versions, function ($res, $ver) {
     $res[$ver['id']] = $ver;
     return $res;
@@ -51,7 +55,7 @@ $previous = $migrationFile['previous'];
 
 <div class="alert alert-danger" id="alertBox">Alert</div>
 <div class="container-fluid mb-2 mt-4 hstack justify-content-between">
-    <h4 class="justify-content-start">SQL Migration Dashboard</h4>
+    <h4 class="justify-content-start">Migration Dashboard</h4>
     <div class="d-grid gap-2 d-md-flex">
         <a class="btn btn-primary justify-content-end" href="../admin.php">Admin</a>
     </div>
@@ -60,17 +64,22 @@ $previous = $migrationFile['previous'];
 <div class="mx-4 hstack align-items-start">
     <div class="col-md-3 col-sm-12">
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="currentVersion">
-            <strong>Current SQL Version:</strong> v<?php echo $versions[$current]['version'] ?? "???"; ?>
+            <strong>Current Version:</strong> v<?php echo $versions[$current]['version'] ?? "???"; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="previousVersions">
-            <strong>Previous SQL Versions:</strong>
+            <strong>Previous Versions:</strong>
             <?php
             if ($previous == []) {
                 echo "None";
             } else {
                 echo "<ul>";
                 foreach ($previous as $version) {
-                    echo "<li>" . $versions[$version]['version'] . "</li>";
+                    $ver = $versions[$version];
+                    if ($ver != null) {
+                        echo "<li>v" . $ver['version'] . "</li>";
+                    } else {
+                        echo "<li>Unknown ($version)</li>";
+                    }
                 }
                 echo "</ul>";
             }
@@ -90,7 +99,7 @@ $previous = $migrationFile['previous'];
                 $greater = $current >= $id;
                 $description = $version['description'];
                 $sql = $version['sql'];
-                $sqlbtn = $sql != null ? "<button class='btn btn-primary migrate-button' onclick='migrateSQL($id)'><span>Migrate SQL</span></button>" : "";
+                $sqlbtn = $sql != null ? "<button class='btn btn-primary mx-1 migrate-button' onclick='migrateSQL($id)'><span>Migrate SQL</span></button>" : "";
                 $ver = $version['version'];
 
                 echo
@@ -98,6 +107,7 @@ $previous = $migrationFile['previous'];
                     <div class='card-header text-bg-" . ($greater ? "success" : "danger") . "'>v$ver</div>
                     <div class='card-body'>
                         <p class='card-text'>$description</p>
+                        <a href='https://github.com/digiext/all-things-puzzles/releases/tag/v$ver/' class='btn btn-primary'>Release Page</a>
                         $sqlbtn
                     </div>
                 </div>";
@@ -111,6 +121,8 @@ $previous = $migrationFile['previous'];
     let previousVersions = $('#previousVersions');
     let alertBox = $('#alertBox');
     alertBox.hide();
+
+
 
     function migrateFull() {
         let migrateButton = $('#migratelatest');
