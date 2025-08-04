@@ -25,18 +25,6 @@ if (!file_exists(__DIR__ . '/../../migrate/versions.json')) {
     $failAlert('Could not read versions file! Check permissions!');
 }
 
-if (isset($_ENV['DEVELOPMENT']) && $_ENV['DEVELOPMENT'] == 'true') {
-    $versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
-} else {
-    $versions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/testing/migrate/versions.json'), true);
-}
-$versions = array_reduce($versions, function ($res, $ver) {
-    $res[$ver['id']] = $ver;
-    return $res;
-});
-
-krsort($versions);
-
 if (!file_exists(__DIR__ . '/../../migrate/migration.json')) {
     $initMigrationWrite = file_put_contents(__DIR__ . '/../../migrate/migration.json', json_encode([
         'current' => 1000,
@@ -51,6 +39,22 @@ if (!file_exists(__DIR__ . '/../../migrate/migration.json')) {
 $migrationFile = json_decode(file_get_contents(__DIR__ . '/../../migrate/migration.json'), true);
 $current = $migrationFile['current'];
 $previous = $migrationFile['previous'];
+
+$allvers = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/main/migrate/versions.json') ?? [], true) ?? [];
+if (isset($_ENV['DEVELOPMENT']) && $_ENV['DEVELOPMENT'] == 'true') {
+    $versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+} else {
+    $versions = $allvers;
+}
+
+krsort($versions);
+krsort($allvers);
+
+$versions = array_reduce($versions, function ($res, $ver) {
+    $res[$ver['id']] = $ver;
+    return $res;
+});
+$latest = $allvers[array_key_first($allvers)] ?? ['id' => $current, 'version' => 'Error'];
 ?>
 
 <div class="alert alert-danger" id="alertBox">Alert</div>
@@ -63,8 +67,11 @@ $previous = $migrationFile['previous'];
 <hr class="mx-2">
 <div class="mx-4 hstack align-items-start">
     <div class="col-md-3 col-sm-12">
+        <div class="rounded-3 bg-body-tertiary px-3 m-2 mt-3" id="currentVersion">
+            <strong>Latest Version:</strong> <?php echo $latest['version'] != 'Error' ? ("v" . $latest['version']) : $latest['version']; ?>
+        </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="currentVersion">
-            <strong>Current Version:</strong> v<?php echo $versions[$current]['version'] ?? "???"; ?>
+            <strong>Current Version:</strong> <?php echo $versions[$current]['version'] != null ? ("v" . $versions[$current]['version']) : "Unknown ($current)"; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="previousVersions">
             <strong>Previous Versions:</strong>
@@ -91,7 +98,7 @@ $previous = $migrationFile['previous'];
         <?php
             $latest = $versions[array_key_first($versions)];
             if ($current != $latest['id']) {
-                echo "<button class='btn btn-primary mt-2' onclick='migrateFull()' id='migratelatest'>Migrate Until Latest (v" . $latest['version'] . ")</button>";
+                echo "<button class='btn btn-primary mt-3' onclick='migrateFull()' id='migratelatest'>Migrate Until Latest (v" . $latest['version'] . ")</button>";
             }
 
             foreach ($versions as $version) {
