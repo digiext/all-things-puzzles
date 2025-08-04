@@ -39,3 +39,5 @@ include 'nav.php';
     <br>
     <h3>To get started, sign up for an account using the Sign Up button in the upper right corner.</h3>
 </div>
+
+<script src="<?php echo BASE_URL ?>/scripts/theme.js"></script>

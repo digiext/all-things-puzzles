@@ -147,6 +147,20 @@ function status(string $expiration): string
                 <div id="passwordFeedback"></div>
             </div>
         </form>
+        <div class="ms-2 col-6">
+            <label for="dark"><strong>Color Theme</strong></label>
+        </div>
+        <div class="ms-2 mode-switch">
+            <button title="Use dark mode" id="dark" class="btn btn-sm btn-default text-secondary">
+                <i class="bi bi-moon"></i>
+            </button>
+            <button title="Use light mode" id="light" class="btn btn-sm btn-default text-secondary">
+                <i class="bi bi-sun"></i>
+            </button>
+            <button title="Use system preferred mode" id="system" class="btn btn-sm btn-default text-secondary">
+                <i class="bi bi-display"></i>
+            </button>
+        </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete Account</button>
         </div>
@@ -294,3 +308,4 @@ function status(string $expiration): string
         })
     })
 </script>
+<script src="<?php echo BASE_URL ?>/scripts/theme.js"></script>

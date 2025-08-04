@@ -152,3 +152,4 @@ if (isset($_SESSION['fail'])) {
 ?>
 
 <script src="<?php echo BASE_URL ?>/scripts/util.js"></script>
+<script src="<?php echo BASE_URL ?>/scripts/theme.js"></script>
