@@ -93,6 +93,53 @@ function status(string $expiration): string
         return "<span class='badge rounded-pill text-bg-danger'><i class='bi bi-x'></i> Expired</span>";
     }
 }
+
+function relative_date(string $ts): string
+{
+    if(!ctype_digit($ts)) $ts = strtotime($ts);
+
+    $diff = new DateTime()->setTime(0, 0)->getTimestamp() - $ts;
+    if($diff == 0) return 'Today';
+    else if($diff > 0)
+    {
+        $day_diff = floor($diff / 86400);
+        $month_diff = floor($diff / 2592000);
+        if($day_diff == 0)
+        {
+            if($diff < 60) return 'Just now';
+            if($diff < 120) return '1 minute ago';
+            if($diff < 3600) return floor($diff / 60) . ' minutes ago';
+            if($diff < 7200) return '1 hour ago';
+            if($diff < 86400) return floor($diff / 3600) . ' hours ago';
+        }
+        if($day_diff == 1) return 'Yesterday';
+        if($day_diff < 7) return $day_diff . ' days ago';
+        if($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
+        if($day_diff < 60) return 'Last month';
+        if ($month_diff < 12) return $month_diff . ' months ago';
+        return date('F Y', $ts);
+    }
+    else
+    {
+        $diff = abs($diff);
+        $day_diff = floor($diff / 86400);
+        $month_diff = floor($diff / 2592000);
+        if($day_diff == 0)
+        {
+            if($diff < 120) return 'In a minute';
+            if($diff < 3600) return 'In ' . floor($diff / 60) . ' minutes';
+            if($diff < 7200) return 'In an hour';
+            if($diff < 86400) return 'In ' . floor($diff / 3600) . ' hours';
+        }
+        if($day_diff == 1) return 'Tomorrow';
+        if($day_diff < 4) return date('l', $ts);
+        if($day_diff < 7 + (7 - date('w'))) return 'Next week';
+        if(ceil($day_diff / 7) < 5) return 'In ' . ceil($day_diff / 7) . ' weeks';
+        if(intval(date('n', $ts)) == intval(date('n')) + 1) return 'Next month';
+        if($month_diff < 12) return 'In ' . $month_diff . ' months';
+        return date('F Y', $ts);
+    }
+}
 ?>
 
 <script src="scripts/profile_validator.js"></script>
@@ -217,7 +264,7 @@ function status(string $expiration): string
                         <td class='text-center align-middle status name'>" . $token->getName() . "</td>
                         <td class='text-center align-middle status'>" . status($token->getExpiration()) . "</td>
                         <td class='text-center align-middle scopes'>" . perm_to_scopes($token->getPermissions()) . "</td>
-                        <td class='text-center align-middle expiration'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
+                        <td class='text-center align-middle expiration'><span><i class='bi bi-clock-history'></i> " . relative_date($token->getExpiration()) . "</span><br> <span>" . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
                         <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                         </tr>";
                 } ?>
