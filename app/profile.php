@@ -104,7 +104,7 @@ function status(string $expiration): string
     </div>
 </div>
 <hr>
-<div class="hstack gap-2">
+<div class="hstack gap-2 align-items-start">
     <div class="col-md-4 col-sm-12">
         <form class="p-2 mb-2 mx-1 align-items-center" action="useredit.php?ctx=uname" method="post">
             <div class="col-6">
