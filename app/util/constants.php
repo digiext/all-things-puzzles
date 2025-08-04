@@ -169,3 +169,7 @@ const LOCATION_DESCRIPTION = 'locationdesc';
 // CATEGORY GATEWAY
 const CATEGORY_ID = 'categoryid';
 const CATEGORY_DESCRIPTION = 'categorydesc';
+
+// THEME GATEWAY
+const THEME_ID = 'themeid';
+const THEME_NAME = 'themedesc';

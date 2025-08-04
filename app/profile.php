@@ -2,6 +2,7 @@
 
 use puzzlethings\src\gateway\APITokenGateway;
 use puzzlethings\src\gateway\PuzzleGateway;
+use puzzlethings\src\gateway\ThemeGateway;
 use puzzlethings\src\gateway\UserGateway;
 use puzzlethings\src\gateway\UserPuzzleGateway;
 use puzzlethings\src\object\APIToken;
@@ -28,6 +29,7 @@ include 'nav.php';
 $gateway = new UserGateway($db);
 $ugateway = new UserPuzzleGateway($db);
 $pgateway = new PuzzleGateway($db);
+$tgateway = new ThemeGateway($db);
 $user = getLoggedInUser();
 $userid = getUserID();
 $totaloptions = [
@@ -35,6 +37,9 @@ $totaloptions = [
         UINV_FILTER_USER => $userid
     ]
 ];
+
+$themes = $tgateway->findAll([MAX_PER_PAGE => 9999]);
+$utheme = $user->getTheme();
 
 $lastcomplete = $ugateway->userLastCompleted($userid);
 if (!empty($lastcomplete)) {
@@ -194,20 +199,23 @@ function relative_date(string $ts): string
                 <div id="passwordFeedback"></div>
             </div>
         </form>
-        <div class="ms-2 col-6">
-            <label for="dark"><strong>Color Theme</strong></label>
-        </div>
-        <div class="ms-2 mode-switch">
-            <button title="Use dark mode" id="dark" class="btn btn-sm btn-default text-secondary">
-                <i class="bi bi-moon"></i>
-            </button>
-            <button title="Use light mode" id="light" class="btn btn-sm btn-default text-secondary">
-                <i class="bi bi-sun"></i>
-            </button>
-            <button title="Use system preferred mode" id="system" class="btn btn-sm btn-default text-secondary">
-                <i class="bi bi-display"></i>
-            </button>
-        </div>
+        <form class="p-2 my-2 mx-1 align-items-center" action="useredit.php?ctx=theme" method="post">
+            <div class="col-6">
+                <label for="updateEmail"><strong>Theme</strong></label>
+            </div>
+            <div class="col-12 input-group">
+                <select class="form-select" aria-label="Theme Selection" id="updateTheme" name="theme">
+                    <?php
+                    foreach ($themes as $theme) {
+                        $sel = $theme->getId() == $utheme->getId() ? ' selected' : '';
+                        echo '<option value="' . $theme->getId() . '"' . $sel . '>' . ucwords($theme->getName()) . '</option>';
+                    }
+                    ?>
+                </select>
+                <button class="btn btn-outline-success rounded-end" type="submit" id="updateThemeSubmit" disabled>Update</button>
+            </div>
+
+        </form>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-danger p-2 me-2 mx-1" type="submit" data-bs-toggle="modal" data-bs-target="#userdelete">Delete Account</button>
         </div>
@@ -353,4 +361,3 @@ function relative_date(string $ts): string
         })
     })
 </script>
-<script src="<?php echo BASE_URL ?>/scripts/theme.js"></script>

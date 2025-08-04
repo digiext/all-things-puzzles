@@ -9,11 +9,5 @@
     "id": 1001,
     "description": "Minor bugfixes, limit decimals on profile, add number of puzzles to highest rated",
     "version": "1.0.1"
-  },
-  {
-    "id": 1100,
-    "description": "Flesh out API, Migration framework, etc",
-    "version": "1.1.0",
-    "sql": "v1.1.sql"
   }
 ]

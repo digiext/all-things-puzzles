@@ -1,5 +1,15 @@
+<?php
+    $theme = 'dark';
+
+    if (isset($_SESSION['theme'])) {
+        $theme = $_SESSION['theme'];
+    } else {
+        $theme = getLoggedInUser()->getTheme()->getName() ?? 'dark';
+    }
+?>
+
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="<?php echo $theme; ?>">
 <title><?php echo ($title); ?></title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
