@@ -190,7 +190,7 @@ function status(string $expiration): string
         </div>
         <table
             id="table"
-            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-classes="table table-bordered table-striped table-hover"
             data-toggle="table"
             data-pagination="true"
             data-search="false"
@@ -224,8 +224,6 @@ function status(string $expiration): string
             </tbody>
         </table>
     </div>
-
-</div>
 </div>
 
 <!-- Delete User Confirmation Modal -->
