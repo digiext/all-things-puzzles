@@ -204,7 +204,7 @@ function status(string $expiration): string
                     <th scope="col" class="col-2 text-center align-middle" data-field="name">Name</th>
                     <th scope="col" class="col-1 text-center align-middle" data-field="status">Status</th>
                     <th scope="col" class="col-7 text-center align-middle" data-field="scopes">Scopes</th>
-                    <th scope="col" class="col-2 text-center align-middle" data-field="lifetime">Expiration</th>
+                    <th scope="col" class="col-2 text-center align-middle" data-field="expiration">Expiration</th>
                     <th scope="col" class="text-center">Delete</th>
                 </tr>
             </thead>
@@ -217,7 +217,7 @@ function status(string $expiration): string
                         <td class='text-center align-middle status name'>" . $token->getName() . "</td>
                         <td class='text-center align-middle status'>" . status($token->getExpiration()) . "</td>
                         <td class='text-center align-middle scopes'>" . perm_to_scopes($token->getPermissions()) . "</td>
-                        <td class='text-center align-middle lifetime'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
+                        <td class='text-center align-middle expiration'><span><i class='bi bi-clock-history'></i> " . DateTime::createFromFormat('Y-m-d', $token->getExpiration())->format("F jS, Y") . "</span></td>
                         <td class='text-center'><button class='btn btn-secondary delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete'><i class='bi bi-trash'></td>
                         </tr>";
                 } ?>

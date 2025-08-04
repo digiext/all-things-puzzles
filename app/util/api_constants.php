@@ -50,10 +50,6 @@ const API_ERROR_BAD_REQUEST = [
     ERROR_CODE => "bad_request",
     MESSAGE => "Bad request. Check your query parameters.",
 ];
-const API_ERROR_INVALID_TOKEN = [
-    ERROR_CODE => "invalid_token",
-    MESSAGE => "Token does not exist or is invalid",
-];
 const API_ERROR_INVALID_USER = [
     ERROR_CODE => "invalid_user",
     MESSAGE => "User does not exist or is invalid",
@@ -61,6 +57,10 @@ const API_ERROR_INVALID_USER = [
 const API_ERROR_INVALID_PUZZLE = [
     ERROR_CODE => "invalid_puzzle",
     MESSAGE => "Puzzle does not exist or is invalid",
+];
+const API_ERROR_INVALID_WISHLIST_PUZZLE = [
+    ERROR_CODE => "invalid_wishlist_puzzle",
+    MESSAGE => "Wishlist puzzle does not exist or is invalid",
 ];
 const API_ERROR_INVALID_STATUS = [
     ERROR_CODE => "invalid_status",

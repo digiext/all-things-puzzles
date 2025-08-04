@@ -268,8 +268,9 @@ class PuzzleWishGateway
     }
 
     // Delete record from puzzlewish table based on wishid
-    public function delete(PuzzleWish|int $id): bool
+    public function delete(PuzzleWish|int $wish): bool
     {
+        $id = $wish instanceof PuzzleWish ? $wish->getId() : $wish;
         $sql = "DELETE FROM puzzlewish WHERE wishid = :wishid";
 
         try {

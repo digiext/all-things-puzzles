@@ -1,43 +1,34 @@
 <?php
-use puzzlethings\src\gateway\UserGateway as Gateway;
+use puzzlethings\src\gateway\PuzzleWishGateway as Gateway;
 
 require_once __DIR__ . "/../../api_utils.php";
 
-require_permissions(PERM_PROFILE);
+require_permissions(PERM_EDIT_WISHLIST);
 $req = $_SERVER['REQUEST_METHOD'];
 if ($req == POST) {
     try {
         global $db;
         $gateway = new Gateway($db);
 
-        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER);
-        $user = $gateway->findById($_POST[ID]);
-        if ($user == null) error(API_ERROR_INVALID_USER);
+        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
+        $wish = $gateway->findById($_POST[ID]);
+        if ($wish == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
 
         global $auth;
-        if ($_POST[ID] != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) error([
-                ERROR_CODE => "cant_edit_other_user",
-                MESSAGE => "You are not able to edit other users!"
+        if ($_POST[ID] != $auth->getUser()->getId() && !is_admin()) error([
+                ERROR_CODE => "cant_edit_other_user_wishlist",
+                MESSAGE => "You do not have permission to edit other user's wishlists!"
         ]);
 
-        $failed = false;
-        if (array_key_exists('username', $_POST)) {
-            $failed |= !$gateway->updateUsername($user, $_POST['username']);
-        }
+        $update = array_filter($_POST, fn ($k) => in_array($k, [PUZ_NAME, PUZ_PIECES, PUZ_BRAND_ID, PUZ_UPC]), ARRAY_FILTER_USE_KEY);
+        constrain(PUZ_PIECES, $update, fn ($pieces) => max(0, $pieces));
+        $success = $gateway->update($wish, $update);
 
-        if (array_key_exists('display_name', $_POST)) {
-            $failed |= !$gateway->updateFullname($user, $_POST['display_name']);
-        }
-
-        if (array_key_exists('email', $_POST)) {
-            $failed |= !$gateway->updateEmail($user, $_POST['email']);
-        }
-
-        if (!$failed) {
+        if ($success) {
             success($gateway->findById($_POST[ID]));
         } else {
             error([
-                ERROR_CODE => "user_update_failed",
+                ERROR_CODE => "wishlist_puzzle_update_failed",
                 MESSAGE => "One or more fields failed to update"
             ]);
         }
