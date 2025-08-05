@@ -25,9 +25,20 @@ if (!file_exists(__DIR__ . '/../../migrate/versions.json')) {
     $failAlert('Could not read versions file! Check permissions!');
 }
 
+$allversions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/main/migrate/versions.json') ?? [], true) ?? [];
+$localversions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+
+$localversions = array_reduce($localversions, function ($res, $ver) {
+    $res[$ver['id']] = $ver;
+    return $res;
+});
+
+krsort($localversions);
+krsort($allversions);
+
 if (!file_exists(__DIR__ . '/../../migrate/migration.json')) {
     $initMigrationWrite = file_put_contents(__DIR__ . '/../../migrate/migration.json', json_encode([
-        'current' => 1000,
+        'current' => $localversions[array_key_first($localversions)]['id'],
         'previous' => []
     ], JSON_PRETTY_PRINT));
 
@@ -40,16 +51,6 @@ $migrationFile = json_decode(file_get_contents(__DIR__ . '/../../migrate/migrati
 $current = $migrationFile['current'];
 $previous = $migrationFile['previous'];
 
-$allversions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/testing/migrate/versions.json') ?? [], true) ?? [];
-$localversions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
-
-krsort($localversions);
-krsort($allversions);
-
-$localversions = array_reduce($localversions, function ($res, $ver) {
-    $res[$ver['id']] = $ver;
-    return $res;
-});
 $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'version' => 'Error'];
 ?>
 
@@ -101,7 +102,7 @@ $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'ver
                 $id = $version['id'];
                 $greater = $current >= $id;
                 $description = $version['description'];
-                $sql = $version['sql'];
+                $sql = $version['sql'] ?? '';
 
                 if ($sql == null) {
                     $sqlbtn = "";
