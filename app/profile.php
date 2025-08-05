@@ -101,47 +101,42 @@ function status(string $expiration): string
 
 function relative_date(string $ts): string
 {
-    if(!ctype_digit($ts)) $ts = strtotime($ts);
+    if (!ctype_digit($ts)) $ts = strtotime($ts);
 
     $diff = new DateTime()->setTime(0, 0)->getTimestamp() - $ts;
-    if($diff == 0) return 'Today';
-    else if($diff > 0)
-    {
+    if ($diff == 0) return 'Today';
+    else if ($diff > 0) {
         $day_diff = floor($diff / 86400);
         $month_diff = floor($diff / 2592000);
-        if($day_diff == 0)
-        {
-            if($diff < 60) return 'Just now';
-            if($diff < 120) return '1 minute ago';
-            if($diff < 3600) return floor($diff / 60) . ' minutes ago';
-            if($diff < 7200) return '1 hour ago';
-            if($diff < 86400) return floor($diff / 3600) . ' hours ago';
+        if ($day_diff == 0) {
+            if ($diff < 60) return 'Just now';
+            if ($diff < 120) return '1 minute ago';
+            if ($diff < 3600) return floor($diff / 60) . ' minutes ago';
+            if ($diff < 7200) return '1 hour ago';
+            if ($diff < 86400) return floor($diff / 3600) . ' hours ago';
         }
-        if($day_diff == 1) return 'Yesterday';
-        if($day_diff < 7) return $day_diff . ' days ago';
-        if($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
-        if($day_diff < 60) return 'Last month';
+        if ($day_diff == 1) return 'Yesterday';
+        if ($day_diff < 7) return $day_diff . ' days ago';
+        if ($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
+        if ($day_diff < 60) return 'Last month';
         if ($month_diff < 12) return $month_diff . ' months ago';
         return date('F Y', $ts);
-    }
-    else
-    {
+    } else {
         $diff = abs($diff);
         $day_diff = floor($diff / 86400);
         $month_diff = floor($diff / 2592000);
-        if($day_diff == 0)
-        {
-            if($diff < 120) return 'In a minute';
-            if($diff < 3600) return 'In ' . floor($diff / 60) . ' minutes';
-            if($diff < 7200) return 'In an hour';
-            if($diff < 86400) return 'In ' . floor($diff / 3600) . ' hours';
+        if ($day_diff == 0) {
+            if ($diff < 120) return 'In a minute';
+            if ($diff < 3600) return 'In ' . floor($diff / 60) . ' minutes';
+            if ($diff < 7200) return 'In an hour';
+            if ($diff < 86400) return 'In ' . floor($diff / 3600) . ' hours';
         }
-        if($day_diff == 1) return 'Tomorrow';
-        if($day_diff < 4) return date('l', $ts);
-        if($day_diff < 7 + (7 - date('w'))) return 'Next week';
-        if(ceil($day_diff / 7) < 5) return 'In ' . ceil($day_diff / 7) . ' weeks';
-        if(intval(date('n', $ts)) == intval(date('n')) + 1) return 'Next month';
-        if($month_diff < 12) return 'In ' . $month_diff . ' months';
+        if ($day_diff == 1) return 'Tomorrow';
+        if ($day_diff < 4) return date('l', $ts);
+        if ($day_diff < 7 + (7 - date('w'))) return 'Next week';
+        if (ceil($day_diff / 7) < 5) return 'In ' . ceil($day_diff / 7) . ' weeks';
+        if (intval(date('n', $ts)) == intval(date('n')) + 1) return 'Next month';
+        if ($month_diff < 12) return 'In ' . $month_diff . ' months';
         return date('F Y', $ts);
     }
 }
@@ -233,7 +228,7 @@ function relative_date(string $ts): string
         <div><strong>Total Puzzles Owned:</strong> <?php echo $ugateway->count($totaloptions) ?></div>
         <div><strong>Puzzles Completed:</strong> <?php echo $ugateway->userCountCompleted($userid) ?></div>
         <div><strong>Last Completed Puzzle:</strong> <?php echo $lastpuzname ?></div>
-        <div><strong>Total Pieces Done:</strong> <?php echo $totalpieces ?></div>
+        <div><strong>Total Pieces Done:</strong> <?php echo number_format($totalpieces) ?></div>
         <div><strong>Average Pieces Per Puzzle: </strong> <?php echo number_format($avgpieces, 2) ?></div>
         <hr>
         <div class="container mb-2 mt-4 pe-3 ps-0 hstack justify-content-between">
