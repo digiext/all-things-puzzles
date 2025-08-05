@@ -10,7 +10,7 @@ if ($req == GET) {
         global $db;
         $gateway = new Gateway($db);
 
-        $id = $_REQUEST['id'] ?? null;
+        $id = $_GET[ID] ?? null;
         $data = $gateway->findById($id);
 
         if ($data == null) {

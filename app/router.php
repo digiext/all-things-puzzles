@@ -29,22 +29,26 @@ if (str_starts_with($path, "/api")) {
             http_response_code(404);
         }
     } else {
-        if ((str_ends_with($path, '/') && file_exists(__DIR__ . "$path/index.php"))) {
-            error_log("Not rerouting $path");
-            include "$path/index.php";
-        } else if (file_exists(__DIR__ . $path)) {
-            error_log("Not rerouting $path");
+        if (str_starts_with($path, "/")) $path = substr($path, 1);
+
+        if ((str_ends_with($path, '/') && file_exists(__DIR__ . '/' . $path ."index.php"))) {
+            error_log("Not rerouting /$path");
+            include $path . "index.php";
+        } else if (file_exists(__DIR__ . '/' . $path)) {
+            error_log("Not rerouting /$path");
             return false;
         } else {
             http_response_code(404);
         }
     }
 } else {
-    if ((str_ends_with($path, '/') && file_exists(__DIR__ . "$path/index.php"))) {
-        error_log("Not rerouting $path");
-        include "$path/index.php";
-    } else if (file_exists(__DIR__ . $path)) {
-        error_log("Not rerouting $path");
+    if (str_starts_with($path, "/")) $path = substr($path, 1);
+
+    if ((str_ends_with($path, '/') && file_exists(__DIR__ . '/' . $path . "index.php"))) {
+        error_log("Not rerouting /$path");
+        include $path . "index.php";
+    } else if (file_exists(__DIR__ . '/' . $path)) {
+        error_log("Not rerouting /$path");
         return false;
     } else {
         http_response_code(404);
