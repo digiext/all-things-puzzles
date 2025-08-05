@@ -37,6 +37,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/Unauthorized'
   /brands:
@@ -78,6 +81,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/Unauthorized'
         405:
@@ -89,6 +95,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/WrongMethod'
   /brand/{id}/:
@@ -110,7 +119,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Brand'
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Brand'
+                        example:
+                          id: 28
+                          name: "MasterPieces"
         404:
           description: Brand not found!
         401:
@@ -122,6 +139,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/Unauthorized'
         405:
@@ -133,6 +153,834 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /categories:
+    get:
+      security:
+        - basicAuth: [ ]
+      description: Get all categories
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Category
+                          allOf:
+                            - $ref: '#/components/schemas/Category'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/category/1/"
+                        example:
+                          - id: 1
+                            name: "Nature"
+                            link: "http://localhost/api/category/1/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /category/{id}/:
+    get:
+      security:
+        - basicAuth: [ ]
+      description: Get a category by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The category ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Category'
+                        example:
+                          id: 1
+                          name: 'Nature'
+        404:
+          description: Category not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /dispositions:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all dispositions
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Disposition
+                          allOf:
+                            - $ref: '#/components/schemas/Disposition'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/disposition/1/"
+                        example:
+                          - id: 1
+                            name: "Keep"
+                            link: "http://localhost/api/disposition/1/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /disposition/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get a disposition by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The disposition ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Disposition'
+                        example:
+                          id: 1
+                          name: "Keep"
+        404:
+          description: Disposition not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /locations:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all locations
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Location
+                          allOf:
+                            - $ref: '#/components/schemas/Location'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/location/28/"
+                        example:
+                          - id: 1
+                            name: "Puzzle Warehouse"
+                            link: "http://localhost/api/location/28/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /location/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get a location by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The location ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Location'
+                        example:
+                          id: 1
+                          name: "Puzzle Warehouse"
+        404:
+          description: Location not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /ownerships:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all ownerships
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Ownership
+                          allOf:
+                            - $ref: '#/components/schemas/Ownership'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/ownership/1/"
+                        example:
+                          - id: 1
+                            name: "Owned"
+                            link: "http://localhost/api/ownership/1/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /ownership/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get an ownership by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The ownership ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Ownership'
+                        example:
+                          id: 28
+                          name: "MasterPieces"
+        404:
+          description: Ownership not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /puzzles:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all puzzles
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Puzzle
+                          allOf:
+                            - $ref: '#/components/schemas/Puzzle'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/puzzle/3/"
+                        example:
+                          - id: 3
+                            name: "Well Stocked Shelves"
+                            pieces: 1000
+                            brand:
+                              id: 28
+                              name: "MasterPieces"
+                            cost: 24.99
+                            source:
+                              id: 5
+                              description: "New Purchase"
+                            location:
+                              id: 11
+                              description: "5 and 10 General Store"
+                            disposition:
+                              id: 1
+                              description: "Keep"
+                            pictureurl: "Well_Stocked_Shelves_3.jpg"
+                            upc: "705988719370"
+                            link: "http://localhost/api/puzzle/3/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /puzzle/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get a puzzle by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The puzzle ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Puzzle'
+        404:
+          description: Puzzle not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /sources:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all sources
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Source
+                          allOf:
+                            - $ref: '#/components/schemas/Source'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/source/1/"
+                        example:
+                          - id: 1
+                            name: "New Purchase"
+                            link: "http://localhost/api/source/1/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /source/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get a source by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The source ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Source'
+                        example:
+                          id: 1
+                          name: "New Purchase"
+        404:
+          description: Source not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /statuses:
+    get:
+      security:
+        - basicAuth: []
+      description: Get all statuses
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          format: Status
+                          allOf:
+                            - $ref: '#/components/schemas/Status'
+                            - type: object
+                              properties:
+                                link:
+                                  type: string
+                                  example: "http://localhost/api/status/1/"
+                        example:
+                          - id: 1
+                            name: "To Do"
+                            link: "http://localhost/api/status/1/"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/WrongMethod'
+  /status/{id}/:
+    get:
+      security:
+        - basicAuth: []
+      description: Get a status by it's ID
+      parameters:
+        - name: id
+          in: path
+          description: The status ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Status'
+                        example:
+                          id: 1
+                          name: "To Do"
+        404:
+          description: Status not found!
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                      error:
+                        $ref: '#/components/schemas/Unauthorized'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/WrongMethod'
   /users:
@@ -158,6 +1006,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/Unauthorized'
         405:
@@ -169,6 +1020,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/WrongMethod'
   /user/{id}/:
@@ -214,6 +1068,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/Unauthorized'
         405:
@@ -225,6 +1082,9 @@ paths:
                   - $ref: '#/components/schemas/Response'
                   - type: object
                     properties:
+                      data:
+                        type: object
+                        example: null
                       error:
                         $ref: '#/components/schemas/WrongMethod'
 components:
@@ -334,7 +1194,7 @@ components:
           example: 1
         description:
           type: string
-          example: "Nature"
+          example: "Keep"
       required:
         - id
         - description
@@ -370,13 +1230,53 @@ components:
         id:
           type: integer
           format: int64
-          example: 1
-        description:
+          example: 3
+        name:
           type: string
-          example: "Nature"
+          example: "Well Stocked Shelves"
+        pieces:
+          type: integer
+          example: 1000
+        brand:
+          $ref: '#/components/schemas/Brand'
+        cost:
+          type: float
+          example: 24.99
+        source:
+          $ref: '#/components/schemas/Source'
+        location:
+          $ref: '#/components/schemas/Location'
+        disposition:
+          $ref: '#/components/schemas/Disposition'
+        pictureurl:
+          type: string
+          example: "Well_Stocked_Shelves_3.jpg"
+        upc:
+          type: string
+          example: "705988719370"
       required:
         - id
-        - description
+        - name
+        - pieces
+      example:
+        id: 3
+        name: "Well Stocked Shelves"
+        pieces: 1000
+        brand:
+          id: 28
+          name: "MasterPieces"
+        cost: 24.99
+        source:
+          id: 5
+          description: "New Purchase"
+        location:
+          id: 11
+          description: "5 and 10 General Store"
+        disposition:
+          id: 1
+          description: "Keep"
+        pictureurl: "Well_Stocked_Shelves_3.jpg"
+        upc: "705988719370"
     Source:
       type: object
       properties:
@@ -399,7 +1299,7 @@ components:
           example: 1
         name:
           type: string
-          example: "Example Puzzle"
+          example: "To Do"
         pieces:
           type: integer
       required:
