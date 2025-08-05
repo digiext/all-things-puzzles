@@ -3,7 +3,7 @@
 
     if (isset($_SESSION['theme'])) {
         $theme = $_SESSION['theme'];
-    } else {
+    } else if (isLoggedIn() && getLoggedInUser()->getTheme() != null) {
         $theme = getLoggedInUser()->getTheme()->getName() ?? 'dark';
     }
 ?>
