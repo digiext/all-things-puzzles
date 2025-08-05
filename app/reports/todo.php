@@ -35,7 +35,7 @@ $puzzles = $gateway->userToDo($userid);
 <div class="container my-2">
     <table
         id="table"
-        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-classes="table table-bordered table-striped table-hover"
         data-toggle="table"
         data-pagination="true"
         data-search="false"
