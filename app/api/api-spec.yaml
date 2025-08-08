@@ -44,6 +44,8 @@ paths:
                         $ref: '#/components/schemas/Unauthorized'
   /brands:
     get:
+      tags:
+        - Brands
       security:
         - basicAuth: []
       description: Get all brands
@@ -102,6 +104,8 @@ paths:
                         $ref: '#/components/schemas/WrongMethod'
   /brand/{id}/:
     get:
+      tags:
+        - Brands
       security:
         - basicAuth: []
       description: Get a brand by it's ID
