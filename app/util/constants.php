@@ -19,11 +19,11 @@ const GROUPS = [
 ];
 
 // COOKIE / SESSION NAMES
-const SESS_LOGGED_IN = "loggedin";
-const COOKIE_REMEMBER_ME = "rememberme";
-const SESS_USER_GROUP = "usg";
-const SESS_USER_ID = 'uid';
-const SESS_USER_NAME = 'uname';
+const SESS_LOGGED_IN = "atploggedin";
+const COOKIE_REMEMBER_ME = "atprememberme";
+const SESS_USER_GROUP = "atpusg";
+const SESS_USER_ID = 'atpuid';
+const SESS_USER_NAME = 'atpuname';
 
 // GENERAL OPTIONS
 const PAGE = "page";
