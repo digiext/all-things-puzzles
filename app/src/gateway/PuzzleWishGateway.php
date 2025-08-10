@@ -175,7 +175,7 @@ class PuzzleWishGateway
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($stmt->rowCount() == 0) return null;
+            if ($stmt->rowCount() == 0) return [];
 
             $upuzzles = array();
             foreach ($result as $res) {
@@ -184,6 +184,7 @@ class PuzzleWishGateway
 
             return $upuzzles;
         } catch (PDOException $e) {
+            error_log('Error while fetching wishlist: ' . $e->getMessage());
             return null;
         }
     }
@@ -267,8 +268,9 @@ class PuzzleWishGateway
     }
 
     // Delete record from puzzlewish table based on wishid
-    public function delete(PuzzleWish|int $id): bool
+    public function delete(PuzzleWish|int $wish): bool
     {
+        $id = $wish instanceof PuzzleWish ? $wish->getId() : $wish;
         $sql = "DELETE FROM puzzlewish WHERE wishid = :wishid";
 
         try {

@@ -4,9 +4,10 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Source;
 
-class SourceGateway
+class SourceGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -33,7 +34,7 @@ class SourceGateway
     }
 
     // Count total records in source table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM source";
 
@@ -48,9 +49,16 @@ class SourceGateway
     }
 
     // Find all records in source table
-    public function findAll(): array
+    public function findAll(mixed $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM source";
+        $sort = $options[SORT] ?? SOURCE_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM source ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -62,8 +70,8 @@ class SourceGateway
             }
 
             return $sources;
-        } catch (PDOException) {
-            return [];
+        } catch (PDOException $e) {
+            return $verbose ? $e : null;
         }
     }
 
@@ -87,7 +95,7 @@ class SourceGateway
     }
 
     // Update description in source table based on sourceid
-    public function updateDesc(Source|int $source, string $name): bool
+    public function updateDesc(Source|int $source, string $name): Source|false
     {
         $sql = "UPDATE source SET sourcedesc = :name WHERE sourceid = :id";
         $id = $source instanceof Source ? $source->getId() : $source;
@@ -96,7 +104,10 @@ class SourceGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $success = $stmt->execute();
+
+            if ($success) return new Source($id, $name);
+            else return false;
         } catch (PDOException) {
             return false;
         }

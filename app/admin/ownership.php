@@ -20,7 +20,9 @@ include '../header.php';
 include '../nav.php';
 
 $gateway = new OwnershipGateway($db);
-$ownerships = $gateway->findAll();
+$ownerships = $gateway->findAll([
+    MAX_PER_PAGE => 9999
+]);
 ?>
 
 <script src="scripts/ownership.js"></script>
@@ -44,7 +46,7 @@ $ownerships = $gateway->findAll();
 <div class="container my-2">
     <table
         id="table"
-        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-classes="table  table-bordered table-striped table-hover"
         data-toggle="table"
         data-pagination="true"
         data-search="true"

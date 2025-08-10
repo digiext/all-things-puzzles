@@ -75,10 +75,20 @@ if (isAdmin()) {
         <div class='container text-center'>
     <div class='row justify-content-center'>
         <div class='col-4 my-3'>
-                    <div class='card'>
-                        <a class='btn btn-secondary' href='admin/users.php' role='button'>Users</a>
-                    </div>
-                </div>
+            <div class='card'>
+                <a class='btn btn-secondary' href='admin/users.php' role='button'>Users</a>
+            </div>
+        </div>
+        <div class='col-4 my-3'>
+            <div class='card'>
+                <a class='btn btn-secondary' href='admin/migrate.php' role='button'>Migration</a>
+            </div>
+        </div>
+        <div class='col-4 my-3'>
+            <div class='card'>
+                <a class='btn btn-secondary' href='admin/settings.php' role='button'>Settings</a>
+            </div>
+        </div>
     </div>
 </div>";
 }

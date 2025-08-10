@@ -24,12 +24,23 @@ class UserPuzzleGateway
     // Create new record in userinv table
     public function create(User|int $user, Puzzle|int $puzzle, Status|int $status, int $missingpieces, string $startdate, string $enddate, int $totaldays, float $difficultyrating, float $qualityrating, float $overallrating, Ownership|int $ownership, string $loanedoutto): UserPuzzle|false
     {
+        $userId = $user instanceof User ? $user->getId() : $user;
+        $puzzleId = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
+        $sql = "SELECT * FROM userinv WHERE userid = :userid AND puzzleid = :puzzleid";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':userid' => $userId,
+            ':puzzleid' => $puzzleId,
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+            return UserPuzzle::of($stmt->fetch(), $this->db);
+        }
+
         $sql = "INSERT INTO userinv (userid, puzzleid, statusid, missingpieces, startdate, enddate, totaldays, difficultyrating, qualityrating, overallrating, ownershipid, loanedoutto) VALUES (:userid, :puzzleid, :statusid, :missingpieces, :startdate, :enddate, :totaldays, :difficultyrating, :qualityrating, :overallrating, :ownershipid, :loanedoutto)";
 
         $startdate = date("Y-m-d H:i:s", strtotime($startdate));
         $enddate = date("Y-m-d H:i:s", strtotime($enddate));
-        $userId = $user instanceof User ? $user->getId() : $user;
-        $puzzleId = $puzzle instanceof Puzzle ? $puzzle->getId() : $puzzle;
         $statusId = $status instanceof Status ? $status->getId() : $status;
         $ownershipId = $ownership instanceof Ownership ? $ownership->getId() : $ownership;
 
@@ -134,14 +145,14 @@ class UserPuzzleGateway
 
         foreach ($filters as $filter => $val) {
             switch ($filter) {
-                case USR_FILTER_USER: {
+                case UINV_FILTER_USER: {
                         if ($val instanceof User) {
                             $id = $val->getId();
                         } else $id = $val;
                         $res .= "AND userid = $id ";
                         break;
                     }
-                case USR_FILTER_STATUS: {
+                case UINV_FILTER_STATUS: {
                         if ($val instanceof Status) {
                             $id = $val->getId();
                             $res .= "AND statusid = $id";
@@ -150,23 +161,23 @@ class UserPuzzleGateway
                         }
                         break;
                     }
-                case USR_FILTER_MISSING: {
+                case UINV_FILTER_MISSING: {
                         $res .= "AND missingpieces > 0";
                         break;
                     }
-                case USR_FILTER_DIFFICULTY: {
+                case UINV_FILTER_DIFFICULTY: {
                         $res .= "AND difficultyrating > 0";
                         break;
                     }
-                case USR_FILTER_QUALITY: {
+                case UINV_FILTER_QUALITY: {
                         $res .= "AND qualityrating > 0";
                         break;
                     }
-                case USR_FILTER_OVERALL: {
+                case UINV_FILTER_OVERALL: {
                         $res .= "AND overallrating > 0";
                         break;
                     }
-                case USR_FILTER_OWNERSHIP: {
+                case UINV_FILTER_OWNERSHIP: {
                         if ($val instanceof Ownership) {
                             $id = $val->getId();
                             $res .= "AND ownershipid = $id";
@@ -285,8 +296,9 @@ class UserPuzzleGateway
     }
 
     // Delete record from userinv based on userinvid
-    public function delete(UserPuzzle|int $id): bool
+    public function delete(UserPuzzle|int $upuz): bool
     {
+        $id = $upuz instanceof UserPuzzle ? $upuz->getId() : $upuz;
         $sql = "DELETE FROM userinv WHERE userinvid = :userinvid";
 
         try {
@@ -319,6 +331,7 @@ class UserPuzzleGateway
         }
     }
 
+    // Return a list of completed puzzles for a specific user
     public function userCompleted(int $id): array
     {
         $sql = "SELECT * FROM userinv WHERE enddate != '1970-01-01' AND userid = :id";
@@ -372,6 +385,52 @@ class UserPuzzleGateway
         }
     }
 
+    // Return list of puzzles with to do status for specific user
+    public function userToDo(int $id): array
+    {
+
+        $sql = "SELECT * FROM userinv WHERE statusid = (SELECT statusid FROM status WHERE statusdesc = 'To Do') AND userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $usertodo = array();
+
+            foreach ($result as $res) {
+                $usertodo[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $usertodo;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // Return list of puzzles with in progress status for specific user
+    public function userInProgress(int $id): array
+    {
+
+        $sql = "SELECT * FROM userinv WHERE statusid = (SELECT statusid FROM status WHERE statusdesc = 'In Progress') AND userid = :id";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $userinprog = array();
+
+            foreach ($result as $res) {
+                $userinprog[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $userinprog;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
     // Find specific records from userinv based on userid
     public function findByUserId(int $id, mixed $options = [
         SORT => null,
@@ -380,7 +439,7 @@ class UserPuzzleGateway
     {
         require_once __DIR__ . '/../../util/constants.php';
 
-        $sort = $options[SORT] ?? USR_INV_ID;
+        $sort = $options[SORT] ?? UINV_ID;
         $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
 
         $sql = "SELECT * FROM userinv WHERE userid = :id ORDER BY $sort $sortDirection";
@@ -443,6 +502,46 @@ class UserPuzzleGateway
             }
 
             return $highestrated;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List of loaned out puzzles
+    public function loanedOut(): array
+    {
+        $sql = "SELECT * FROM userinv WHERE ownershipid = (SELECT ownershipid FROM ownership WHERE ownershipdesc = 'Loaned Out')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $completed = array();
+
+            foreach ($result as $res) {
+                $completed[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $completed;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List of loaned out puzzles
+    public function borrowed(): array
+    {
+        $sql = "SELECT * FROM userinv WHERE ownershipid = (SELECT ownershipid FROM ownership WHERE ownershipdesc = 'Borrowed')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $completed = array();
+
+            foreach ($result as $res) {
+                $completed[] = UserPuzzle::of($res, $this->db);
+            }
+
+            return $completed;
         } catch (PDOException $e) {
             exit($e->getMessage());
         }

@@ -56,7 +56,7 @@ if (!empty($userpuzzles)) {
         </div>
         <table
             id="table"
-            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-classes="table  table-bordered table-striped table-hover"
             data-toggle="table"
             data-pagination="true"
             data-search="true"
@@ -95,7 +95,7 @@ if (!empty($userpuzzles)) {
         </div>
         <table
             id="table"
-            data-classes="table table-dark table-bordered table-striped table-hover"
+            data-classes="table  table-bordered table-striped table-hover"
             data-toggle="table"
             data-pagination="true"
             data-search="true"

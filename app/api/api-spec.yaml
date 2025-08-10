@@ -1,0 +1,1997 @@
+openapi: 3.1.0
+info:
+  title: All Things Puzzles
+  version: 1.0.0
+  description: OpenAPI Specification for the All Things Puzzles API
+
+servers:
+  - url: http://localhost/api/
+    description: Localhost
+
+security:
+  - basicAuth: []
+
+paths:
+  /checkauth:
+    get:
+      tags: [ Misc ]
+      description: Check authentication status and permissions
+      responses:
+        200:
+          $ref: '#/components/responses/AuthCheck'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+
+  # Brands
+  /brands:
+    get:
+      tags: [ Brands ]
+      description: Get all brands
+      responses:
+        200:
+          $ref: '#/components/responses/BrandsList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /brand/{id}/:
+    get:
+      tags: [ Brands ]
+      description: Get a brand by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/BrandItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Brand not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /brand/create/:
+    put:
+      tags: [ Brands ]
+      description: Create a brand
+      requestBody:
+        $ref: '#/components/requestBodies/BrandCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/BrandItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /brand/{id}/update/:
+    post:
+      tags: [ Brands ]
+      description: Update a brand
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/BrandUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/BrandItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Brand not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /brand/{id}/delete/:
+    delete:
+      tags: [ Brands ]
+      description: Delete a brand
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Brand not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Categories
+  /categories:
+    get:
+      tags: [ Categories ]
+      description: Get all categories
+      responses:
+        200:
+          $ref: '#/components/responses/CategoriesList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /category/{id}/:
+    get:
+      tags: [ Categories ]
+      description: Get a category by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/CategoryItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Category not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /category/create/:
+    put:
+      tags: [ Categories ]
+      description: Create a category
+      requestBody:
+        $ref: '#/components/requestBodies/CategoryCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/CategoryItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /category/{id}/update/:
+    post:
+      tags: [ Categories ]
+      description: Update a category
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/CategoryUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/CategoryItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Category not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /category/{id}/delete/:
+    delete:
+      tags: [ Categories ]
+      description: Delete a category
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Category not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Dispositions
+  /dispositions:
+    get:
+      tags: [ Dispositions ]
+      description: Get all dispositions
+      responses:
+        200:
+          $ref: '#/components/responses/DispositionsList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /disposition/{id}/:
+    get:
+      tags: [ Dispositions ]
+      description: Get a disposition by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/DispositionItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Disposition not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /disposition/create/:
+    put:
+      tags: [Dispositions]
+      description: Create a disposition
+      requestBody:
+        $ref: '#/components/requestBodies/DispositionCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/DispositionItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /disposition/{id}/update/:
+    post:
+      tags: [Dispositions]
+      description: Update a disposition
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/DispositionUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/DispositionItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Disposition not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /disposition/{id}/delete/:
+    delete:
+      tags: [Dispositions]
+      description: Delete a disposition
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Disposition not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Locations
+  /locations:
+    get:
+      tags: [ Locations ]
+      description: Get all locations
+      responses:
+        200:
+          $ref: '#/components/responses/LocationsList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /location/{id}/:
+    get:
+      tags: [ Locations ]
+      description: Get a location by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/LocationItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Location not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /location/create/:
+    put:
+      tags: [Locations]
+      description: Create a location
+      requestBody:
+        $ref: '#/components/requestBodies/LocationCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/LocationItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /location/{id}/update/:
+    post:
+      tags: [Locations]
+      description: Update a location
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/LocationUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/LocationItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Location not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /location/{id}/delete/:
+    delete:
+      tags: [Locations]
+      description: Delete a location
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Location not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Ownerships
+  /ownerships:
+    get:
+      tags: [ Ownerships ]
+      description: Get all ownerships
+      responses:
+        200:
+          $ref: '#/components/responses/OwnershipsList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /ownership/{id}/:
+    get:
+      tags: [ Ownerships ]
+      description: Get an ownership by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/OwnershipItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Ownership not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /ownership/create/:
+    put:
+      tags: [Ownerships]
+      description: Create an ownership
+      requestBody:
+        $ref: '#/components/requestBodies/OwnershipCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/OwnershipItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /ownership/{id}/update/:
+    post:
+      tags: [Ownerships]
+      description: Update an ownership
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/OwnershipUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/OwnershipItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Ownership not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /ownership/{id}/delete/:
+    delete:
+      tags: [Ownerships]
+      description: Delete an ownership
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Ownership not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Puzzles
+  /puzzles:
+    get:
+      tags: [ Puzzles ]
+      description: Get all puzzles
+      responses:
+        200:
+          $ref: '#/components/responses/PuzzlesList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /puzzle/{id}/:
+    get:
+      tags: [ Puzzles ]
+      description: Get a puzzle by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/PuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Puzzle not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /puzzle/create/:
+    put:
+      tags: [ Puzzles ]
+      description: Create a puzzle
+      requestBody:
+        $ref: '#/components/requestBodies/PuzzleCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/PuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /puzzle/{id}/update/:
+    post:
+      tags: [ Puzzles ]
+      description: Update a puzzle
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/PuzzleUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/PuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Puzzle not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /puzzle/{id}/delete/:
+    delete:
+      tags: [ Puzzles ]
+      description: Delete a puzzle
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Puzzle not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Sources
+  /sources:
+    get:
+      tags: [ Sources ]
+      description: Get all sources
+      responses:
+        200:
+          $ref: '#/components/responses/SourcesList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /source/{id}/:
+    get:
+      tags: [ Sources ]
+      description: Get a source by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/SourceItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Source not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /source/create/:
+    put:
+      tags: [Sources]
+      description: Create a source
+      requestBody:
+        $ref: '#/components/requestBodies/SourceCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/SourceItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /source/{id}/update/:
+    post:
+      tags: [Sources]
+      description: Update a source
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/SourceUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/SourceItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Source not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /source/{id}/delete/:
+    delete:
+      tags: [Sources]
+      description: Delete a source
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Source not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Statuses
+  /statuses:
+    get:
+      tags: [ Statuses ]
+      description: Get all statuses
+      responses:
+        200:
+          $ref: '#/components/responses/StatusesList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /status/{id}/:
+    get:
+      tags: [ Statuses ]
+      description: Get a status by its ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/StatusItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Status not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /status/create/:
+    put:
+      tags: [Statuses]
+      description: Create a status
+      requestBody:
+        $ref: '#/components/requestBodies/StatusCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/StatusItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /status/{id}/update/:
+    post:
+      tags: [Statuses]
+      description: Update a status
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/StatusUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/StatusItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Status not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /status/{id}/delete/:
+    delete:
+      tags: [Statuses]
+      description: Delete a status
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Status not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  # Users
+  /users:
+    get:
+      tags: [ Users ]
+      description: Get all users
+      responses:
+        200:
+          description: "List of users"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserMin'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /user/{id}/:
+    get:
+      tags: [ Users ]
+      description: Get a user by ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: "Single user"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserMin'
+                  - $ref: '#/components/schemas/UserFull'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: User not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /userinventory/:
+    get:
+      tags:
+        - User Inventory
+      security:
+        - basicAuth: []
+      description: Get all User Inventory Puzzles
+      responses:
+        200:
+          $ref: '#/components/responses/UserInventoryPuzzleList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+          
+  /userinventory/add/:
+    post:
+      tags:
+        - User Inventory
+      security:
+        - basicAuth: []
+      description: Add a new User Inventory Puzzle
+      requestBody:
+        $ref: '#/components/requestBodies/UserInventoryPuzzleCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/UserInventoryPuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /userinventory/{id}/:
+    get:
+      tags:
+        - User Inventory
+      security:
+        - basicAuth: []
+      description: Get a User Inventory Puzzle by ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/UserInventoryPuzzleItem'
+        404:
+          description: User Inventory Puzzle not found!
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+          
+  /userinventory/{id}/update/:
+    put:
+      tags:
+        - User Inventory
+      security:
+        - basicAuth: []
+      description: Update a User Inventory Puzzle by ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/UserInventoryPuzzleUpdate'
+      responses:
+        200:
+          $ref: '#/components/responses/UserInventoryPuzzleItem'
+        404:
+          description: User Inventory Puzzle not found!
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+    
+  /userinventory/{id}/remove/:
+    delete:
+      tags:
+        - User Inventory
+      security:
+        - basicAuth: []
+      description: Remove a User Inventory Puzzle by ID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        404:
+          description: User Inventory Puzzle not found!
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  # Wishlist Puzzles
+  /wishlist:
+    get:
+      tags: [ Wishlist ]
+      description: Get all wishlist puzzles
+      responses:
+        200:
+          $ref: '#/components/responses/WishlistPuzzleList'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+
+  /wishlist/create/:
+    put:
+      tags: [ Wishlist ]
+      description: Create a wishlist puzzle
+      requestBody:
+        $ref: '#/components/requestBodies/WishlistPuzzleCreate'
+      responses:
+        201:
+          $ref: '#/components/responses/WishlistPuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /wishlist/{id}/update/:
+    post:
+      tags: [ Wishlist ]
+      description: Update a wishlist puzzle
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/WishlistPuzzleUpdate'
+      responses:
+        201:
+          $ref: '#/components/responses/WishlistPuzzleItem'
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Puzzle not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+  /wishlist/{id}/delete/:
+    delete:
+      tags: [ Wishlist ]
+      description: Delete a wishlist puzzle
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: Deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedResponse'
+        404:
+          description: Puzzle not found!
+        405:
+          $ref: '#/components/responses/WrongMethodResponse'
+        500:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  requestBodies:
+    BrandCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [name]
+            properties:
+              name:
+                type: string
+    BrandUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+    CategoryCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+    CategoryUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+    DispositionCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+                example: "Keep"
+    DispositionUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Keep"
+    LocationCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+                example: "5 and 10 General Store"
+    LocationUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "5 and 10 General Store"
+    OwnershipCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+                example: "Owned"
+    OwnershipUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Owned"
+    SourceCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+                example: "New Purchase"
+    SourceUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "New Purchase"
+    StatusCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required: [ description ]
+            properties:
+              description:
+                type: string
+                example: "Available"
+    StatusUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Available"
+    PuzzleCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - name
+              - pieces
+              - brand_id
+            properties:
+              name:
+                type: string
+                example: "Well Stocked Shelves"
+              pieces:
+                type: integer
+                example: 1000
+              brand_id:
+                type: integer
+                example: 28
+              cost:
+                type: number
+                format: float
+                example: 24.99
+              source_id:
+                type: integer
+                example: 5
+              location_id:
+                type: integer
+                example: 11
+              disposition_id:
+                type: integer
+                example: 1
+              pictureurl:
+                type: string
+                example: "Well_Stocked_Shelves_3.jpg"
+              upc:
+                type: string
+                example: "705988719370"
+    PuzzleUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Well Stocked Shelves"
+              pieces:
+                type: integer
+                example: 1000
+              brand_id:
+                type: integer
+                example: 28
+              cost:
+                type: number
+                format: float
+                example: 24.99
+              source_id:
+                type: integer
+                example: 5
+              location_id:
+                type: integer
+                example: 11
+              disposition_id:
+                type: integer
+                example: 1
+              pictureurl:
+                type: string
+                example: "Well_Stocked_Shelves_3.jpg"
+              upc:
+                type: string
+                example: "705988719370"
+    UserInventoryPuzzleCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - user_id
+              - puzzle_id
+              - status_id
+            properties:
+              user_id:
+                type: integer
+                example: 10
+              puzzle_id:
+                type: integer
+                example: 3
+              status_id:
+                type: integer
+                example: 1
+              missingpieces:
+                type: integer
+                example: 0
+              start:
+                type: string
+                format: date
+                example: "2023-11-20"
+              end:
+                type: string
+                format: date
+                example: "2023-11-23"
+              totaldays:
+                type: integer
+                example: 3
+              difficultyrating:
+                type: integer
+                example: 2
+              qualityrating:
+                type: integer
+                example: 4
+              overallrating:
+                type: integer
+                example: 4
+              ownership_id:
+                type: integer
+                example: 1
+              loanedoutto:
+                type: string
+                example: ""
+              picture:
+                type: string
+                example: ""
+
+    UserInventoryPuzzleUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 10
+              puzzle_id:
+                type: integer
+                example: 3
+              status_id:
+                type: integer
+                example: 1
+              missingpieces:
+                type: integer
+                example: 0
+              start:
+                type: string
+                format: date
+                example: "2023-11-20"
+              end:
+                type: string
+                format: date
+                example: "2023-11-23"
+              totaldays:
+                type: integer
+                example: 3
+              difficultyrating:
+                type: integer
+                example: 2
+              qualityrating:
+                type: integer
+                example: 4
+              overallrating:
+                type: integer
+                example: 4
+              ownership_id:
+                type: integer
+                example: 1
+              loanedoutto:
+                type: string
+                example: ""
+              picture:
+                type: string
+                example: ""
+    WishlistPuzzleCreate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - name
+              - pieces
+              - brand_id
+            properties:
+              name:
+                type: string
+                example: "Well Stocked Shelves"
+              pieces:
+                type: integer
+                example: 1000
+              brand_id:
+                type: integer
+                example: 28
+              upc:
+                type: string
+                example: "705988719370"
+    WishlistPuzzleUpdate:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Well Stocked Shelves"
+              pieces:
+                type: integer
+                example: 1000
+              brand_id:
+                type: integer
+                example: 28
+              upc:
+                type: string
+                example: "705988719370"
+  responses:
+    UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  has_error:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    example: null
+                  error:
+                    $ref: '#/components/schemas/Unauthorized'
+
+    WrongMethodResponse:
+      description: Wrong Method
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  has_error:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    example: null
+                  error:
+                    $ref: '#/components/schemas/WrongMethod'
+
+    ServerErrorResponse:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  has_error:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    example: null
+                  error:
+                    $ref: '#/components/schemas/Error'
+
+    AuthCheck:
+      description: Authenticated
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      permissions:
+                        type: object
+
+    BrandsList:
+      description: List of brands
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Brand'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/brand/28/"
+
+    BrandItem:
+      description: Single brand
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Brand'
+
+    CategoriesList:
+      description: List of categories
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Category'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/category/1/"
+
+    CategoryItem:
+      description: Single category
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Category'
+
+    DispositionsList:
+      description: List of dispositions
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Disposition'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/disposition/1/"
+
+    DispositionItem:
+      description: Single disposition
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Disposition'
+
+    LocationsList:
+      description: List of locations
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Location'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/location/28/"
+
+    LocationItem:
+      description: Single location
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Location'
+
+    OwnershipsList:
+      description: List of ownerships
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Ownership'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/ownership/1/"
+
+    OwnershipItem:
+      description: Single ownership
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Ownership'
+
+    PuzzlesList:
+      description: List of puzzles
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Puzzle'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/puzzle/3/"
+
+    PuzzleItem:
+      description: Single puzzle
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Puzzle'
+
+    SourcesList:
+      description: List of sources
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Source'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/source/1/"
+
+    SourceItem:
+      description: Single source
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
+
+    StatusesList:
+      description: List of statuses
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Status'
+                        - type: object
+                          properties:
+                            link:
+                              type: string
+                              example: "http://localhost/api/status/1/"
+
+    StatusItem:
+      description: Single status
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Status'
+                 
+    UserInventoryPuzzleList:
+      description: List of user inventory puzzles
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserInventoryPuzzle'
+    
+    UserInventoryPuzzleItem:
+      description: Single user inventory puzzle
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserInventoryPuzzle'
+                    
+    WishlistPuzzleList:
+      description: List of wishlist puzzles
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WishlistPuzzle'
+
+    WishlistPuzzleItem:
+      description: Single wishlist puzzle
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/WishlistPuzzle'
+
+  schemas:
+    Response:
+      type: object
+      properties:
+        server_version:
+          type: string
+          example: "1.1.0"
+        api_version:
+          type: integer
+          example: 1
+        authenticated:
+          type: boolean
+          example: true
+        has_error:
+          type: boolean
+          example: false
+        error:
+          type: object
+          nullable: true
+          example: null
+        data:
+          type: object
+          nullable: true
+
+    Unauthorized:
+      type: object
+      properties:
+        error_code:
+          type: string
+          example: "unauthorized"
+        message:
+          type: string
+          example: "You need correct authorization to interact with this endpoint!"
+      example:
+        error_code: "unauthorized"
+        message: "You need correct authorization to interact with this endpoint!"
+
+    WrongMethod:
+      type: object
+      properties:
+        error_code:
+          type: string
+          example: "wrong_method"
+        message:
+          type: string
+          example: "Method not allowed"
+        accepted_methods:
+          type: array
+          items:
+            type: string
+          example:
+            - "GET"
+      example:
+        error_code: "wrong_method"
+        message: "Method not allowed"
+        accepted_methods:
+          - "GET"
+
+    Error:
+      type: object
+      properties:
+        error_code:
+          type: string
+          example: "server_error"
+        message:
+          type: string
+          example: "Internal server error"
+      example:
+        error_code: "server_error"
+        message: "Internal server error"
+
+    Brand:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Sample Brand"
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Puzzle Category"
+
+    Disposition:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Owned"
+
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Storage Room"
+
+    Ownership:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+
+    Puzzle:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 3
+        name:
+          type: string
+          example: "Well Stocked Shelves"
+        pieces:
+          type: integer
+          example: 1000
+        brand:
+          $ref: '#/components/schemas/Brand'
+        cost:
+          type: number
+          format: float
+          example: 24.99
+        source:
+          $ref: '#/components/schemas/Source'
+        location:
+          $ref: '#/components/schemas/Location'
+        disposition:
+          $ref: '#/components/schemas/Disposition'
+        pictureurl:
+          type: string
+          example: "Well_Stocked_Shelves_3.jpg"
+        upc:
+          type: string
+          example: "705988719370"
+      required:
+        - id
+        - name
+        - pieces
+      example:
+        id: 3
+        name: "Well Stocked Shelves"
+        pieces: 1000
+        brand:
+          id: 28
+          name: "MasterPieces"
+        cost: 24.99
+        source:
+          id: 5
+          description: "New Purchase"
+        location:
+          id: 11
+          description: "5 and 10 General Store"
+        disposition:
+          id: 1
+          description: "Keep"
+        pictureurl: "Well_Stocked_Shelves_3.jpg"
+        upc: "705988719370"
+
+    Source:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Puzzle Source"
+
+    Status:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Available"
+
+    UserMin:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: "example"
+        display_name:
+          type: string
+          example: "Example Exampleton"
+        last_login:
+          type: string
+          example: "2025-01-01 12:00:00"
+      required:
+        - id
+        - username
+      example:
+        id: 10
+        username: "example"
+        display_name: "Example Exampleton"
+        last_login: "2025-01-01 12:00:00"
+
+    UserFull:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: "example"
+        display_name:
+          type: string
+          example: "Example Exampleton"
+        email:
+          type: string
+          example: "example@example.org"
+        email_confirmed:
+          type: boolean
+          example: false
+        group:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            name:
+              type: string
+              example: "Member"
+        theme:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: "dark"
+        last_login:
+          type: string
+          example: "2025-01-01 12:00:00"
+      required:
+        - id
+        - username
+      example:
+        id: 10
+        username: "example"
+        display_name: "Example Exampleton"
+        email: "example@example.org"
+        email_confirmed: false
+        group:
+          id: 2
+          name: "Member"
+        theme:
+          id: 1
+          name: "dark"
+        last_login: "2025-01-01 12:00:00"
+
+    WishlistPuzzle:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 3
+        userid:
+          type: integer
+          format: int64
+          example: 3
+        name:
+          type: string
+          example: "Well Stocked Shelves"
+        pieces:
+          type: integer
+          example: 1000
+        brand:
+          $ref: '#/components/schemas/Brand'
+        upc:
+          type: string
+          example: "705988719370"
+      required:
+        - id
+        - userid
+        - name
+        - pieces
+      example:
+        id: 3
+        userid: 10
+        name: "Well Stocked Shelves"
+        pieces: 1000
+        brand:
+          id: 28
+          name: "MasterPieces"
+        upc: "705988719370"
+
+    UserInventoryPuzzle:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user:
+          $ref: '#/components/schemas/UserMin'
+        puzzle:
+          $ref: '#/components/schemas/Puzzle'
+        status:
+          $ref: '#/components/schemas/Status'
+        missingpieces:
+          type: integer
+          example: 0
+        start:
+          type: string
+          example: "2023-11-20"
+        end:
+          type: string
+          example: "2023-11-23"
+        totaldays:
+          type: integer
+          example: 3
+        difficultyrating:
+          type: integer
+          example: 2
+        qualityrating:
+          type: integer
+          example: 4
+        overallrating:
+          type: integer
+          example: 4
+        ownership:
+          $ref: '#/components/schemas/Ownership'
+        loanedoutto:
+          type: string
+          example: ""
+        picture:
+          type: string
+          example: ""

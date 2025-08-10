@@ -4,10 +4,11 @@ namespace puzzlethings\src\gateway;
 
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 use puzzlethings\src\object\Category;
 
 
-class CategoryGateway
+class CategoryGateway implements IGatewayWithID
 {
     private PDO $db;
 
@@ -64,7 +65,7 @@ class CategoryGateway
     }
 
     // Count total number of records in categories table
-    public function count(): int
+    public function count(mixed $options = []): int
     {
         $sql = "SELECT COUNT(*) FROM categories";
 
@@ -79,9 +80,16 @@ class CategoryGateway
     }
 
     // Return all records from the categories table
-    public function findAll(): array
+    public function findAll(mixed $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM categories ORDER BY categorydesc";
+        $sort = $options[SORT] ?? CATEGORY_DESCRIPTION;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+
+        $offset = $page * $maxPerPage;
+
+        $sql = "SELECT * FROM categories ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -93,8 +101,8 @@ class CategoryGateway
             }
 
             return $categories;
-        } catch (PDOException) {
-            return [];
+        } catch (PDOException $e) {
+            return $verbose ? $e : null;
         }
     }
 
@@ -118,7 +126,7 @@ class CategoryGateway
     }
 
     // Update category description in categories table based on category id
-    public function updateDesc(Category|int $category, string $name): bool
+    public function updateDesc(Category|int $category, string $name): Category|false
     {
         $sql = "UPDATE categories SET categorydesc = :name WHERE categoryid = :id";
         $id = $category instanceof Category ? $category->getId() : $category;
@@ -127,7 +135,10 @@ class CategoryGateway
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $success = $stmt->execute();
+
+            if ($success) return new Category($id, $name);
+            else return false;
         } catch (PDOException) {
             return false;
         }

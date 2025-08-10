@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1000,
+    "description": "Initial release of All Things Puzzles",
+    "version": "1.0.0",
+    "sql": "v1.0.sql"
+  },
+  {
+    "id": 1001,
+    "description": "Minor bugfixes, limit decimals on profile, add number of puzzles to highest rated",
+    "version": "1.0.1"
+  },
+  {
+    "id": 1100,
+    "description": "API tokens, API endpoints, reporting, completed puzzle pictures",
+    "version": "1.1.0",
+    "sql": "v1.1.sql"
+  }
+]

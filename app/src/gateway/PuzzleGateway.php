@@ -11,8 +11,10 @@ use puzzlethings\src\object\{
     Disposition,
     Puzzle
 };
+use puzzlethings\src\gateway\interfaces\IGatewayWithFilters;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
 
-class PuzzleGateway
+class PuzzleGateway implements IGatewayWithID, IGatewayWithFilters
 {
     private PDO $db;
 
@@ -70,7 +72,7 @@ class PuzzleGateway
         FILTERS => []
     ]): int
     {
-        $filters = $this->determineFilters($options[FILTERS] ?? []);
+        $filters = $this->filtersToSQL($options[FILTERS] ?? []);
         $sql = "SELECT COUNT(*) FROM puzzleinv $filters";
 
         try {
@@ -87,10 +89,10 @@ class PuzzleGateway
     public function findAll(mixed $options = [
         PAGE => 0,
         MAX_PER_PAGE => 10,
-        SORT => null,
+        SORT => PUZ_ID,
         SORT_DIRECTION => SQL_SORT_ASC,
         FILTERS => []
-    ]): array
+    ], bool $verbose = false): array|null|PDOException
     {
         require_once __DIR__ . '/../../util/constants.php';
 
@@ -101,10 +103,9 @@ class PuzzleGateway
         $filters = $options[FILTERS] ?? [];
 
         $offset = $page * $maxPerPage;
-        $filters = $this->determineFilters($filters);
+        $filters = $this->filtersToSQL($filters);
 
         $sql = "SELECT puzzleinv.*, brand.brandname FROM puzzleinv INNER JOIN brand ON puzzleinv.brandid = brand.brandid $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
-        error_log($sql);
 
         try {
             $stmt = $this->db->query($sql);
@@ -118,12 +119,12 @@ class PuzzleGateway
             return $puzzles;
         } catch (PDOException $e) {
             error_log('Error while fetching puzzles: ' . $e->getMessage());
-            die();
+            return $verbose ? $e : null;
         }
     }
 
     // Determine what filter to apply to puzzleinv table based on what options are passed
-    private function determineFilters(mixed $filters = []): string
+    public function filtersToSQL(mixed $filters = []): string
     {
         if (empty($filters)) {
             return "";
@@ -202,7 +203,7 @@ class PuzzleGateway
     }
 
     // Find record in puzzleinv table based on puzzleid
-    public function findById(int $id, mixed $options = []): ?Puzzle
+    public function findById(int $id): ?Puzzle
     {
         $sql = "SELECT * FROM puzzleinv WHERE puzzleid = :id";
 
@@ -349,13 +350,14 @@ class PuzzleGateway
     }
 
     // Delete record from table puzzleinv based on puzzleid
-    public function delete(Puzzle|int $id): bool
+    public function delete(Puzzle|int $puz): bool
     {
+        $id = $puz instanceof Puzzle ? $puz->getId() : $puz;
         $sql = "DELETE FROM puzzleinv WHERE puzzleid = :puzzleid";
 
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':puzzleid', $id);
+            $stmt->bindParam(':puzzleid', $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("Database error while deleting puzzle: " . $e->getMessage());
@@ -367,6 +369,106 @@ class PuzzleGateway
     public function recent(): array
     {
         $sql = "SELECT * FROM puzzleinv ORDER BY addeddate DESC LIMIT 5";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status keep
+    public function puzzleKeep(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Keep')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status sell
+    public function puzzleSell(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Sell')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status trade
+    public function puzzleTrade(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Trade')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status donate
+    public function puzzleDonate(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Donate')";
+
+        try {
+            $stmt = $this->db->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $recents = array();
+
+            foreach ($result as $res) {
+                $recents[] = Puzzle::of($res, $this->db);
+            }
+
+            return $recents;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // List puzzles in disposition status donate
+    public function puzzleGiveAway(): array
+    {
+        $sql = "SELECT * FROM puzzleinv WHERE dispositionid = (SELECT dispositionid FROM disposition WHERE dispositiondesc = 'Give Away')";
 
         try {
             $stmt = $this->db->query($sql);

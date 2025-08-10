@@ -19,12 +19,14 @@ include 'nav.php';
 $userid = getUserID();
 
 $options = [
-    SORT => USR_INV_ID,
+    SORT => UINV_ID,
     SORT_DIRECTION => SQL_SORT_DESC,
 ];
 $gateway = new UserPuzzleGateway($db);
 $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
 ?>
+
+<script src="scripts/userinv.js"></script>
 
 <div class="container-fluid mb-2 mt-4 gap-3 d-flex justify-content-end align-items-center">
     <h3 class="text-center align-text-bottom me-auto">User Inventory Management</h3>
@@ -37,7 +39,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
 <div class="container-fluid my-2 col">
     <table
         id="table"
-        data-classes="table table-dark table-bordered table-striped table-hover"
+        data-classes="table  table-bordered table-striped table-hover"
         data-toggle="table"
         data-pagination="true"
         data-search="false"
@@ -47,6 +49,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
         data-id-field="id">
         <thead>
             <tr>
+                <th scope="col" class="text-center visually-hidden">ID</th>
                 <th scope="col" class="text-center align-middle">Picture</th>
                 <th scope="col" class="align-middle" data-sortable="true" data-field="name">Name</th>
                 <th scope="col" class="text-center" data-sortable="true" data-field="pieces">Pieces</th>
@@ -59,6 +62,7 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                 <th scope="col" class="text-center">Overall</th>
                 <th scope="col" class="text-center">Ownership</th>
                 <th scope="col" class="text-center">Loaned To</th>
+                <th scope="col" class="text-center">Completed Pic</th>
                 <th scope="col" class="text-center">Edit</th>
             </tr>
         </thead>
@@ -68,7 +72,8 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                 if (!($userpuzzle instanceof UserPuzzle)) continue;
                 echo
                 "<tr class='user-puzzle-row'>
-                        <th scope='row' class='text-center align-middle''><img src='" . (empty(getThumbnail($userpuzzle->getPuzzle()->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnail($userpuzzle->getPuzzle()->getPicture())) . "' alt='Puzzle image' height=100></th>
+                        <th scope='row' class='align-middle id visually-hidden'>" . $userpuzzle->getId() . "</th>
+                        <td class='text-center align-middle picture''><a href='#picturelarge' data-bs-toggle='modal' data-bs-target='#picturelarge'><img src='" . (empty(getThumbnail($userpuzzle->getPuzzle()->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnail($userpuzzle->getPuzzle()->getPicture())) . "' alt='Puzzle image' height=100></a></th>
                         <td class='align-middle name'>" . $userpuzzle->getPuzzle()->getName() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getPuzzle()->getPieces() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getMissingPieces() . "</td>
@@ -80,9 +85,30 @@ $userpuzzles = $gateway->findByUserId($userid, $options) ?? [];
                         <td class='align-middle'>" . $userpuzzle->getOverall() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getOwnership()->getDescription() . "</td>
                         <td class='align-middle'>" . $userpuzzle->getLoaned() . "</td>
+                        <td class='text-center align-middle picture''><a href='#picturelarge' data-bs-toggle='modal' data-bs-target='#picturelarge'><img src='" . (empty(getThumbnailCompleted($userpuzzle->getPicture())) ? "no-image-dark.svg"  : "" . getThumbnailCompleted($userpuzzle->getPicture())) . "' alt='Puzzle image' height=100></a></td>
                         <td class='text-center'><a class='btn btn-secondary id' href='userinvedit.php?id=" . $userpuzzle->getId() . "'><i class='bi bi-pencil'></a></td>
                     </tr>";
             } ?>
         </tbody>
     </table>
+</div>
+
+
+
+<div class="modal fade" id="picturelarge" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="picName" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="picName"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control visually-hidden" id="picId" name="id" value="" readonly>
+                <img id="picPath" src="" class="img-fluid mx-auto d-block">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

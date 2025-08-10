@@ -2,9 +2,11 @@
 
 namespace puzzlethings\src\gateway;
 
-use DateTime;
 use PDO;
 use PDOException;
+use puzzlethings\src\gateway\interfaces\IGatewayWithFilters;
+use puzzlethings\src\gateway\interfaces\IGatewayWithID;
+use puzzlethings\src\object\Theme;
 use puzzlethings\src\object\User;
 
 const INVALID_USERNAME = 1;
@@ -14,7 +16,7 @@ const EMAIL_IN_USE = 4;
 const USERNAME_DB_ERROR = 5;
 const EMAIL_DB_ERROR = 6;
 
-class UserGateway
+class UserGateway implements IGatewayWithID, IGatewayWithFilters
 {
     private PDO $db;
 
@@ -23,7 +25,7 @@ class UserGateway
         $this->db = $db;
     }
 
-    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true, int $group = USER_GROUP_ID): User|PDOException|bool|int
+    public function create(string $username, string $fullname, string $email, string $password, bool $returnuser = true, int $group = GROUP_ID_MEMBER): User|PDOException|bool|int
     {
         $sql = "INSERT INTO user (user_name, full_name, email, emailconfirmed, user_password, user_hash, usergroupid, themeid, lastlogin) VALUES (:username, :fullname, :email, 0, :password, :hash, :usergroup, 1, NOW())";
 
@@ -85,9 +87,12 @@ class UserGateway
         }
     }
 
-    public function count(): int
+    public function count(mixed $options = [
+        FILTERS => [],
+    ]): int
     {
-        $sql = "SELECT COUNT(*) FROM user";
+        $filters = $this->filtersToSQL($options[FILTERS] ?? []);
+        $sql = "SELECT COUNT(*) FROM user $filters";
 
         try {
             $stmt = $this->db->prepare($sql);
@@ -113,9 +118,24 @@ class UserGateway
         }
     }
 
-    public function findAll(): array
+    public function findAll(mixed $options = [
+        PAGE => 0,
+        MAX_PER_PAGE => 10,
+        SORT => USER_ID,
+        SORT_DIRECTION => SQL_SORT_ASC,
+        FILTERS => [],
+    ], bool $verbose = false): array|null|PDOException
     {
-        $sql = "SELECT * FROM user";
+        $sort = $options[SORT] ?? USER_ID;
+        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+        $page = $options[PAGE] ?? 0;
+        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+        $filters = $options[FILTERS] ?? [];
+
+        $offset = $page * $maxPerPage;
+        $filters = $this->filtersToSQL($filters);
+
+        $sql = "SELECT * FROM user $filters ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
 
         try {
             $stmt = $this->db->query($sql);
@@ -123,13 +143,55 @@ class UserGateway
             $users = array();
 
             foreach ($result as $res) {
-                $users[] = User::of($res);
+                $users[] = User::of($res, $this->db);
             }
 
             return $users;
-        } catch (PDOException) {
-            return [];
+        } catch (PDOException $e) {
+            error_log("Database error while finding users: " . $e->getMessage());
+            return $verbose ? $e : null;
         }
+    }
+
+    public function filtersToSQL(mixed $filters = []): string {
+        if (empty($filters)) {
+            return "";
+        }
+
+        $res = "";
+
+        foreach ($filters as $filter => $val) {
+            switch ($filter) {
+                case USER_FILTER_NAME: {
+                    $res .= "AND user_name LIKE '%$val%' ";
+                    break;
+                }
+                case USER_FILTER_FULLNAME: {
+                    $res .= "AND full_name LIKE '%$val%' ";
+                    break;
+                }
+                case USER_FILTER_EMAIL: {
+                    $res .= "AND email LIKE '%$val%' ";
+                    break;
+                }
+                case USER_FILTER_GROUP: {
+                    $res .= "AND usergroupid = $val ";
+                    break;
+                }
+                case USER_FILTER_THEME: {
+                    $res .= "AND themeid = $val ";
+                    break;
+                }
+            }
+        }
+
+        $pos = strpos($res, "AND");
+        if ($pos !== false) {
+            $res = substr_replace($res, "WHERE", $pos, 3);
+            $res = rtrim($res);
+        }
+
+        return $res;
     }
 
     public function findById(int $id): ?User
@@ -144,28 +206,27 @@ class UserGateway
 
             if ($stmt->rowCount() == 0) return null;
 
-            return User::of($result);
+            return User::of($result, $this->db);
         } catch (PDOException) {
             return null;
         }
     }
 
-    public function findByName(string $name): array
+    public function findByName(string $name): ?User
     {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
         try {
-            $stmt = $this->db->query($sql);
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $users = array();
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':username', $name);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            foreach ($result as $res) {
-                $users[] = User::of($res);
-            }
+            if ($stmt->rowCount() == 0) return null;
 
-            return $users;
+            return User::of($result, $this->db);
         } catch (PDOException) {
-            return [];
+            return null;
         }
     }
 
@@ -184,7 +245,7 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -206,7 +267,7 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -228,7 +289,7 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -254,7 +315,30 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
+            } else return false;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function updateTheme(User|int $user, Theme|int $theme): User|false
+    {
+        $sql = "UPDATE user SET themeid = :themeid WHERE userid = :id";
+        $id = $user instanceof User ? $user->getId() : $user;
+        $tid = $theme instanceof Theme ? $theme->getId() : $theme;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':themeid', $tid, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                $userSql =  "SELECT * FROM user WHERE userid = :id";
+                $userStmt = $this->db->prepare($userSql);
+                $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $userStmt->execute();
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -276,7 +360,7 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -297,7 +381,7 @@ class UserGateway
                 $userStmt = $this->db->prepare($userSql);
                 $userStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $userStmt->execute();
-                return User::of($userStmt->fetch(PDO::FETCH_ASSOC));
+                return User::of($userStmt->fetch(PDO::FETCH_ASSOC), $this->db);
             } else return false;
         } catch (PDOException) {
             return false;
@@ -337,7 +421,7 @@ class UserGateway
     }
 
 
-    public function attemptLogin(string $username, string $password, bool $setlastlogin = true): User|false
+    public function attemptLogin(string $username, string $password): User|false
     {
         $sql = "SELECT * FROM user WHERE user_name = :username";
 
@@ -351,25 +435,23 @@ class UserGateway
             }
 
             $record = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id = $record[USER_ID];
             $hashedPassword = $record['user_password'];
 
-            // UNCOMMENT THIS TO CHECK YOUR HASH
-            //error_log(password_hash($password . $record['user_hash'], PASSWORD_BCRYPT));
-
             if (password_verify($password . $record['user_hash'], $hashedPassword)) {
-                if ($setlastlogin) {
-                    try {
-                        $llsql = "UPDATE user SET lastlogin = CURRENT_TIMESTAMP WHERE userid = :id";
+                try {
+                    $now = date("Y-m-d H:i:s");
+                    $llsql = "UPDATE user SET lastlogin = :ll WHERE userid = :id";
 
-                        $llstmt = $this->db->prepare($llsql);
-                        $llstmt->bindParam(':id', $id, PDO::PARAM_INT);
-                        $llstmt->execute();
-                    } catch (PDOException $e) {
-                        error_log("Database error on updating last login: " . $e->getMessage());
-                    }
+                    $llstmt = $this->db->prepare($llsql);
+                    $llstmt->bindParam(':ll', $now);
+                    $llstmt->bindParam(':id', $id, PDO::PARAM_INT);
+                    $llstmt->execute();
+                } catch (PDOException $e) {
+                    error_log("Database error on updating last login: " . $e->getMessage());
                 }
 
-                return User::of($record);
+                return User::of($record, $this->db);
             } else return false;
         } catch (PDOException $e) {
             error_log("Database error on signing in: " . $e->getMessage());

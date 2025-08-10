@@ -42,5 +42,13 @@ switch ($ctx) {
         else failAlert("Failed to update password!", "profile.php");
         break;
     }
+    case 'theme': {
+        //theme
+        $success = $gateway->updateTheme($uid, $_POST['theme']);
+
+        if ($success) successAlert("Updated theme!", "profile.php");
+        else failAlert("Failed to update theme!", "profile.php");
+        break;
+    }
 }
 

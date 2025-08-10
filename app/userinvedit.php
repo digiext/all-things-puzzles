@@ -6,9 +6,7 @@ require 'util/db.php';
 use puzzlethings\src\gateway\StatusGateway;
 use puzzlethings\src\object\Status;
 use puzzlethings\src\gateway\UserPuzzleGateway;
-use puzzlethings\src\object\UserPuzzle;
 use puzzlethings\src\gateway\PuzzleGateway;
-use puzzlethings\src\object\Puzzle;
 use puzzlethings\src\gateway\OwnershipGateway;
 use puzzlethings\src\object\Ownership;
 
@@ -127,18 +125,20 @@ $userpuzzle = $gateway->findById($id);
                 <input type="text" class="form-control" name="loanedoutto" id="loanedoutto" value="<?php echo $userpuzzle->getLoaned(); ?>">
             </div>
 
+            <div class="p-2 mb-2 mx-1">
+                <label for="picture" class="form-label"><strong>Completed Picture</strong></label>
+                <div class="input-group">
+                    <input type="file" accept="image/png, image/jpeg" class="form-control" name="picture" id="picture" max="1">
+                    <button type="button" class="btn btn-outline-danger" id="pictureclear"><i class="bi bi-trash"></i> Clear</button>
+                </div>
+            </div>
 
-            <!--            <div class="p-2 mb-2 mx-1">-->
-            <!--                <label for="cost" class="form-label"><strong>Cost</strong></label>-->
-            <!--                <div class="input-group">-->
-            <!--                    <span class="input-group-text">$</span>-->
-            <!--                    <input type="number" class="form-control" name="cost" id="cost" min="0" step="0.01">-->
-            <!--                    <select class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" name="costCurrency" id="costCurrency">-->
-            <!--                        <option value="USD" selected>USD</option>-->
-            <!--                        <option value="CAD">CAD</option>-->
-            <!--                    </select>-->
-            <!--                </div>-->
-            <!--            </div>-->
+            <?php
+            if (!empty($userpuzzle->getPicture())) {
+                echo
+                "<div class='p-2 mb-2 mx-1'>Current picture is " . $userpuzzle->getPicture() . ". If you want to delete it, click the button
+                <a class='btn btn-danger p-2 mb-2 mx-1' href='completedelete.php?id=" . $userpuzzle->getId() . "'>Delete Picture</a></div>";
+            } ?>
 
             <div class="p-2 mb-2 mx-1">
                 <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>

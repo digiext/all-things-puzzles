@@ -1,12 +1,27 @@
 <?php
 use puzzlethings\src\gateway\UserGateway as Gateway;
 
-global $db;
-require __DIR__ . "/../../util/db.php";
-$gateway = new Gateway($db);
+require_once __DIR__ . "/../api_utils.php";
 
-$res = $gateway->findAll();
+require_auth();
+$req = $_SERVER['REQUEST_METHOD'];
+if ($req == GET) {
+    try {
+        global $db;
+        $gateway = new Gateway($db);
 
-header("Content-Type: application/json");
-echo json_encode($res);
-die();
+        $searchOptions = search_options(USER_ID, USER_FILTERS);
+
+        $count = $gateway->count($searchOptions);
+        $res = $gateway->findAll($searchOptions, true);
+
+        if ($res instanceof PDOException) database_error();
+        else if ($res == null) success([]);
+        else {
+            $res = array_map(fn($itm) => array_merge($itm->jsonSerializeMin(), [LINK => api_link('/api/user/' . $itm->getId() . '/')]), $res);
+            success_with_pagination($res, $count);
+        }
+    } catch (Error $e) {
+        bad_request($e);
+    }
+} else wrong_method([GET]);

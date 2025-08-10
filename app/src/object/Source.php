@@ -31,7 +31,7 @@ class Source implements \JsonSerializable
     {
         return [
             "id" => $this->id,
-            "desc" => $this->desc
+            "description" => $this->desc
         ];
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Jul 14, 2025 at 01:55 PM
+-- Generation Time: Aug 03, 2025 at 09:54 AM
 -- Server version: 10.9.8-MariaDB-1:10.9.8+maria~ubu2204
 -- PHP Version: 8.2.27
 
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `puzzlethingstemp`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `apitokens`
+--
+
+CREATE TABLE `apitokens` (
+  `tokenid` bigint(20) NOT NULL,
+  `tokenname` text NOT NULL,
+  `apitoken` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `userid` bigint(20) UNSIGNED NOT NULL,
+  `permissions` int(11) NOT NULL,
+  `expiration` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -390,12 +405,20 @@ CREATE TABLE `userinv` (
   `qualityrating` float UNSIGNED NOT NULL,
   `overallrating` float UNSIGNED NOT NULL,
   `ownershipid` bigint(20) UNSIGNED NOT NULL,
-  `loanedoutto` text NOT NULL
+  `loanedoutto` text NOT NULL,
+  `completepicurl` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `apitokens`
+--
+ALTER TABLE `apitokens`
+  ADD PRIMARY KEY (`tokenid`),
+  ADD KEY `fkapitokenuserid` (`userid`);
 
 --
 -- Indexes for table `auth`
@@ -524,6 +547,12 @@ ALTER TABLE `userinv`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `apitokens`
+--
+ALTER TABLE `apitokens`
+  MODIFY `tokenid` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `auth`

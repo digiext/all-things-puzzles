@@ -25,7 +25,7 @@ class Disposition implements \JsonSerializable {
     public function jsonSerialize(): mixed {
         return [
             "id" => $this->id,
-            "desc" => $this->desc
+            "description" => $this->desc
         ];
     }
 }

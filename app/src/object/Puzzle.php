@@ -30,10 +30,10 @@ class Puzzle implements \JsonSerializable {
     }
 
     public static function of($res, $db): Puzzle {
-        $brand = (new BrandGateway($db))->findById($res['brandid']);
-        $disposition = (new DispositionGateway($db))->findById($res['dispositionid']);
-        $source = (new SourceGateway($db))->findById($res['sourceid']);
-        $location = (new LocationGateway($db))->findById($res['locationid']);
+        $brand = new BrandGateway($db)->findById($res['brandid']);
+        $disposition = new DispositionGateway($db)->findById($res['dispositionid']);
+        $source = new SourceGateway($db)->findById($res['sourceid']);
+        $location = new LocationGateway($db)->findById($res['locationid']);
 
         return new Puzzle($res['puzzleid'], $res['puzname'], $res['pieces'], $brand, $res['cost'], $res['dateacquired'], $source, $location, $disposition, $res['pictureurl'], $res['upc']);
     }

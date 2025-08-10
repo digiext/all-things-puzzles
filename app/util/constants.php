@@ -1,17 +1,29 @@
 <?php
 // VERSION NUMBER
-const VERSION = "1.0.1";
+const VERSION = "1.1.0";
+const API_VERSION = 1;
 
-// GROUP IDS
-const ADMIN_GROUP_ID = 1;
-const USER_GROUP_ID = 2;
+
+// GROUPS
+const GROUP_ID_ADMIN = 1;
+const GROUP_ID_MEMBER = 2;
+const GROUPS = [
+    GROUP_ID_ADMIN => [
+        'id' => GROUP_ID_ADMIN,
+        'name' => 'Admin',
+    ],
+    GROUP_ID_MEMBER => [
+        'id' => GROUP_ID_MEMBER,
+        'name' => 'Member',
+    ]
+];
 
 // COOKIE / SESSION NAMES
-const LOGGED_IN = "loggedin";
-const REMEMBER_ME = "rememberme";
-const USER_GROUP = "usg";
-const USER_ID = 'uid';
-const USER_NAME = 'uname';
+const SESS_LOGGED_IN = "atploggedin";
+const COOKIE_REMEMBER_ME = "atprememberme";
+const SESS_USER_GROUP = "atpusg";
+const SESS_USER_ID = 'atpuid';
+const SESS_USER_NAME = 'atpuname';
 
 // GENERAL OPTIONS
 const PAGE = "page";
@@ -34,6 +46,19 @@ const PUZ_LOCATION_ID = "locationid";
 const PUZ_DISPOSITION_ID = "dispositionid";
 const PUZ_PICTURE_URL = "pictureurl";
 const PUZ_UPC = "upc";
+const PUZ_FIELDS = [
+    PUZ_ID,
+    PUZ_NAME,
+    PUZ_PIECES,
+    PUZ_COST,
+    PUZ_DATE_ACQUIRED,
+    PUZ_BRAND_ID,
+    PUZ_SOURCE_ID,
+    PUZ_LOCATION_ID,
+    PUZ_DISPOSITION_ID,
+    PUZ_PICTURE_URL,
+    PUZ_UPC,
+];
 
 const PUZ_SORT_BRAND_NAME = "brand.brandname";
 
@@ -57,22 +82,94 @@ const PUZ_FILTERS = [
 ];
 
 // USER INVENTORY GATEWAY
-const USR_INV_ID = "userinvid";
-const USR_INV_STATUS = "statusid";
-const USR_INV_MISSING = "missingpieces";
-const USR_INV_STARTDATE = "startdate";
-const USR_INV_ENDDATE = "enddate";
-const USR_INV_TOTALDAYS = "totaldays";
-const USR_INV_DIFFICULTY = "difficultyrating";
-const USR_INV_QUALITY = "qualityrating";
-const USR_INV_OVERALL = "overallrating";
-const USR_INV_OWNERSHIP = "ownershipid";
-const USR_INV_LOANED = "loanedoutto";
+const UINV_ID = "userinvid";
+const UINV_STATUS = "statusid";
+const UINV_MISSING = "missingpieces";
+const UINV_STARTDATE = "startdate";
+const UINV_ENDDATE = "enddate";
+const UINV_TOTALDAYS = "totaldays";
+const UINV_DIFFICULTY = "difficultyrating";
+const UINV_QUALITY = "qualityrating";
+const UINV_OVERALL = "overallrating";
+const UINV_OWNERSHIP = "ownershipid";
+const UINV_LOANED = "loanedoutto";
+const UINV_COMPLETE_URL = "completepicurl";
+const UINV_FIELDS = [
+    UINV_ID,
+    UINV_STATUS,
+    UINV_MISSING,
+    UINV_STARTDATE,
+    UINV_ENDDATE,
+    UINV_TOTALDAYS,
+    UINV_DIFFICULTY,
+    UINV_QUALITY,
+    UINV_OVERALL,
+    UINV_OWNERSHIP,
+    UINV_LOANED,
+    UINV_COMPLETE_URL,
+];
 
-const USR_FILTER_USER = "userid";
-const USR_FILTER_STATUS = "status";
-const USR_FILTER_MISSING = "missingpieces";
-const USR_FILTER_DIFFICULTY = "difficultyrating";
-const USR_FILTER_QUALITY = "qualityrating";
-const USR_FILTER_OVERALL = "overallrating";
-const USR_FILTER_OWNERSHIP = "ownership";
+const UINV_FILTER_USER = "userid";
+const UINV_FILTER_STATUS = "status";
+const UINV_FILTER_MISSING = "missingpieces";
+const UINV_FILTER_DIFFICULTY = "difficultyrating";
+const UINV_FILTER_QUALITY = "qualityrating";
+const UINV_FILTER_OVERALL = "overallrating";
+const UINV_FILTER_OWNERSHIP = "ownership";
+
+// USER GATEWAY
+const USER_ID = 'userid';
+const USER_NAME = 'user_name';
+const USER_FULLNAME = 'full_name';
+const USER_EMAIL = 'email';
+const USER_EMAIL_CONFIRMED = 'emailconfirmed';
+const USER_PASSWORD = 'user_password';
+const USER_HASH = 'user_hash';
+const USER_GROUP_ID = 'usergroupid';
+const USER_THEME_ID = 'themeid';
+const USER_LAST_LOGIN = 'lastlogin';
+
+const USER_FILTER_NAME = 'username';
+const USER_FILTER_FULLNAME = 'fullname';
+const USER_FILTER_EMAIL = 'email';
+const USER_FILTER_GROUP = 'group';
+const USER_FILTER_THEME = 'theme';
+const USER_FILTERS = [
+    USER_FILTER_NAME,
+    USER_FILTER_FULLNAME,
+    USER_FILTER_EMAIL,
+    USER_FILTER_GROUP,
+    USER_FILTER_THEME,
+];
+
+// STATUS GATEWAY
+const STATUS_ID = 'statusid';
+const STATUS_DESCRIPTION = 'statusdesc';
+
+// OWNERSHIP GATEWAY
+const OWNERSHIP_ID = 'ownershipid';
+const OWNERSHIP_DESCRIPTION = 'ownershipdesc';
+
+// DISPOSITION GATEWAY
+const DISPOSITION_ID = 'dispositionid';
+const DISPOSITION_DESCRIPTION = 'dispositiondesc';
+
+// BRAND GATEWAY
+const BRAND_ID = 'brandid';
+const BRAND_NAME = 'brandname';
+
+// SOURCE GATEWAY
+const SOURCE_ID = 'sourceid';
+const SOURCE_DESCRIPTION = 'sourcedesc';
+
+// LOCATION GATEWAY
+const LOCATION_ID = 'locationid';
+const LOCATION_DESCRIPTION = 'locationdesc';
+
+// CATEGORY GATEWAY
+const CATEGORY_ID = 'categoryid';
+const CATEGORY_DESCRIPTION = 'categorydesc';
+
+// THEME GATEWAY
+const THEME_ID = 'themeid';
+const THEME_NAME = 'themedesc';

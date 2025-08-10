@@ -1,44 +1,26 @@
 <?php
 use puzzlethings\src\gateway\PuzzleGateway as Gateway;
 
-$id = $_GET['id'] ?? null;
-$name = $_GET['name'] ?? null;
-$before = $_GET['before'] ?? null;
-$after = $_GET['after'] ?? null;
-$pieces = $_GET['pieces'] ?? null;
+require_once __DIR__ . "/../api_utils.php";
 
-try {
-    if ($before != null) $before = new DateTime($before);
-} catch (Exception $e) {
-}
+require_permissions(PERM_READ_PUZZLE);
+$req = $_SERVER['REQUEST_METHOD'];
+if ($req == GET) {
+    try {
+        global $db;
+        $gateway = new Gateway($db);
 
-try {
-    if ($after != null) $after = new DateTime($after);
-} catch (Exception $e) {
-}
+        $id = $_GET[ID] ?? null;
+        $data = $gateway->findById($id);
 
-$options = [
-    "pieces" => $pieces,
-    "before" => $before,
-    "after" => $after,
-];
-
-global $db;
-
-require __DIR__ . "/../../util/db.php";
-$gateway = new Gateway($db);
-
-$res = null;
-if ($id != null) {
-    $res = $gateway->findById($id, $options);
-} else if ($name != null) {
-    $res = $gateway->findByName($name, $options);
-}
-
-if ($res == null) {
-    http_response_code(404);
+        if ($data == null) {
+            error(API_ERROR_INVALID_PUZZLE, 404);
+        } else {
+            success($data);
+        }
+    } catch (Error $e) {
+        bad_request($e);
+    }
 } else {
-    header("Content-Type: application/json");
-    echo json_encode($res);
+    wrong_method([GET]);
 }
-die();

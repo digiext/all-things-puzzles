@@ -1,18 +1,31 @@
 <?php
 use puzzlethings\src\gateway\UserGateway as Gateway;
 
-$id = $_GET['id'] ?? null;
-global $db;
+require_once __DIR__ . "/../api_utils.php";
 
-require __DIR__ . "/../../util/db.php";
-$gateway = new Gateway($db);
+require_permissions(PERM_READ_PROFILE);
+$req = $_SERVER['REQUEST_METHOD'];
+if ($req == GET) {
+    try {
+        global $db;
+        $gateway = new Gateway($db);
 
-$res = $gateway->findById($id);
+        global $auth;
+        if (($_GET[ID] ?? $auth->getUser()->getId()) == null) error(API_ERROR_INVALID_USER, 404);
+        $user = $gateway->findById($_GET[ID] ?? $auth->getUser()->getId());
+        if ($user == null) error(API_ERROR_INVALID_USER, 404);
 
-if ($res == null) {
-    http_response_code(404);
+        global $auth;
+
+        if ($user == null) {
+            error(API_ERROR_INVALID_USER, 404);
+        } else {
+            if (($_GET[ID] ?? $auth->getUser()->getId()) != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) success($user->jsonSerializeMin());
+            success($user->jsonSerialize());
+        }
+    } catch (Error $e) {
+        bad_request($e);
+    }
 } else {
-    header("Content-Type: application/json");
-    echo json_encode($res);
+    wrong_method([GET]);
 }
-die();

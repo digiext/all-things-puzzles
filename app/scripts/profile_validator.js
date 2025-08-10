@@ -179,4 +179,8 @@ $(function () {
             submit.prop('disabled', true);
         }
     })
+
+    $('#updateTheme').on('change', function () {
+        $('#updateThemeSubmit').prop('disabled', false);
+    })
 })

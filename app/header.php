@@ -1,5 +1,15 @@
+<?php
+    $theme = 'dark';
+
+    if (isset($_SESSION['theme'])) {
+        $theme = $_SESSION['theme'];
+    } else if (isLoggedIn() && getLoggedInUser()->getTheme() != null) {
+        $theme = getLoggedInUser()->getTheme()->getName() ?? 'dark';
+    }
+?>
+
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="<?php echo $theme; ?>">
 <title><?php echo ($title); ?></title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,3 +22,5 @@
 <script src="<?php echo BASE_URL ?>/scripts/jquery-3.7.1.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/bootstrap-table.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/popper.min.js"></script>
+<script src="<?php echo BASE_URL ?>/scripts/bootstrap-table-print.min.js"></script>
+<?php header("X-Frame-Options: DENY"); ?>

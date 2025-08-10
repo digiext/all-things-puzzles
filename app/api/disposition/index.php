@@ -1,18 +1,26 @@
 <?php
 use puzzlethings\src\gateway\DispositionGateway as Gateway;
 
-$id = $_GET['id'] ?? null;
-global $db;
+require_once __DIR__ . "/../api_utils.php";
 
-require __DIR__ . "/../../util/db.php";
-$gateway = new Gateway($db);
+require_permissions(PERM_READ_MISC);
+$req = $_SERVER['REQUEST_METHOD'];
+if ($req == GET) {
+    try {
+        global $db;
+        $gateway = new Gateway($db);
 
-$res = $gateway->findById($id);
+        $id = $_GET['id'] ?? null;
+        $data = $gateway->findById($id);
 
-if ($res == null) {
-    http_response_code(404);
+        if ($data == null) {
+            error(API_ERROR_INVALID_DISPOSITION, 404);
+        } else {
+            success($data);
+        }
+    } catch (Error $e) {
+        bad_request($e);
+    }
 } else {
-    header("Content-Type: application/json");
-    echo json_encode($res);
+    wrong_method([GET]);
 }
-die();
