@@ -1,4 +1,11 @@
 <script src="<?php echo BASE_URL ?>/scripts/signup_validator.js"></script>
+<?php
+$sql = "SELECT signup FROM settings";
+
+$signup = $db->query($sql)->fetchColumn();
+?>
+
+
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?php
@@ -28,7 +35,9 @@
                 } else {
                     echo "<div class='text-end'>";
                     echo "<button class='btn btn-secondary m-1' type='submit' data-bs-toggle='modal' data-bs-target='#login'>Login</button>";
-                    echo "<button class='btn btn-warning' type='submit' data-bs-toggle='modal' data-bs-target='#signup'>Sign Up</button>";
+                    if ($signup == 1) {
+                        echo "<button class='btn btn-warning' type='submit' data-bs-toggle='modal' data-bs-target='#signup'>Sign Up</button>";
+                    }
                     echo "</div>";
                 } ?>
             </div>

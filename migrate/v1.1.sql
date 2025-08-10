@@ -7,6 +7,22 @@ CREATE TABLE `apitokens` (
   `expiration` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `settings` (
+  `settingid` bigint(20) UNSIGNED NOT NULL,
+  `signup` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `settings` (`settingid`, `signup`) VALUES
+(1, 1);
+
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`settingid`),
+  ADD UNIQUE KEY `settingid` (`settingid`);
+
+ALTER TABLE `settings`
+  MODIFY `settingid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;
+
 ALTER TABLE `userinv`
   ADD `completepicurl` text DEFAULT NULL;
 

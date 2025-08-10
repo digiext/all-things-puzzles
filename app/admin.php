@@ -84,6 +84,11 @@ if (isAdmin()) {
                 <a class='btn btn-secondary' href='admin/migrate.php' role='button'>Migration</a>
             </div>
         </div>
+        <div class='col-4 my-3'>
+            <div class='card'>
+                <a class='btn btn-secondary' href='admin/settings.php' role='button'>Settings</a>
+            </div>
+        </div>
     </div>
 </div>";
 }
