@@ -15,10 +15,10 @@ if ($req == GET) {
         global $auth;
         $id = $_GET[ID] ?? $auth->getUser()->getId();
         if (!is_admin()) $id = $auth->getUser()->getId();
-        if ($id == null) error(API_ERROR_INVALID_USER);
+        if ($id == null) error(API_ERROR_INVALID_USER, 404);
 
         $user = $gateway->findById($id);
-        if ($user == null) error(API_ERROR_INVALID_USER);
+        if ($user == null) error(API_ERROR_INVALID_USER, 404);
 
         $wishlist = $wishGateway->findByUserId($user->getId());
         if ($wishlist == null && $wishlist != array()) error([

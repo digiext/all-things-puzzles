@@ -10,9 +10,9 @@ if ($req == POST) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_LOCATION);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_LOCATION, 404);
     $location = $gateway->findById($_POST[ID]);
-    if ($location == null) error(API_ERROR_INVALID_LOCATION);
+    if ($location == null) error(API_ERROR_INVALID_LOCATION, 404);
 
     if (array_key_exists('description', $_POST)) {
         $location = $gateway->updateDesc($location, $_POST['description']);

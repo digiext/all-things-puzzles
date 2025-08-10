@@ -9,10 +9,10 @@ if ($req == DELETE) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE, 404);
     $pwish = $gateway->findById($_POST[ID]);
 
-    if ($pwish == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
+    if ($pwish == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE, 404);
 
     global $auth;
     if ($pwish->getUserId() != $auth->getUser()->getId() && !is_admin()) {

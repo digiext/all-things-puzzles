@@ -14,7 +14,7 @@ if ($req == GET) {
         $data = $gateway->findById($id);
 
         if ($data == null) {
-            error(API_ERROR_INVALID_LOCATION);
+            error(API_ERROR_INVALID_LOCATION, 404);
         } else {
             success($data);
         }

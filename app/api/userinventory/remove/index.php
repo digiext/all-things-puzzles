@@ -9,10 +9,10 @@ if ($req == DELETE) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE, 404);
     $uipuzid = $gateway->findById($_POST[ID]);
 
-    if ($uipuzid == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE);
+    if ($uipuzid == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE, 404);
 
     global $auth;
     if ($uipuzid->getUser()->getId() != $auth->getUser()->getId() && !is_admin()) {

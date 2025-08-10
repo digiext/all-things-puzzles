@@ -10,9 +10,9 @@ if ($req == POST) {
         global $db;
         $gateway = new Gateway($db);
 
-        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER);
+        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER, 404);
         $user = $gateway->findById($_POST[ID]);
-        if ($user == null) error(API_ERROR_INVALID_USER);
+        if ($user == null) error(API_ERROR_INVALID_USER, 404);
 
         global $auth;
         if ($_POST[ID] != $auth->getUser()->getId() && $auth->getUser()->getGroupId() !== GROUP_ID_ADMIN) error([

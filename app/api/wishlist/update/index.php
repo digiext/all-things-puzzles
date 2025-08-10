@@ -10,9 +10,9 @@ if ($req == POST) {
         global $db;
         $gateway = new Gateway($db);
 
-        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
+        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE, 404);
         $wish = $gateway->findById($_POST[ID]);
-        if ($wish == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE);
+        if ($wish == null) error(API_ERROR_INVALID_WISHLIST_PUZZLE, 404);
 
         global $auth;
         if ($_POST[ID] != $auth->getUser()->getId() && !is_admin()) error([

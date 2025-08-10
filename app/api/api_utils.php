@@ -10,7 +10,7 @@ header("Access-Control-Allow-Origin: *");
 
 $auth = get_auth();
 
-function error(array $error, int $statusCode = 404): void
+function error(array $error, int $statusCode = 500): void
 {
     http_response_code($statusCode);
 
@@ -25,6 +25,11 @@ function error(array $error, int $statusCode = 404): void
     ]);
 
     die($json);
+}
+
+function not_found(int $statusCode = 404): void {
+    http_response_code($statusCode);
+    die();
 }
 
 function unauthorized(): void

@@ -9,9 +9,9 @@ if ($req == POST) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_PUZZLE);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_PUZZLE, 404);
     $puzzle = $gateway->findById($_POST[ID]);
-    if ($puzzle == null) error(API_ERROR_INVALID_PUZZLE);
+    if ($puzzle == null) error(API_ERROR_INVALID_PUZZLE, 404);
 
     $update = array_filter($_POST, fn ($k) => in_array($k, PUZ_FIELDS), ARRAY_FILTER_USE_KEY);
 

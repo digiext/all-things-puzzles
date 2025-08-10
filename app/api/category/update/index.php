@@ -10,9 +10,9 @@ if ($req == POST) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_CATEGORY);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_CATEGORY, 404);
     $category = $gateway->findById($_POST[ID]);
-    if ($category == null) error(API_ERROR_INVALID_CATEGORY);
+    if ($category == null) error(API_ERROR_INVALID_CATEGORY, 404);
 
     if (array_key_exists('description', $_POST)) {
         $category = $gateway->updateDesc($category, $_POST['description']);

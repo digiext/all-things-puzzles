@@ -9,7 +9,7 @@ if ($req == DELETE) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_SOURCE);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_SOURCE, 404);
     $success = $gateway->delete($_POST[ID]);
 
     if ($success) {

@@ -11,9 +11,9 @@ if ($req == POST) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_STATUS);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_STATUS, 404);
     $status = $gateway->findById($_POST[ID]);
-    if ($status == null) error(API_ERROR_INVALID_STATUS);
+    if ($status == null) error(API_ERROR_INVALID_STATUS, 404);
 
     if (array_key_exists('description', $_POST)) {
         $status = $gateway->updateDesc($status, $_POST['description']);

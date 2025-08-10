@@ -10,9 +10,9 @@ if ($req == POST) {
         global $db;
         $gateway = new Gateway($db);
 
-        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE);
+        if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE, 404);
         $uipuz = $gateway->findById($_POST[ID]);
-        if ($uipuz == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE);
+        if ($uipuz == null) error(API_ERROR_INVALID_USER_INVENTORY_PUZZLE, 404);
 
         global $auth;
         if ($_POST[ID] != $auth->getUser()->getId() && !is_admin()) error([

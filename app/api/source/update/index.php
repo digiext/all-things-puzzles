@@ -10,9 +10,9 @@ if ($req == POST) {
     global $db;
     $gateway = new Gateway($db);
 
-    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_SOURCE);
+    if (($_POST[ID] ?? null) == null) error(API_ERROR_INVALID_SOURCE, 404);
     $source = $gateway->findById($_POST[ID]);
-    if ($source == null) error(API_ERROR_INVALID_SOURCE);
+    if ($source == null) error(API_ERROR_INVALID_SOURCE, 404);
 
     if (array_key_exists('description', $_POST)) {
         $source = $gateway->updateDesc($source, $_POST['description']);

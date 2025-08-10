@@ -1,6 +1,6 @@
 <?php
 use puzzlethings\src\gateway\UserGateway as Gateway;
-use puzzlethings\src\gateway\PuzzleWishGateway as WishGateway;
+use puzzlethings\src\gateway\UserPuzzleGateway;
 
 require_once __DIR__ . "/../api_utils.php";
 
@@ -10,22 +10,22 @@ if ($req == GET) {
     try {
         global $db;
         $gateway = new Gateway($db);
-        $wishGateway = new WishGateway($db);
+        $upuzGateway = new UserPuzzleGateway($db);
 
         global $auth;
         $id = $_GET[ID] ?? $auth->getUser()->getId();
         if (!is_admin()) $id = $auth->getUser()->getId();
-        if ($id == null) error(API_ERROR_INVALID_USER);
+        if ($id == null) error(API_ERROR_INVALID_USER, 404);
 
         $user = $gateway->findById($id);
-        if ($user == null) error(API_ERROR_INVALID_USER);
+        if ($user == null) error(API_ERROR_INVALID_USER, 404);
 
-        $wishlist = $wishGateway->findByUserId($user->getId());
-        if ($wishlist == null && $wishlist != array()) error([
+        $uinv = $upuzGateway->findByUserId($user->getId());
+        if ($uinv == null && $uinv != array()) error([
             ERROR_CODE => 'invalid_wishlist',
             MESSAGE => 'Wishlist not found!'
         ]);
-        else success($wishlist);
+        else success($uinv);
     } catch (Error $e) {
         bad_request($e);
     }

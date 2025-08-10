@@ -122,7 +122,7 @@ class UserPuzzle implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'user' => $this->user,
+            'user' => $this->user->jsonSerializeMin(),
             'puzzle' => $this->puzzle,
             'status' => $this->status,
             'missingpieces' => $this->missingpieces,
