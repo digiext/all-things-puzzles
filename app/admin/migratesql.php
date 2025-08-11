@@ -3,10 +3,10 @@ global $db;
 include '../util/function.php';
 require '../util/db.php';
 
-const MIGRATION = __DIR__ . '/../../migrate/migration.json';
+const MIGRATION = __DIR__ . '/../migrate/migration.json';
 
 $id = $_POST['id'];
-$versions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+$versions = json_decode(file_get_contents(__DIR__ . '/../migrate/versions.json'), true);
 $versions = array_reduce($versions, function ($res, $ver) {
     $res[$ver['id']] = $ver;
     return $res;
@@ -39,7 +39,7 @@ if ($id === 'latest') {
     foreach ($versions as $version) {
         $greater = $version['id'] > $current;
         if ($greater) {
-            $sqlFile = __DIR__ . '/../../migrate/' . $version['sql'];
+            $sqlFile = __DIR__ . '/../migrate/' . $version['sql'];
             if (!file_exists($sqlFile)) {
                 http_response_code(500);
                 die("SQL Migration file not found! Check permissions!");
@@ -68,7 +68,7 @@ if ($id === 'latest') {
     die();
 } else {
     $ver = $versions[$id];
-    $sqlFile = __DIR__ . '/../../migrate/' . $ver['sql'];
+    $sqlFile = __DIR__ . '/../migrate/' . $ver['sql'];
     if (!file_exists($sqlFile)) {
         http_response_code(500);
         die("SQL Migration file not found! Check permissions!");

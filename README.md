@@ -1,5 +1,12 @@
-# All Things Puzzles
+### Quick Links
+- [Screenshots](#screenshots)
+- [Docker Install](#docker-install)
+- [Webserver Install](#webserver-install)
+- [Access](#access-application)
+- [Upgrading](#upgrading-application)
+- [Contributing](#contributing)
 
+# All Things Puzzles
 All Things Puzzles is an inventory management system of your personal puzzle collection.
 
 Current Features include:
@@ -72,19 +79,15 @@ docker exec -it all-things-puzzles-php-1 composer update
 
 ### Requirements
 
-* Machine running a webserver (nginx or apache), php8.4, mariadb, and has php composer
+* Machine running a webserver (nginx or apache), php 8.4, mariadb, and has php composer
 
-## Installation
+### Installation
 
-* Download apponly.zip from the latest release on the Releases page
-
-* Unzip apponly.zip file to the root of your webserver
-
+* Download `apponly.zip` from the latest release on the Releases page
+* Unzip `apponly.zip` file to the root of your webserver
 * Create database using sql file available in the repo
-
-* Create .env file in root web directory based off the env-example file in the repo
-
-* Navigate to web root directory and run php composer update to generate vendor files
+* Create `.env` file in root web directory based off the `env-example` file in the repo
+* Navigate to web root directory and run `php composer update` to generate vendor files
 
 ## Access application
 
@@ -98,12 +101,21 @@ cd all-things-puzzles
 
 git pull
 ```
+Some versions require updates to the database schema. You may use either method below to update the schemas:
 
+### Manual Database Upgrades
 Upgrade database with any changes needed
 ```bash
 docker exec -i <MariaDB Container Name> mariadb -uroot -p<Root Password> puzzlethings < v<Version Number>.sql
 ```
 
-Delete sql file
-```bash
-rm v<Version Number>.sql
+### Migration Dashboard
+> This feature is currently experimental and subject to change in the future!
+
+Alternatively, use the **Migration Dashboard** under *Admin > Migration*.
+You can use the `Migrate to Latest Local Version` to migrate to the latest version.
+Alternatively, you can press the `Migrate SQL` button for each version to go step by step.
+Any errors in the migration process will roll back all changes made by that process 
+
+## Contributing
+Want to contribute to All Things Puzzles? View `CONTRIBUTING.md` or contact `allthingspuzzles@dumail.net`
