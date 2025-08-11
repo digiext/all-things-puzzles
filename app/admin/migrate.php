@@ -21,24 +21,32 @@ include '../nav.php';
 
 $failAlert = fn($alert) => die("<div class='alert alert-danger'>$alert</div>");
 
-if (!file_exists(__DIR__ . '/../../migrate/versions.json')) {
+function process_versions(array $arr): array {
+    $arr = array_reduce($arr, function ($res, $ver) {
+        $res[$ver['id']] = $ver;
+        return $res;
+    });
+
+    krsort($arr);
+    return $arr;
+}
+
+if (!file_exists(__DIR__ . '/../migrate/versions.json')) {
     $failAlert('Could not read versions file! Check permissions!');
 }
 
 $allversions = json_decode(file_get_contents('https://raw.githubusercontent.com/digiext/all-things-puzzles/refs/heads/main/migrate/versions.json') ?? [], true) ?? [];
-$localversions = json_decode(file_get_contents(__DIR__ . '/../../migrate/versions.json'), true);
+$localversions = json_decode(file_get_contents(__DIR__ . '/../migrate/versions.json') ?? [], true) ?? [];
+$mergedversions = array_merge($allversions, array_filter($localversions, fn ($ver) => !key_exists($ver['id'], $allversions)));
 
-$localversions = array_reduce($localversions, function ($res, $ver) {
-    $res[$ver['id']] = $ver;
-    return $res;
-});
+$allversions = process_versions($mergedversions);
+$localversions = process_versions($allversions);
+$mergedversions = process_versions($mergedversions);
 
-krsort($localversions);
-krsort($allversions);
 
-if (!file_exists(__DIR__ . '/../../migrate/migration.json')) {
-    $initMigrationWrite = file_put_contents(__DIR__ . '/../../migrate/migration.json', json_encode([
-        'current' => $localversions[array_key_first($localversions)]['id'],
+if (!file_exists(__DIR__ . '/../migrate/migration.json')) {
+    $initMigrationWrite = file_put_contents(__DIR__ . '/../migrate/migration.json', json_encode([
+        'current' => $mergedversions[array_key_first($localversions)]['id'],
         'previous' => []
     ], JSON_PRETTY_PRINT));
 
@@ -47,11 +55,11 @@ if (!file_exists(__DIR__ . '/../../migrate/migration.json')) {
     }
 }
 
-$migrationFile = json_decode(file_get_contents(__DIR__ . '/../../migrate/migration.json'), true);
+$migrationFile = json_decode(file_get_contents(__DIR__ . '/../migrate/migration.json'), true);
 $current = $migrationFile['current'];
 $previous = $migrationFile['previous'];
 
-$latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'version' => 'Error'];
+$latest = $mergedversions[array_key_first($mergedversions)] ?? ['id' => $current, 'version' => 'Error'];
 ?>
 
 <div class="alert alert-danger" id="alertBox">Alert</div>
@@ -68,7 +76,7 @@ $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'ver
             <strong>Latest Version:</strong> <?php echo $latest['version'] != 'Error' ? ("v" . $latest['version']) : $latest['version']; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="currentVersion">
-            <strong>Current Version:</strong> <?php echo $localversions[$current]['version'] != null ? ("v" . $localversions[$current]['version']) : "Unknown ($current)"; ?>
+            <strong>Current Version:</strong> <?php echo $mergedversions[$current]['version'] != null ? ("v" . $mergedversions[$current]['version']) : "Unknown ($current)"; ?>
         </div>
         <div class="rounded-3 bg-body-tertiary px-3 m-2" id="previousVersions">
             <strong>Previous Versions:</strong>
@@ -78,7 +86,7 @@ $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'ver
             } else {
                 echo "<ul>";
                 foreach ($previous as $version) {
-                    $ver = $localversions[$version];
+                    $ver = $mergedversions[$version];
                     if ($ver != null) {
                         echo "<li>v" . $ver['version'] . "</li>";
                     } else {
@@ -93,12 +101,12 @@ $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'ver
     <div class="vr"></div>
     <div class="px-3 w-100 overflow-y-scroll">
         <?php
-            $latestloc = $localversions[array_key_first($localversions)];
+            $latestloc = $mergedversions[array_key_first($localversions)];
             if ($current < $latestloc['id']) {
                 echo "<button class='btn btn-primary mt-3' onclick='migrateFull()' id='migratelatest'>Migrate Until Latest Local Version (v" . $latest['version'] . ")</button>";
             }
 
-            foreach ($allversions as $version) {
+            foreach ($mergedversions as $version) {
                 $id = $version['id'];
                 $greater = $current >= $id;
                 $description = $version['description'];
@@ -106,7 +114,7 @@ $latest = $allversions[array_key_first($allversions)] ?? ['id' => $current, 'ver
 
                 if ($sql == null) {
                     $sqlbtn = "";
-                } else if (file_exists(__DIR__ . "/../../migrate/$sql")) {
+                } else if (file_exists(__DIR__ . "/../migrate/$sql")) {
                     $sqlbtn = "<button class='btn btn-primary mx-1 migrate-button' onclick='migrateSQL($id)'><span>Migrate SQL</span></button>";
                 } else {
                     $sqlbtn = "<button class='btn btn-warning mx-1 migrate-button' onclick='alert(`SQL file not found on server!`)'><span>Migrate SQL</span></button>";

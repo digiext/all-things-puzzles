@@ -14,4 +14,4 @@
 
 #### **Do you want to contribute?**
 
-* Email allthingspuzzles@dumail.net and we will gladly get you started on contributing to this project.
+* Email `allthingspuzzles@dumail.net` and we will gladly get you started on contributing to this project.

@@ -5,4 +5,4 @@ app/images/uploads/
 !app/images/uploads/thumbnails/.gitkeep
 !app/images/uploads/completed/.gitkeep
 apidocs/
-migrate/migration.json
+app/migrate/migration.json
