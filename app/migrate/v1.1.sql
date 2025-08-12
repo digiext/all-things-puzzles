@@ -1,3 +1,5 @@
+DROP TABLE `theme`;
+
 CREATE TABLE `apitokens` (
   `tokenid` bigint(20) NOT NULL,
   `tokenname` text NOT NULL,
@@ -12,8 +14,17 @@ CREATE TABLE `settings` (
   `signup` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `theme` (
+  `themeid` bigint(20) UNSIGNED NOT NULL,
+  `themedesc` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 INSERT INTO `settings` (`settingid`, `signup`) VALUES
 (1, 1);
+
+INSERT INTO `theme` (`themeid`, `themedesc`) VALUES
+(1, 'dark'),
+(2, 'light');
 
 ALTER TABLE `settings`
   ADD PRIMARY KEY (`settingid`),
@@ -32,3 +43,7 @@ ALTER TABLE `apitokens`
 
 ALTER TABLE `apitokens`
   MODIFY `tokenid` bigint(20) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `theme`
+  ADD PRIMARY KEY (`themeid`),
+  ADD UNIQUE KEY `themeid` (`themeid`);

@@ -1,11 +1,11 @@
 <?php
-    $theme = 'dark';
+$theme = 'dark';
 
-    if (isset($_SESSION['theme'])) {
-        $theme = $_SESSION['theme'];
-    } else if (isLoggedIn() && getLoggedInUser()->getTheme() != null) {
-        $theme = getLoggedInUser()->getTheme()->getName() ?? 'dark';
-    }
+if (isset($_SESSION['theme'])) {
+    $theme = $_SESSION['theme'];
+} else if (isLoggedIn() && getLoggedInUser()->getTheme() != null) {
+    $theme = getLoggedInUser()->getTheme()->getName() ?? 'dark';
+}
 ?>
 
 <!DOCTYPE html>
@@ -23,4 +23,3 @@
 <script src="<?php echo BASE_URL ?>/scripts/bootstrap-table.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/popper.min.js"></script>
 <script src="<?php echo BASE_URL ?>/scripts/bootstrap-table-print.min.js"></script>
-<?php header("X-Frame-Options: DENY"); ?>
