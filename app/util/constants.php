@@ -1,6 +1,6 @@
 <?php
 // VERSION NUMBER
-const VERSION = "1.1.1";
+const VERSION = "1.1.2";
 const API_VERSION = 1;
 
 
