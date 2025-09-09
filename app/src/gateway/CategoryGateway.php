@@ -82,14 +82,19 @@ class CategoryGateway implements IGatewayWithID
     // Return all records from the categories table
     public function findAll(mixed $options = [], bool $verbose = false): array|null|PDOException
     {
-        $sort = $options[SORT] ?? CATEGORY_DESCRIPTION;
-        $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
-        $page = $options[PAGE] ?? 0;
-        $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
+        if (!empty($options)) {
 
-        $offset = $page * $maxPerPage;
+            $sort = $options[SORT] ?? CATEGORY_DESCRIPTION;
+            $sortDirection = $options[SORT_DIRECTION] ?? SQL_SORT_ASC;
+            $page = $options[PAGE] ?? 0;
+            $maxPerPage = $options[MAX_PER_PAGE] ?? 10;
 
-        $sql = "SELECT * FROM categories ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
+            $offset = $page * $maxPerPage;
+
+            $sql = "SELECT * FROM categories ORDER BY $sort $sortDirection LIMIT $offset, $maxPerPage";
+        } else {
+            $sql = "SELECT * FROM categories";
+        }
 
         try {
             $stmt = $this->db->query($sql);
