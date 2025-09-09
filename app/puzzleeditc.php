@@ -25,8 +25,6 @@ $dispositiondesc = $_POST['dispositionDesc'];
 $locationdesc = $_POST['locationDesc'];
 $hasfile = isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK;
 
-var_dump($hasfile);
-
 if (isset($_POST['submit'])) {
     $id = $_POST['id'];
     $currpicture = $_POST['currpicture'];
