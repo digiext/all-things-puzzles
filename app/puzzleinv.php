@@ -79,6 +79,7 @@ $gateway = new PuzzleGateway($db);
 $puzzles = $gateway->findAll($options);
 
 $totalPuzzles = $gateway->count($options);
+$totalPageCount = $totalPuzzles % $maxperpage == 0 ? $totalPuzzles / $maxperpage : ($totalPuzzles / $maxperpage) + 1;
 $seen = $maxperpage * ($page - 1) + count($puzzles);
 
 $prevLink = $page <= 1 ? "#" : 'puzzleinv.php?' . queryForPage($page - 1);
@@ -186,6 +187,9 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
         ?>
         <li class="page-item">
             <a class="page-link <?php echo $nextLink === '#' ? 'disabled' : "" ?>" href="<?php echo $nextLink ?>"><i class="bi bi-chevron-right"></i></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link <?php echo $page >= ($totalPuzzles / $maxperpage) ? 'disabled' : "" ?>" href='<?php echo "puzzleinv.php?" . queryForPage($totalPageCount) ?>'><i class="bi bi-chevron-double-right"></i></a>
         </li>
     </ul>
 </nav>
@@ -364,24 +368,3 @@ $nextLink = $totalPuzzles <= $seen ? "#" : 'puzzleinv.php?' . queryForPage($page
         $("#filtcostmax").val(sliderValue[1]);
     });
 </script>
-
-<!--            --><?php //foreach ($puzzles as $puzzle) {
-                    //                if (!($puzzle instanceof Puzzle)) continue;
-                    //                echo
-                    //                "<tr>
-                    //                        <div class='card' style='width: 100%'>
-                    //                            <div class='card-header'><strong>Puzzle Listing Preview</strong></div>
-                    //                            <div class='card-body placeholder-glow'>
-                    //                                <h5 class='card-title col-12' id='cardname'></h5>
-                    //                                <p class='card-subtitle placeholder col-12 text-body-secondary' id='cardbrand'></p>
-                    //                            </div>
-                    //                            <ul class='list-group list-group-flush placeholder-glow'>
-                    //                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-puzzle'></i><span id='cardpieces' class='placeholder col-2'></span></li>
-                    //                                <li class='list-group-item hstack gap-2'><span class='input-group-text py-1'>$</span><span id='cardcost' class='placeholder col-1'></span> <span id='cardcurrency'>USD</span></li>
-                    //                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-stars'></i><span id='cardsource' class='placeholder col-3'></span></li>
-                    //                                <li class='list-group-item hstack gap-2'><i class='input-group-text p-2 bi bi-qr-code'></i><span id='cardupc' class='placeholder col-3'></span></li>
-                    //                            </ul>
-                    //                        </div>
-                    //                    </tr>";
-                    //            } 
-                    ?>
