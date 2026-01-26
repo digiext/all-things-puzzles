@@ -94,6 +94,10 @@ const API_ERROR_INVALID_CATEGORY = [
     ERROR_CODE => "invalid_category",
     MESSAGE => "Category does not exist or is invalid",
 ];
+const API_ERROR_SERVER = [
+    ERROR_CODE => "server_error",
+    MESSAGE => "Server error. Please try again later.",
+];
 
 // PERMISSIONS
 const PERM_READ_PROFILE = 1; // 1
