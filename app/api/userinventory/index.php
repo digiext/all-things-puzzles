@@ -22,8 +22,8 @@ if ($req == GET) {
 
         $uinv = $upuzGateway->findByUserId($user->getId());
         if ($uinv == null && $uinv != array()) error([
-            ERROR_CODE => 'invalid_wishlist',
-            MESSAGE => 'Wishlist not found!'
+            ERROR_CODE => 'invalid_user_inventory',
+            MESSAGE => 'User inventory not found!'
         ]);
         else success($uinv);
     } catch (Error $e) {
